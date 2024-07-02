@@ -1,0 +1,54 @@
+"use client";
+
+import { PrimaryBtn } from "@/components/ui/buttons/primary-btn";
+import { TextInput } from "@/components/ui/inputs/text-input";
+import Image from "next/image";
+import React, { useState } from "react";
+
+const Signin = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  return (
+    <div className="flex flex-col items-center w-[460px] bg-[#FFFFFF4D] p-3">
+      <Image
+        src="/assets/signin/logo.svg"
+        width={420}
+        height={166}
+        className="object-cover"
+        alt="my-signin-logo"
+      />
+      <h1 className="font-[600] text-[40px] font-heading py-10">Welcome !</h1>
+      <div className="flex flex-col items-start w-full">
+        <div className="flex flex-col items-end w-full">
+          <TextInput
+            value={email}
+            setValue={setEmail}
+            type="email"
+            title="Email"
+            placeholder="email"
+          />
+          <div className="flex items-center gap-2 mt-2">
+            <input type="radio" className="h-5 w-5" />
+            <p>Remember me</p>
+          </div>
+        </div>
+        <TextInput
+          value={password}
+          setValue={setPassword}
+          type="password"
+          title="Password"
+          placeholder="password"
+        />
+        <PrimaryBtn className="mt-10" onClick={() => {}}>
+          <div>Submit</div>
+        </PrimaryBtn>
+        <div className="flex flex-row items-center justify-between w-full py-5 px-3">
+          <p className="text-[14px]">New User? Sign Up</p>
+          <p className="text-[14px]">Forget Password?</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Signin;
