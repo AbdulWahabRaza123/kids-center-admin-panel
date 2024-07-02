@@ -1,4 +1,5 @@
-import { Sidebar } from "@/components/side-bar";
+import Navbar from "@/components/navbar";
+import { Sidebar } from "@/components/sidebar";
 
 export default function Layout({
   children,
@@ -10,7 +11,12 @@ export default function Layout({
       <aside>
         <Sidebar />
       </aside>
-      <section>{children}</section>
+      <section className="flex flex-col gap-3 w-full">
+        <nav>
+          <Navbar />
+        </nav>
+        <main>{children}</main>
+      </section>
     </main>
   );
 }
