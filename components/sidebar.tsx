@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
+import { LogoutDialog } from "./ui/dialogs/logout-dialog";
 const sidebarItems = [
   {
     name: "Dashboard",
@@ -39,19 +40,19 @@ const sidebarItems = [
     name: "QR Code",
     activeIcon: "/assets/sidebar-icons/active/qr-code.svg",
     noneActiveIcon: "/assets/sidebar-icons/non-active/qr-code.svg",
-    link: "#",
+    link: "#qrcode",
   },
   {
     name: "Settings",
     activeIcon: "/assets/sidebar-icons/active/settings.svg",
     noneActiveIcon: "/assets/sidebar-icons/non-active/settings.svg",
-    link: "#",
+    link: "#setting",
   },
   {
     name: "Logout",
     activeIcon: "/assets/sidebar-icons/active/logout.svg",
     noneActiveIcon: "/assets/sidebar-icons/non-active/logout.svg",
-    link: "#",
+    link: "#logout",
   },
 ];
 
@@ -68,33 +69,72 @@ export const Sidebar = () => {
         className="object-cover w-full my-5"
       />
       <div className="mt-7 flex flex-col gap-3 w-full">
-        {sidebarItems?.map((item, index) => (
-          <Link
-            key={index}
-            href={item.link}
-            onClick={() => setActive(item.link)}
-            className={cn(
-              "flex items-center gap-2 p-3 rounded-md transition-all text-black w-full",
-              item.link === active && "bg-white"
-            )}
-          >
-            <Image
-              loader={({ src }) => src}
-              src={active === item.link ? item.activeIcon : item.noneActiveIcon}
-              width={20}
-              height={20}
-              alt={item.name}
-              className="object-cover"
-            />
-            <p
-              className={cn(
-                active === item.link ? "text-primary" : "text-black"
-              )}
-            >
-              {item.name}
-            </p>
-          </Link>
-        ))}
+        {sidebarItems?.map((item, index) => {
+          if (item.link === "#logout") {
+            return (
+              <LogoutDialog>
+                <div
+                  key={index}
+                  onClick={() => setActive(item.link)}
+                  className={cn(
+                    "flex items-center gap-2 p-3 rounded-md transition-all text-black w-full",
+                    item.link === active && "bg-white"
+                  )}
+                >
+                  <Image
+                    loader={({ src }) => src}
+                    src={
+                      active === item.link
+                        ? item.activeIcon
+                        : item.noneActiveIcon
+                    }
+                    width={20}
+                    height={20}
+                    alt={item.name}
+                    className="object-cover"
+                  />
+                  <p
+                    className={cn(
+                      active === item.link ? "text-primary" : "text-black"
+                    )}
+                  >
+                    {item.name}
+                  </p>
+                </div>
+              </LogoutDialog>
+            );
+          } else {
+            return (
+              <Link
+                key={index}
+                href={item.link}
+                onClick={() => setActive(item.link)}
+                className={cn(
+                  "flex items-center gap-2 p-3 rounded-md transition-all text-black w-full",
+                  item.link === active && "bg-white"
+                )}
+              >
+                <Image
+                  loader={({ src }) => src}
+                  src={
+                    active === item.link ? item.activeIcon : item.noneActiveIcon
+                  }
+                  width={20}
+                  height={20}
+                  alt={item.name}
+                  className="object-cover"
+                />
+                <p
+                  className={cn(
+                    active === item.link ? "text-primary" : "text-black"
+                  )}
+                >
+                  {item.name}
+                </p>
+              </Link>
+            );
+          }
+        })}
       </div>
     </div>
   );
