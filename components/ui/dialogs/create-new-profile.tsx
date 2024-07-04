@@ -21,7 +21,7 @@ export const CreateNewProfileDialog = ({
     <Dialog>
       <DialogTrigger>{children}</DialogTrigger>
 
-      <DialogContent className="bg-white border-[1px] border-[#00f4ff] rounded-[20px] max-w-[700px] h-[60vh] overflow-auto flex flex-col gap-7 p-5">
+      <DialogContent className="bg-white border-[1px] border-[#00f4ff] rounded-[20px] max-w-[700px] h-[60vh] flex flex-col gap-7 p-5">
         <div className="flex flex-row items-center gap-3">
           <Image
             src="/assets/icons/profile.svg"

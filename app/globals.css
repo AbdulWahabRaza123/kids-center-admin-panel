@@ -22,3 +22,16 @@ body{
 .text-primary{
   color: #7A1FA0;
 }
+.hide-scroll::-webkit-scrollbar {
+  display: none;
+  /* background-color: #232323;
+  width: 13px;
+  color: white; */
+}
+
+.hide-scroll::-webkit-scrollbar-thumb {
+  background-color: #c2c1c1;
+  border-radius: 10px;
+  border: 3px solid #232323;
+
+}

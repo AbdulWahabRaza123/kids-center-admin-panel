@@ -9,7 +9,7 @@ const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   return (
-    <div className="flex flex-col items-center w-[460px] bg-[#FFFFFF4D] p-3">
+    <div className="flex flex-col items-center w-[460px] bg-[#FFFFFF4D] p-3 mt-32">
       <Image
         src="/assets/signin/logo.svg"
         width={420}
