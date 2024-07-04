@@ -72,9 +72,8 @@ export const Sidebar = () => {
         {sidebarItems?.map((item, index) => {
           if (item.link === "#logout") {
             return (
-              <LogoutDialog>
+              <LogoutDialog key={index}>
                 <div
-                  key={index}
                   onClick={() => setActive(item.link)}
                   className={cn(
                     "flex items-center gap-2 p-3 rounded-md transition-all text-black w-full",
