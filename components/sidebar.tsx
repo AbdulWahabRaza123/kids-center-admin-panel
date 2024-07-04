@@ -2,6 +2,7 @@
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 const sidebarItems = [
   {
@@ -20,7 +21,7 @@ const sidebarItems = [
     name: "Reports",
     activeIcon: "/assets/sidebar-icons/active/reports.svg",
     noneActiveIcon: "/assets/sidebar-icons/non-active/reports.svg",
-    link: "#",
+    link: "/report",
   },
   {
     name: "Profile",
@@ -55,7 +56,8 @@ const sidebarItems = [
 ];
 
 export const Sidebar = () => {
-  const [active, setActive] = useState(0);
+  const pathname = usePathname();
+  const [active, setActive] = useState(pathname);
   return (
     <div className="w-[230px] bg-[#7A1FA01A] h-screen overflow-auto flex flex-col items-center">
       <Image
@@ -70,21 +72,25 @@ export const Sidebar = () => {
           <Link
             key={index}
             href={item.link}
-            onClick={() => setActive(index)}
+            onClick={() => setActive(item.link)}
             className={cn(
               "flex items-center gap-2 p-3 rounded-md transition-all text-black w-full",
-              index === active && "bg-white"
+              item.link === active && "bg-white"
             )}
           >
             <Image
               loader={({ src }) => src}
-              src={active === index ? item.activeIcon : item.noneActiveIcon}
+              src={active === item.link ? item.activeIcon : item.noneActiveIcon}
               width={20}
               height={20}
               alt={item.name}
               className="object-cover"
             />
-            <p className={cn(active === index ? "text-primary" : "text-black")}>
+            <p
+              className={cn(
+                active === item.link ? "text-primary" : "text-black"
+              )}
+            >
               {item.name}
             </p>
           </Link>
