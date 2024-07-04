@@ -47,7 +47,7 @@ export default function Report() {
         <h1 className="text-[26px] font-[600]">Reports / Performance</h1>
       </div>
 
-      <table className="w-full mt-10">
+      <table className="w-full mt-10 max-h-[70vh] overflow-auto">
         <thead className="bg-[#7A1FA01A]">
           {tableHeadings.map((heading) => (
             <th key={heading} className="w-[200px] text-start p-3">

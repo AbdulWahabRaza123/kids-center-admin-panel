@@ -63,7 +63,7 @@ export default function Home() {
         <h1 className="text-[26px] font-[600]">Welcome!</h1>
         <SelectInput options={options} value={value} setValue={setValue} />
       </div>
-      <table className="w-full mt-10">
+      <table className="w-full mt-10 max-h-[70vh] overflow-auto">
         <thead className="bg-[#7A1FA01A]">
           {tableHeadings.map((heading) => (
             <th key={heading} className="w-[200px] text-start p-3">

@@ -11,7 +11,7 @@ export default function Layout({
       <aside>
         <Sidebar />
       </aside>
-      <section className="flex flex-col gap-3 w-full">
+      <section className="flex flex-col gap-3 w-full ms-[230px] h-screen overflow-auto">
         <nav>
           <Navbar />
         </nav>

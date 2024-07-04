@@ -27,7 +27,7 @@ const sidebarItems = [
     name: "Profile",
     activeIcon: "/assets/sidebar-icons/active/profile.svg",
     noneActiveIcon: "/assets/sidebar-icons/non-active/profile.svg",
-    link: "#",
+    link: "/profile",
   },
   {
     name: "Communication",
@@ -59,7 +59,7 @@ export const Sidebar = () => {
   const pathname = usePathname();
   const [active, setActive] = useState(pathname);
   return (
-    <div className="w-[230px] bg-[#7A1FA01A] h-screen overflow-auto flex flex-col items-center">
+    <div className="w-[230px] bg-[#7A1FA01A] h-screen overflow-auto flex flex-col items-center fixed">
       <Image
         src="/assets/signin/logo.svg"
         width={200}
