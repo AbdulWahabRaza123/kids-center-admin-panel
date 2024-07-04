@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { SearchInput } from "./ui/inputs/search-input";
 import Image from "next/image";
@@ -27,7 +28,12 @@ const Navbar = () => {
           alt="bell"
           className="object-cover mt-2"
         />
-        <MenubarComp options={options}>
+        <MenubarComp
+          options={options}
+          onClick={(selectedOpt) => {
+            console.log("This is selected option ");
+          }}
+        >
           <div className="flex flex-row items-center gap-2 cursor-pointer hover:bg-slate-400/10 active:bg-slate-400/20 p-2 rounded-[10px]">
             <Image
               src="/assets/profile.svg"

@@ -1,3 +1,4 @@
+"use client";
 import {
   Select,
   SelectContent,
@@ -26,7 +27,11 @@ export const SelectInput = ({
         </SelectTrigger>
         <SelectContent>
           {options.map((val) => {
-            return <SelectItem value={val.value}>{val.title}</SelectItem>;
+            return (
+              <SelectItem key={val.title} value={val.value}>
+                {val.title}
+              </SelectItem>
+            );
           })}
         </SelectContent>
       </Select>
