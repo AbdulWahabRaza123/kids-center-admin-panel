@@ -33,7 +33,7 @@ const sidebarItems = [
     name: "Communication",
     activeIcon: "/assets/sidebar-icons/active/communication.svg",
     noneActiveIcon: "/assets/sidebar-icons/non-active/communication.svg",
-    link: "#",
+    link: "/communication",
   },
   {
     name: "QR Code",
