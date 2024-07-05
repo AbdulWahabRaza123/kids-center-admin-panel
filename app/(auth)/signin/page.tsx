@@ -23,11 +23,8 @@ const Signin = () => {
         email,
         password,
       });
-      console.log("This is res ", res);
       const token = res.data.user.token;
       const user = res.data.user.user;
-      console.log("This is token ", token);
-      console.log("This is user ", user);
       localStorage.setItem("kids-token", token);
       localStorage.setItem("kids-user", JSON.stringify(user));
       router.push("/");

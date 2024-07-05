@@ -25,14 +25,14 @@ export const MenubarComp = ({
       <Menubar className="border-none cursor-pointer">
         <MenubarMenu>
           <MenubarTrigger className="p-3">{children}</MenubarTrigger>
-          <MenubarContent className="w-full bg-slate-400/20">
+          <MenubarContent className="w-full bg-white">
             {options.map((option) => (
               <MenubarItem
                 onClick={() => {
                   onClick(option.value);
                 }}
                 key={option.value}
-                className="cursor-pointer hover:bg-slate-400/30 active:bg-slate-400/20 rounded-[10px]"
+                className="cursor-pointer font-[600] hover:bg-slate-400/30 active:bg-slate-400/20 rounded-[10px]"
               >
                 {option.name}
               </MenubarItem>
