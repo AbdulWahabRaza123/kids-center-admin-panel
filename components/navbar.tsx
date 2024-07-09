@@ -5,14 +5,14 @@ import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import { MenubarComp } from "./menu-bar";
 const options = [
-  //   {
-  //     name: "Profile",
-  //     value: "profile",
-  //   },
   {
-    name: "Logout",
-    value: "logout",
+    name: "Profile",
+    value: "profile",
   },
+  // {
+  //   name: "Logout",
+  //   value: "logout",
+  // },
 ];
 const Navbar = () => {
   return (
