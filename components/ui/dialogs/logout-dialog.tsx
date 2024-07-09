@@ -1,15 +1,41 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import Image from "next/image";
 import { PrimaryBtn } from "../buttons/primary-btn";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { SpinnerBtn } from "@/components/spinner-btn";
 export const LogoutDialog = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const clearCookies = async () => {
+    try {
+      await axios.get("/api/auth/logout");
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  };
+  const handleLogout = async () => {
+    try {
+      setLoading(true);
+      const flag = await clearCookies();
+      if (flag) {
+        localStorage.clear();
+        alert("logout success");
+        router.push("/signin");
+      } else {
+        alert("Invalid error occured");
+      }
+    } catch (e) {
+      console.log(e);
+      alert("invalid error");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <Dialog>
       <DialogTrigger>{children}</DialogTrigger>
@@ -29,10 +55,15 @@ export const LogoutDialog = ({ children }: { children: React.ReactNode }) => {
 
         <div className="flex flex-row items-center justify-center w-full gap-4">
           <PrimaryBtn
-            onClick={() => console.log("Logout")}
+            onClick={() => {
+              handleLogout();
+            }}
             className="w-[100px] h-[45px] text-[16px] rounded-[9px] flex flex-row items-center justify-center"
           >
-            <div>Logout</div>
+            <div className="flex flex-row items-center justify-center gap-2">
+              {loading && <SpinnerBtn />}
+              <div>Logout</div>
+            </div>
           </PrimaryBtn>
         </div>
       </DialogContent>
