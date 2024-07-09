@@ -32,7 +32,7 @@ export const MenubarComp = ({
                   onClick(option.value);
                 }}
                 key={option.value}
-                className="cursor-pointer hover:bg-white/80 bg-white rounded-[10px]"
+                className="cursor-pointer font-[600] hover:bg-slate-400/30 active:bg-slate-400/20 rounded-[10px]"
               >
                 {option.name}
               </MenubarItem>
