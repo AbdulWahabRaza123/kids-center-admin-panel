@@ -25,10 +25,14 @@ export const SelectInput = ({
         <SelectTrigger className="w-[350px] rounded-[10px]">
           <SelectValue placeholder="Select a value" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="bg-white">
           {options.map((val) => {
             return (
-              <SelectItem key={val.title} value={val.value}>
+              <SelectItem
+                key={val.title}
+                value={val.value}
+                className="bg-white cursor-pointer"
+              >
                 {val.title}
               </SelectItem>
             );

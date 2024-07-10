@@ -5,8 +5,12 @@ import { useEffect, useState } from "react";
 
 const options = [
   {
-    title: "Student",
-    value: "student",
+    title: "Parent",
+    value: "parent",
+  },
+  {
+    title: "Nanny",
+    value: "nany",
   },
 ];
 const tableHeadings = [
