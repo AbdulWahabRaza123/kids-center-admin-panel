@@ -1,4 +1,5 @@
 "use client";
+import { PrimaryInput } from "@/components/ui/inputs/primary-input";
 import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
@@ -95,6 +96,7 @@ const chatData = [
 ];
 const Communication = () => {
   const [activeChat, setActiveChat] = useState(chatData[0]);
+  const [message, setMessage] = useState("");
   return (
     <main className="flex flex-row items-start px-10">
       <section className="w-[28%] border-r-[1px] border-r-gray-400 min-h-[80vh]">
@@ -134,7 +136,7 @@ const Communication = () => {
           </div>
         </div>
       </section>
-      <section className="w-[45%] border-r-[1px] border-r-gray-400 min-h-[80vh]">
+      <section className="w-[45%] border-r-[1px] border-r-gray-400 min-h-[80vh] relative">
         <div className="flex flex-col gap-3">
           <div className="flex flex-row items-center gap-3 p-3 border-b-[1px] border-b-gray-400">
             <img
@@ -167,6 +169,23 @@ const Communication = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+        <div className="absolute bottom-0 w-full p-3 flex items-center gap-3">
+          <PrimaryInput
+            placeholder="Type a message"
+            value={message}
+            setValue={setMessage}
+            type="text"
+          />
+          <div className="w-[40px] cursor-pointer h-[40px] rounded-full p-3 bg-primary flex flex-row items-center justify-center">
+            <Image
+              src="/assets/icons/send.svg"
+              alt="send"
+              width={40}
+              height={40}
+              className="object-cover"
+            />
           </div>
         </div>
       </section>

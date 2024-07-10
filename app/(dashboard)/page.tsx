@@ -1,11 +1,9 @@
 "use client";
 import { useAllNanies, useAllParents } from "@/actions/queries";
-import { Spinner } from "@/components/spinner";
 import { SelectInput } from "@/components/ui/inputs/select-input";
 import { NanyTableComp } from "@/components/ui/tables/nany-table";
 import { ParentTableComp } from "@/components/ui/tables/parent-table";
-import { NanyDetails, ParentDetails } from "@/interface/user-interface";
-import Image from "next/image";
+import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { useEffect, useState } from "react";
 
 const options = [
@@ -19,56 +17,6 @@ const options = [
   },
 ];
 
-const data = [
-  {
-    id: 1,
-    profile: "/assets/profile.svg",
-    name: "Raza",
-    class: "English",
-    age: 20,
-    gender: "Male",
-    teacherName: "David",
-    email: "raza@gmail.com",
-  },
-  {
-    id: 2,
-    profile: "/assets/profile.svg",
-    name: "Raza",
-    class: "English",
-    age: 20,
-    gender: "Male",
-    teacherName: "David",
-    email: "raza@gmail.com",
-  },
-  {
-    id: 3,
-    profile: "/assets/profile.svg",
-    name: "Raza",
-    class: "English",
-    age: 20,
-    gender: "Male",
-    teacherName: "David",
-    email: "raza@gmail.com",
-  },
-];
-
-const SpinnerWrapper = ({
-  loading,
-  children,
-}: {
-  loading: boolean;
-  children: React.ReactNode;
-}) => {
-  if (loading) {
-    return (
-      <div className="h-[70vh] w-full flex items-center justify-center">
-        <Spinner />
-      </div>
-    );
-  } else {
-    return <>{children}</>;
-  }
-};
 export default function Home() {
   const {
     data: naniesData,
