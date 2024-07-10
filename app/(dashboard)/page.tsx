@@ -2,6 +2,7 @@
 import { useAllNanies, useAllParents } from "@/actions/queries";
 import { Spinner } from "@/components/spinner";
 import { SelectInput } from "@/components/ui/inputs/select-input";
+import { NanyTableComp } from "@/components/ui/tables/nany-table";
 import { ParentTableComp } from "@/components/ui/tables/parent-table";
 import { NanyDetails, ParentDetails } from "@/interface/user-interface";
 import Image from "next/image";
@@ -93,7 +94,8 @@ export default function Home() {
         <SelectInput options={options} value={value} setValue={setValue} />
       </div>
       <SpinnerWrapper loading={naniesLoading || parentsLoading}>
-        <ParentTableComp data={parentsData} />
+        {value === "parent" && <ParentTableComp data={parentsData} />}
+        {value === "nany" && <NanyTableComp data={naniesData} />}
       </SpinnerWrapper>
     </main>
   );
