@@ -1,24 +1,22 @@
+import { EditDelMenuComp } from "@/components/menu-bar";
 import { ParentDetails } from "@/interface/user-interface";
+import { EllipsisVertical } from "lucide-react";
 import Image from "next/image";
-const parentTableHeadings = [
-  "User ID",
-  "Student ID",
-  "Name",
-  "Email",
-  "Phone No",
-  "Class",
-  "Roll No",
-];
+
 export const ParentTableComp = ({
+  headings,
   data,
+  edit = false,
 }: {
+  headings: string[];
   data: ParentDetails[] | undefined;
+  edit: boolean;
 }) => {
   return (
     <>
       <table className="w-full mt-10 max-h-[70vh] overflow-auto">
         <thead className="bg-[#7A1FA01A]">
-          {parentTableHeadings.map((heading) => (
+          {headings.map((heading) => (
             <th key={heading} className="w-[200px] text-start p-3">
               {heading}
             </th>
@@ -63,6 +61,17 @@ export const ParentTableComp = ({
                   <td className="w-[200px] text-start p-3">
                     {val.roll_no || "-"}
                   </td>
+                  {edit && (
+                    <td className="w-[200px] text-start p-3">
+                      <EditDelMenuComp
+                        onClick={(selectedOpt) => {
+                          console.log("This is selected option");
+                        }}
+                      >
+                        <EllipsisVertical className="cursor-pointer" />
+                      </EditDelMenuComp>
+                    </td>
+                  )}
                 </tr>
               </>
             );

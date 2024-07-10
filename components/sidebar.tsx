@@ -16,7 +16,7 @@ const sidebarItems = [
     name: "User Management",
     activeIcon: "/assets/sidebar-icons/active/people.svg",
     noneActiveIcon: "/assets/sidebar-icons/non-active/people.svg",
-    link: "/student-manage",
+    link: "/user-manage",
   },
   {
     name: "Reports",

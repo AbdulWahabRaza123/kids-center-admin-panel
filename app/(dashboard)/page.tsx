@@ -5,7 +5,24 @@ import { NanyTableComp } from "@/components/ui/tables/nany-table";
 import { ParentTableComp } from "@/components/ui/tables/parent-table";
 import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { useEffect, useState } from "react";
-
+const nanyTableHeadings = [
+  "User ID",
+  "Nany ID",
+  "Name",
+  "Email",
+  "Phone No",
+  "Qualification",
+  "Reg No",
+];
+const parentTableHeadings = [
+  "User ID",
+  "Student ID",
+  "Name",
+  "Email",
+  "Phone No",
+  "Class",
+  "Roll No",
+];
 const options = [
   {
     title: "Parent",
@@ -33,7 +50,6 @@ export default function Home() {
   useEffect(() => {
     setMount(true);
   }, []);
-
   if (!mount) return null;
   return (
     <main className="flex flex-col px-10">
@@ -42,8 +58,20 @@ export default function Home() {
         <SelectInput options={options} value={value} setValue={setValue} />
       </div>
       <SpinnerWrapper loading={naniesLoading || parentsLoading}>
-        {value === "parent" && <ParentTableComp data={parentsData} />}
-        {value === "nany" && <NanyTableComp data={naniesData} />}
+        {value === "parent" && (
+          <ParentTableComp
+            headings={parentTableHeadings}
+            data={parentsData}
+            edit={false}
+          />
+        )}
+        {value === "nany" && (
+          <NanyTableComp
+            headings={nanyTableHeadings}
+            data={naniesData}
+            edit={false}
+          />
+        )}
       </SpinnerWrapper>
     </main>
   );

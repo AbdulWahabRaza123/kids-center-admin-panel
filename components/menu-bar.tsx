@@ -6,6 +6,7 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from "@/components/ui/menubar";
+import { Edit } from "lucide-react";
 import Image from "next/image";
 
 export const MenubarComp = ({
@@ -43,7 +44,7 @@ export const MenubarComp = ({
     </>
   );
 };
-export const AddDelMenuComp = ({
+export const EditDelMenuComp = ({
   children,
   onClick,
 }: {
@@ -62,14 +63,15 @@ export const AddDelMenuComp = ({
               }}
               className="cursor-pointer flex flex-row items-center gap-2 rounded-[10px]"
             >
-              <Image
+              {/* <Image
                 src="/assets/icons/add-table.svg"
                 alt="add table"
                 width={20}
                 height={20}
                 className="object-cover"
-              />
-              <p className="text-[#2D8C00] text-[14px]">Add</p>
+              /> */}
+              <Edit className="w-[20px] h-[20px] text-[#2D8C00]" />
+              <p className="text-[#2D8C00] text-[14px]">Edit</p>
             </MenubarItem>
             <MenubarItem
               onClick={() => {
