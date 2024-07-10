@@ -7,8 +7,10 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { SpinnerBtn } from "@/components/spinner-btn";
+import { AuthStatesContext } from "@/context/auth";
 const Signin = () => {
   const router = useRouter();
+  const { setUser } = AuthStatesContext();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,6 +27,7 @@ const Signin = () => {
       });
       const token = res.data.user.token;
       const user = res.data.user.user;
+      setUser(user);
       localStorage.setItem("kids-token", token);
       localStorage.setItem("kids-user", JSON.stringify(user));
       router.push("/");

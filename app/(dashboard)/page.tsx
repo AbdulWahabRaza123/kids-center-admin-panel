@@ -1,5 +1,9 @@
 "use client";
+import { useAllNanies, useAllParents } from "@/actions/queries";
+import { Spinner } from "@/components/spinner";
 import { SelectInput } from "@/components/ui/inputs/select-input";
+import { ParentTableComp } from "@/components/ui/tables/parent-table";
+import { NanyDetails, ParentDetails } from "@/interface/user-interface";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -13,15 +17,7 @@ const options = [
     value: "nany",
   },
 ];
-const tableHeadings = [
-  "ID",
-  "Name",
-  "Class",
-  "Age",
-  "Gender",
-  "Teacher",
-  "Email",
-];
+
 const data = [
   {
     id: 1,
@@ -54,12 +50,41 @@ const data = [
     email: "raza@gmail.com",
   },
 ];
+
+const SpinnerWrapper = ({
+  loading,
+  children,
+}: {
+  loading: boolean;
+  children: React.ReactNode;
+}) => {
+  if (loading) {
+    return (
+      <div className="h-[70vh] w-full flex items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  } else {
+    return <>{children}</>;
+  }
+};
 export default function Home() {
+  const {
+    data: naniesData,
+    isLoading: naniesLoading,
+    error: naniesError,
+  } = useAllNanies();
+  const {
+    data: parentsData,
+    isLoading: parentsLoading,
+    error: parentsError,
+  } = useAllParents();
   const [mount, setMount] = useState<boolean>(false);
-  const [value, setValue] = useState<string>("");
+  const [value, setValue] = useState<string>("parent");
   useEffect(() => {
     setMount(true);
   }, []);
+
   if (!mount) return null;
   return (
     <main className="flex flex-col px-10">
@@ -67,43 +92,9 @@ export default function Home() {
         <h1 className="text-[26px] font-[600]">Welcome!</h1>
         <SelectInput options={options} value={value} setValue={setValue} />
       </div>
-      <table className="w-full mt-10 max-h-[70vh] overflow-auto">
-        <thead className="bg-[#7A1FA01A]">
-          {tableHeadings.map((heading) => (
-            <th key={heading} className="w-[200px] text-start p-3">
-              {heading}
-            </th>
-          ))}
-        </thead>
-        <tbody>
-          {data.map((val) => {
-            return (
-              <>
-                <tr>
-                  <td className="w-[200px] text-start p-3">{val.id}</td>
-                  <td className="flex flex-row items-center gap-2 w-[200px] text-start p-3">
-                    <Image
-                      src={val.profile}
-                      width={30}
-                      height={30}
-                      alt="profile"
-                      className="rounded-full object-cover"
-                    />
-                    <p>{val.name}</p>
-                  </td>
-                  <td className="w-[200px] text-start p-3">{val.class}</td>
-                  <td className="w-[200px] text-start p-3">{val.age}</td>
-                  <td className="w-[200px] text-start p-3">{val.gender}</td>
-                  <td className="w-[200px] text-start p-3">
-                    {val.teacherName}
-                  </td>
-                  <td className="w-[200px] text-start p-3">{val.email}</td>
-                </tr>
-              </>
-            );
-          })}
-        </tbody>
-      </table>
+      <SpinnerWrapper loading={naniesLoading || parentsLoading}>
+        <ParentTableComp data={parentsData} />
+      </SpinnerWrapper>
     </main>
   );
 }

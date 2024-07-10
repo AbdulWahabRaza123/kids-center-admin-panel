@@ -7,7 +7,7 @@ export async function POST(req: Request, res: NextApiResponse) {
   try {
     const { email, password } = await req.json();
     const cookieStore = cookies();
-    const res = await client.post("/api/auth/login", {
+    const res = await client.post("/auth/login", {
       email,
       password,
     });

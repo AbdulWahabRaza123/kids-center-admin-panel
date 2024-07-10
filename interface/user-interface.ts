@@ -10,3 +10,23 @@ export interface DBUser {
   token: string;
   user: UserDetails;
 }
+export interface ParentDetails {
+  user_id: number;
+  student_id: number;
+  student_name: string;
+  role: "parent";
+  email: string;
+  class: string;
+  roll_no: string;
+  phone_no: string;
+}
+export interface NanyDetails {
+  user_id: number;
+  email: string;
+  role: "nany";
+  nany_id: number;
+  nany_name: string;
+  qualification: string;
+  reg_no: string;
+  phone_no: string;
+}
