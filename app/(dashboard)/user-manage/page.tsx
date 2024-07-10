@@ -81,8 +81,10 @@ export default function StudentManagement() {
     isLoading: parentsLoading,
     error: parentsError,
   } = useAllParents();
+  const [openUserDialog, setOpenUserDialog] = useState(false);
   const [mount, setMount] = useState<boolean>(false);
   const [value, setValue] = useState<string>("parent");
+
   useEffect(() => {
     setMount(true);
   }, []);
@@ -94,10 +96,15 @@ export default function StudentManagement() {
         <div className="flex flex-col items-end gap-2">
           <SelectInput options={options} value={value} setValue={setValue} />
 
-          <CreateNewProfileDialog>
+          <CreateNewProfileDialog
+            open={openUserDialog}
+            setOpen={setOpenUserDialog}
+          >
             <PrimaryBtn
               className="w-[200px] text-[16px] h-[40px] flex flex-row items-center justify-center"
-              onClick={() => console.log("Create Profile")}
+              onClick={() => {
+                setOpenUserDialog(true);
+              }}
             >
               Create Profile
             </PrimaryBtn>

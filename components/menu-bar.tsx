@@ -63,13 +63,6 @@ export const EditDelMenuComp = ({
               }}
               className="cursor-pointer flex flex-row items-center gap-2 rounded-[10px]"
             >
-              {/* <Image
-                src="/assets/icons/add-table.svg"
-                alt="add table"
-                width={20}
-                height={20}
-                className="object-cover"
-              /> */}
               <Edit className="w-[20px] h-[20px] text-[#2D8C00]" />
               <p className="text-[#2D8C00] text-[14px]">Edit</p>
             </MenubarItem>

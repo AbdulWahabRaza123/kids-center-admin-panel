@@ -1,10 +1,6 @@
 "use client";
-import { PrimaryBtn } from "@/components/ui/buttons/primary-btn";
-import { AddDelMenuComp, MenubarComp } from "@/components/menu-bar";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { EllipsisVertical } from "lucide-react";
-import { CreateNewProfileDialog } from "@/components/ui/dialogs/create-new-profile";
 
 const tableHeadings = ["Username", "Email", "QR Code", "Performance", "Active"];
 const data = [
