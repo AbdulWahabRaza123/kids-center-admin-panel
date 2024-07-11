@@ -19,10 +19,10 @@ const sidebarItems = [
     link: "/user-manage",
   },
   {
-    name: "Reports",
+    name: "Activities",
     activeIcon: "/assets/sidebar-icons/active/reports.svg",
     noneActiveIcon: "/assets/sidebar-icons/non-active/reports.svg",
-    link: "/report",
+    link: "/activities",
   },
   {
     name: "Profile",

@@ -1,9 +1,10 @@
-import { EditDelMenuComp } from "@/components/menu-bar";
+import { EditDisableMenuComp } from "@/components/menu-bar";
 import { NanyDetails } from "@/interface/user-interface";
 import { EllipsisVertical } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { CreateOrEditProfileDialog } from "../dialogs/create-edit-profile";
+import { UserBanConfirmationDialog } from "../dialogs/user-ban-confirmation-dialog";
 
 export const NanyTableComp = ({
   headings,
@@ -14,8 +15,11 @@ export const NanyTableComp = ({
   data: NanyDetails[] | undefined;
   edit: boolean;
 }) => {
+  console.log("This is nany details data ", data);
   const [selectedData, setSelectedData] = useState<NanyDetails | null>(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [openBanDialog, setOpenBanDialog] = useState(false);
+
   return (
     <>
       {selectedData && (
@@ -24,6 +28,14 @@ export const NanyTableComp = ({
           setOpen={setOpenEditDialog}
           data={selectedData}
           edit={edit}
+        />
+      )}
+      {selectedData && openBanDialog && (
+        <UserBanConfirmationDialog
+          open={openBanDialog}
+          setOpen={setOpenBanDialog}
+          id={selectedData.user_id}
+          role="nany"
         />
       )}
       <table className="w-full mt-10 max-h-[70vh] overflow-auto">
@@ -36,6 +48,9 @@ export const NanyTableComp = ({
         </thead>
         <tbody>
           {data?.map((val: NanyDetails) => {
+            if (val?.disabled === 1) {
+              return <></>;
+            }
             return (
               <>
                 <tr>
@@ -75,17 +90,20 @@ export const NanyTableComp = ({
                   </td>
                   {edit && (
                     <td className="w-[200px] text-start p-3">
-                      <EditDelMenuComp
+                      <EditDisableMenuComp
                         onClick={(selectedOpt) => {
                           if (selectedOpt === "edit") {
                             setSelectedData(val);
                             setOpenEditDialog(true);
+                          } else if (selectedOpt === "ban") {
+                            setSelectedData(val);
+                            setOpenBanDialog(true);
                           }
                           console.log("This is selected option");
                         }}
                       >
                         <EllipsisVertical className="cursor-pointer" />
-                      </EditDelMenuComp>
+                      </EditDisableMenuComp>
                     </td>
                   )}
                 </tr>

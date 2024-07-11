@@ -1,4 +1,4 @@
-import { EditDelMenuComp } from "@/components/menu-bar";
+import { EditDisableMenuComp } from "@/components/menu-bar";
 import { UserDetails } from "@/interface/user-interface";
 import { EllipsisVertical } from "lucide-react";
 import Image from "next/image";
@@ -33,13 +33,13 @@ export const FinanceTableComp = ({
                   </td>
                   {edit && (
                     <td className="w-[200px] text-start p-3">
-                      <EditDelMenuComp
+                      <EditDisableMenuComp
                         onClick={(selectedOpt) => {
                           console.log("This is selected option");
                         }}
                       >
                         <EllipsisVertical className="cursor-pointer" />
-                      </EditDelMenuComp>
+                      </EditDisableMenuComp>
                     </td>
                   )}
                 </tr>
