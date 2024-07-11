@@ -1,4 +1,4 @@
-export type RoleDetails = "admin" | "parent" | "nany";
+export type RoleDetails = "admin" | "parent" | "nany" | "finance";
 export interface UserDetails {
   id: number;
   email: string;
@@ -19,6 +19,7 @@ export interface ParentDetails {
   class: string;
   roll_no: string;
   phone_no: string;
+  user_created_at: any;
 }
 export interface NanyDetails {
   user_id: number;
@@ -29,4 +30,5 @@ export interface NanyDetails {
   qualification: string;
   reg_no: string;
   phone_no: string;
+  user_created_at: any;
 }

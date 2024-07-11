@@ -6,8 +6,10 @@ import { PrimaryBtn } from "../buttons/primary-btn";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { SpinnerBtn } from "@/components/spinner-btn";
+import { AuthStatesContext } from "@/context/auth";
 export const LogoutDialog = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
+  const { setUser, setToken } = AuthStatesContext();
   const [loading, setLoading] = useState(false);
   const clearCookies = async () => {
     try {
@@ -23,6 +25,8 @@ export const LogoutDialog = ({ children }: { children: React.ReactNode }) => {
       setLoading(true);
       const flag = await clearCookies();
       if (flag) {
+        setUser(null);
+        setToken("");
         localStorage.clear();
         alert("logout success");
         router.push("/signin");

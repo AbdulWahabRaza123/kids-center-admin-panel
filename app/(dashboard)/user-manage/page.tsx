@@ -2,13 +2,18 @@
 import { PrimaryBtn } from "@/components/ui/buttons/primary-btn";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { EllipsisVertical } from "lucide-react";
 import { CreateNewProfileDialog } from "@/components/ui/dialogs/create-new-profile";
-import { useAllNanies, useAllParents } from "@/actions/queries";
+import {
+  useAllFinancers,
+  useAllNanies,
+  useAllParents,
+} from "@/actions/queries";
 import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { ParentTableComp } from "@/components/ui/tables/parent-table";
 import { NanyTableComp } from "@/components/ui/tables/nany-table";
 import { SelectInput } from "@/components/ui/inputs/select-input";
+import { AuthStatesContext } from "@/context/auth";
+import { FinanceTableComp } from "@/components/ui/tables/finance-table";
 const nanyTableHeadings = [
   "User ID",
   "Nany ID",
@@ -29,6 +34,8 @@ const parentTableHeadings = [
   "Roll No",
   "Action",
 ];
+const financeTableHeadings = ["User ID", "Email", "Action"];
+
 const options = [
   {
     title: "Parent",
@@ -38,49 +45,29 @@ const options = [
     title: "Nanny",
     value: "nany",
   },
-];
-const tableHeadings = ["Username", "Email", "Performance", "Action"];
-const data = [
   {
-    profile: "/assets/profile.svg",
-    name: "Raza",
-    email: "raza@gmail.com",
-    performance: "Good",
-  },
-  {
-    profile: "/assets/profile.svg",
-    name: "Raza",
-    email: "raza@gmail.com",
-    performance: "Good",
-  },
-  {
-    profile: "/assets/profile.svg",
-    name: "Raza",
-    email: "raza@gmail.com",
-    performance: "Good",
+    title: "Finance",
+    value: "finance",
   },
 ];
-const tableOptions = [
-  {
-    name: "Edit",
-    value: "edit",
-  },
-  {
-    name: "Delete",
-    value: "delete",
-  },
-];
+
 export default function StudentManagement() {
+  const { user, token } = AuthStatesContext();
   const {
     data: naniesData,
     isLoading: naniesLoading,
     error: naniesError,
-  } = useAllNanies();
+  } = useAllNanies(user ?? user, token ?? token);
   const {
     data: parentsData,
     isLoading: parentsLoading,
     error: parentsError,
-  } = useAllParents();
+  } = useAllParents(user ?? user, token ?? token);
+  const {
+    data: financersData,
+    isLoading: financersLoading,
+    error: financersError,
+  } = useAllFinancers(user ?? user, token ?? token);
   const [openUserDialog, setOpenUserDialog] = useState(false);
   const [mount, setMount] = useState<boolean>(false);
   const [value, setValue] = useState<string>("parent");
@@ -126,16 +113,32 @@ export default function StudentManagement() {
               <p>{parentsData?.length || 0}</p>
             </div>
           )}
-          {value === "nany" && (
-            <div className="flex flex-col items-start gap-2 text-white">
-              <p>Nanies</p>
-              <p>{naniesData?.length || 0}</p>
-            </div>
-          )}
         </div>
+        {value === "nany" && (
+          <div className="flex flex-col items-start gap-2 text-white">
+            <p>Nanies</p>
+            <p>{naniesData?.length || 0}</p>
+          </div>
+        )}
+        {value === "finance" && (
+          <div className="flex flex-col items-start gap-2 text-white">
+            <p>Financers</p>
+            <p>{financersData?.length || 0}</p>
+          </div>
+        )}
       </div>
 
-      <SpinnerWrapper loading={naniesLoading || parentsLoading}>
+      <SpinnerWrapper
+        loading={
+          value === "nany"
+            ? naniesLoading
+            : value === "parent"
+            ? parentsLoading
+            : value === "finance"
+            ? financersLoading
+            : false
+        }
+      >
         {value === "parent" && (
           <ParentTableComp
             headings={parentTableHeadings}
@@ -147,6 +150,13 @@ export default function StudentManagement() {
           <NanyTableComp
             headings={nanyTableHeadings}
             data={naniesData}
+            edit={true}
+          />
+        )}
+        {value === "finance" && (
+          <FinanceTableComp
+            headings={financeTableHeadings}
+            data={financersData}
             edit={true}
           />
         )}

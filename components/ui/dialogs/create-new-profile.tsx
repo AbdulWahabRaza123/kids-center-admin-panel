@@ -35,19 +35,19 @@ export const CreateNewProfileDialog = ({
   setOpen: (value: boolean) => void;
   children: React.ReactNode;
 }) => {
-  const { token } = AuthStatesContext();
+  const { user, token } = AuthStatesContext();
   const {
     data: naniesData,
     isLoading: naniesLoading,
     error: naniesError,
     refetch: refetchNanies,
-  } = useAllNanies();
+  } = useAllNanies(user ?? user, token ?? token);
   const {
     data: parentsData,
     isLoading: parentsLoading,
     error: parentsError,
     refetch: refetchParents,
-  } = useAllParents();
+  } = useAllParents(user ?? user, token ?? token);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("parent");

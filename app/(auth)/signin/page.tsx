@@ -3,14 +3,14 @@
 import { PrimaryBtn } from "@/components/ui/buttons/primary-btn";
 import { TextInput } from "@/components/ui/inputs/text-input";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { SpinnerBtn } from "@/components/spinner-btn";
 import { AuthStatesContext } from "@/context/auth";
 const Signin = () => {
   const router = useRouter();
-  const { setUser } = AuthStatesContext();
+  const { user, setUser, setToken } = AuthStatesContext();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,12 +25,13 @@ const Signin = () => {
         email,
         password,
       });
-      const token = res.data.user.token;
-      const user = res.data.user.user;
-      setUser(user);
-      localStorage.setItem("kids-token", token);
-      localStorage.setItem("kids-user", JSON.stringify(user));
-      router.push("/");
+      const tempToken = res.data.user.token;
+      const tempUser = res.data.user.user;
+      localStorage.setItem("kids-token", tempToken);
+      localStorage.setItem("kids-user", JSON.stringify(tempUser));
+      setToken(tempToken);
+      setUser(tempUser);
+      // router.push("/");
       alert("login sucessful");
     } catch (e) {
       console.log(e);
@@ -39,6 +40,11 @@ const Signin = () => {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [user, router]);
   return (
     <div className="flex flex-col items-center w-[460px] bg-[#FFFFFF4D] p-3 mt-32">
       <Image

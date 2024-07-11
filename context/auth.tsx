@@ -36,9 +36,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 export const AuthStatesContext = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error(
-      "Auth Context must be used within a Airdrop Context Provider"
-    );
+    throw new Error("Auth Context must be used within a Auth Context Provider");
   }
   return context;
 };
