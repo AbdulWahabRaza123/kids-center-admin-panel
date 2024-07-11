@@ -71,7 +71,6 @@ export default function StudentManagement() {
   const [openUserDialog, setOpenUserDialog] = useState(false);
   const [mount, setMount] = useState<boolean>(false);
   const [value, setValue] = useState<string>("parent");
-
   useEffect(() => {
     setMount(true);
   }, []);
@@ -114,19 +113,19 @@ export default function StudentManagement() {
                 <p>{parentsData?.length || 0}</p>
               </div>
             )}
+            {value === "nany" && (
+              <div className="flex flex-col items-start gap-2 text-white">
+                <p>Nanies</p>
+                <p>{naniesData?.length || 0}</p>
+              </div>
+            )}
+            {value === "finance" && (
+              <div className="flex flex-col items-start gap-2 text-white">
+                <p>Financers</p>
+                <p>{financersData?.length || 0}</p>
+              </div>
+            )}
           </div>
-          {value === "nany" && (
-            <div className="flex flex-col items-start gap-2 text-white">
-              <p>Nanies</p>
-              <p>{naniesData?.length || 0}</p>
-            </div>
-          )}
-          {value === "finance" && (
-            <div className="flex flex-col items-start gap-2 text-white">
-              <p>Financers</p>
-              <p>{financersData?.length || 0}</p>
-            </div>
-          )}
         </div>
 
         <SpinnerWrapper

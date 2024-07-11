@@ -125,12 +125,30 @@ export const CreateOrEditProfileDialog = ({
       setLoading(false);
     }
   };
+  const handleEditUser = async () => {
+    try {
+      setLoading(true);
+      if (role === "parent") {
+        const parentData: ParentDetails = data as ParentDetails;
+        await handleLinkParent(parentData.user_id);
+      } else if (role === "nany") {
+        const nanyData: NanyDetails = data as NanyDetails;
+        await handleLinkNany(nanyData.user_id);
+      }
+      setOpen(false);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     if (edit && data) {
       if (data.role === "parent") {
         const parentData: ParentDetails = data as ParentDetails;
         setEmail(parentData.email);
         setPassword("*****");
+        setRole(data.role);
         setStudentName(parentData.student_name);
         setStudentClass(parentData.class);
         setStudentRollNo(parentData.roll_no);
@@ -139,16 +157,17 @@ export const CreateOrEditProfileDialog = ({
         const nanyData: NanyDetails = data as NanyDetails;
         setEmail(nanyData.email);
         setPassword("*****");
+        setRole(data.role);
         setNanyName(nanyData.nany_name);
         setNanyPhoneNo(nanyData.phone_no);
         setNanyRegNo(nanyData.reg_no);
         setNanyQualification(nanyData.qualification);
+      } else if (data.role === "finance") {
+        const financeData: UserDetails = data as UserDetails;
+        setEmail(financeData.email);
+        setPassword("*****");
+        setRole(data.role);
       }
-      // else if (data.role === "finance") {
-      //   const financeData: UserDeatis = data as UserDeatis;
-      //   setEmail(nanyData.email);
-      //   setPassword("*****");
-      // }
     }
   }, [edit, data]);
   return (
@@ -282,7 +301,13 @@ export const CreateOrEditProfileDialog = ({
         <div className="flex flex-row items-center justify-end w-full gap-4">
           <PrimaryBtn
             loading={loading}
-            onClick={handleRegisterUser}
+            onClick={() => {
+              if (edit) {
+                handleEditUser();
+              } else {
+                handleRegisterUser();
+              }
+            }}
             className="w-[100px] h-[45px] text-[16px] rounded-[9px] flex flex-row items-center justify-center"
           >
             <div className="flex items-center gap-2">

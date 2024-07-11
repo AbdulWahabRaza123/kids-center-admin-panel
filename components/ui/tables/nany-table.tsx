@@ -2,6 +2,8 @@ import { EditDelMenuComp } from "@/components/menu-bar";
 import { NanyDetails } from "@/interface/user-interface";
 import { EllipsisVertical } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
+import { CreateOrEditProfileDialog } from "../dialogs/create-edit-profile";
 
 export const NanyTableComp = ({
   headings,
@@ -12,8 +14,18 @@ export const NanyTableComp = ({
   data: NanyDetails[] | undefined;
   edit: boolean;
 }) => {
+  const [selectedData, setSelectedData] = useState<NanyDetails | null>(null);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
   return (
     <>
+      {selectedData && (
+        <CreateOrEditProfileDialog
+          open={openEditDialog}
+          setOpen={setOpenEditDialog}
+          data={selectedData}
+          edit={edit}
+        />
+      )}
       <table className="w-full mt-10 max-h-[70vh] overflow-auto">
         <thead className="bg-[#7A1FA01A]">
           {headings?.map((heading) => (
@@ -65,6 +77,10 @@ export const NanyTableComp = ({
                     <td className="w-[200px] text-start p-3">
                       <EditDelMenuComp
                         onClick={(selectedOpt) => {
+                          if (selectedOpt === "edit") {
+                            setSelectedData(val);
+                            setOpenEditDialog(true);
+                          }
                           console.log("This is selected option");
                         }}
                       >
