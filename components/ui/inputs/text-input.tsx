@@ -9,6 +9,7 @@ export const TextInput = ({
   title,
   placeholder,
   className,
+  disabled,
 }: {
   value: string;
   setValue: (value: string) => void;
@@ -16,6 +17,7 @@ export const TextInput = ({
   title: string;
   placeholder: string;
   className?: string;
+  disabled?: boolean;
 }) => {
   return (
     <div className={cn("flex flex-col items-start gap-2 w-full", className)}>
@@ -25,6 +27,7 @@ export const TextInput = ({
         setValue={setValue}
         type={type}
         placeholder={placeholder}
+        disabled={disabled}
       />
     </div>
   );

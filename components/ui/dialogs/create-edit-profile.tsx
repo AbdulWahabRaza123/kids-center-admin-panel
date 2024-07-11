@@ -16,6 +16,11 @@ import { useAllNanies, useAllParents } from "@/actions/queries";
 import { SpinnerBtn } from "@/components/spinner-btn";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
+import {
+  NanyDetails,
+  ParentDetails,
+  UserDetails,
+} from "@/interface/user-interface";
 const options = [
   {
     title: "Parent",
@@ -26,28 +31,23 @@ const options = [
     value: "nany",
   },
 ];
-export const CreateNewProfileDialog = ({
+export const CreateOrEditProfileDialog = ({
   open,
   setOpen,
-  children,
+  edit = false,
+  data,
 }: {
   open: boolean;
   setOpen: (value: boolean) => void;
-  children: React.ReactNode;
+  edit: boolean;
+  data?: ParentDetails | NanyDetails | UserDetails;
 }) => {
   const { user, token } = AuthStatesContext();
-  const {
-    data: naniesData,
-    isLoading: naniesLoading,
-    error: naniesError,
-    refetch: refetchNanies,
-  } = useAllNanies(user ?? user, token ?? token);
-  const {
-    data: parentsData,
-    isLoading: parentsLoading,
-    error: parentsError,
-    refetch: refetchParents,
-  } = useAllParents(user ?? user, token ?? token);
+  const { refetch: refetchNanies } = useAllNanies(user ?? user, token ?? token);
+  const { refetch: refetchParents } = useAllParents(
+    user ?? user,
+    token ?? token
+  );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("parent");
@@ -62,6 +62,46 @@ export const CreateNewProfileDialog = ({
   const [nanyRegNo, setNanyRegNo] = useState("");
   const [nanyQualification, setNanyQualification] = useState("");
   const [loading, setLoading] = useState(false);
+  const handleLinkParent = async (id: number) => {
+    try {
+      const data = {
+        userId: id,
+        studentName: studentName,
+        class: studentClass,
+        rollNo: studentRollNo,
+        phoneNo: studentPhoneNo,
+      };
+      const resParent = await client.post("/parent/link", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      refetchParents();
+    } catch (e) {
+      console.log(e);
+      throw new Error("Parent Invalid error");
+    }
+  };
+  const handleLinkNany = async (id: number) => {
+    try {
+      const data = {
+        userId: id,
+        nanyName: nanyName,
+        phoneNo: nanyPhoneNo,
+        regNo: nanyRegNo,
+        qualification: nanyQualification,
+      };
+      const resNany = await client.post("/nany/link", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      refetchNanies();
+    } catch (e) {
+      console.log(e);
+      throw new Error("Nany Invalid error");
+    }
+  };
   const handleRegisterUser = async () => {
     try {
       setLoading(true);
@@ -73,33 +113,9 @@ export const CreateNewProfileDialog = ({
       const id = res.data.id;
       if (id > 0) {
         if (role === "parent") {
-          const data = {
-            userId: id,
-            studentName: studentName,
-            class: studentClass,
-            rollNo: studentRollNo,
-            phoneNo: studentPhoneNo,
-          };
-          const resParent = await client.post("/parent/link", data, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          refetchParents();
+          await handleLinkParent(id);
         } else if (role === "nany") {
-          const data = {
-            userId: id,
-            nanyName: nanyName,
-            phoneNo: nanyPhoneNo,
-            regNo: nanyRegNo,
-            qualification: nanyQualification,
-          };
-          const resNany = await client.post("/nany/link", data, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          refetchNanies();
+          await handleLinkNany(id);
         }
         setOpen(false);
       }
@@ -109,14 +125,39 @@ export const CreateNewProfileDialog = ({
       setLoading(false);
     }
   };
+  useEffect(() => {
+    if (edit && data) {
+      if (data.role === "parent") {
+        const parentData: ParentDetails = data as ParentDetails;
+        setEmail(parentData.email);
+        setPassword("*****");
+        setStudentName(parentData.student_name);
+        setStudentClass(parentData.class);
+        setStudentRollNo(parentData.roll_no);
+        setStudentPhoneNo(parentData.phone_no);
+      } else if (data.role === "nany") {
+        const nanyData: NanyDetails = data as NanyDetails;
+        setEmail(nanyData.email);
+        setPassword("*****");
+        setNanyName(nanyData.nany_name);
+        setNanyPhoneNo(nanyData.phone_no);
+        setNanyRegNo(nanyData.reg_no);
+        setNanyQualification(nanyData.qualification);
+      }
+      // else if (data.role === "finance") {
+      //   const financeData: UserDeatis = data as UserDeatis;
+      //   setEmail(nanyData.email);
+      //   setPassword("*****");
+      // }
+    }
+  }, [edit, data]);
   return (
     <Dialog open={open}>
-      <div>{children}</div>
-      <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-        <X onClick={() => setOpen(false)} className="h-4 w-4" />
-        <span className="sr-only">Close</span>
-      </DialogPrimitive.Close>
       <DialogContent className="bg-white border-[1px] border-[#00f4ff] rounded-[20px] max-w-[900px] h-[80vh] overflow-auto flex flex-col gap-7 p-5">
+        <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+          <X onClick={() => setOpen(false)} className="h-4 w-4" />
+          <span className="sr-only">Close</span>
+        </DialogPrimitive.Close>
         <div className="flex flex-row items-center gap-3">
           <Image
             src="/assets/icons/profile.svg"
@@ -125,7 +166,9 @@ export const CreateNewProfileDialog = ({
             height={20}
             className="object-cover"
           />
-          <h1 className="text-[20px]">Create New Profile</h1>
+          <h1 className="text-[20px]">
+            {edit ? "Edit Profile" : "Create New Profile"}
+          </h1>
         </div>
         <div className="flex flex-row items-center gap-3 mt-3">
           <TextInput
@@ -135,10 +178,16 @@ export const CreateNewProfileDialog = ({
             value={email}
             setValue={setEmail}
             className="w-[50%]"
+            disabled={edit}
           />
           <div className="flex flex-col items-start gap-2">
             <h1 className=" text-black">Role</h1>
-            <SelectInput options={options} value={role} setValue={setRole} />
+            <SelectInput
+              options={options}
+              value={role}
+              setValue={setRole}
+              disabled={edit}
+            />
           </div>
         </div>
         <TextInput
@@ -148,6 +197,7 @@ export const CreateNewProfileDialog = ({
           value={password}
           setValue={setPassword}
           className="w-full"
+          disabled={edit}
         />
         {role == "parent" && (
           <div>

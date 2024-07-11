@@ -13,6 +13,7 @@ export const SelectInput = ({
   value,
   setValue,
   className,
+  disabled,
 }: {
   options: {
     title: string;
@@ -21,10 +22,19 @@ export const SelectInput = ({
   value: string;
   setValue: (val: string) => void;
   className?: string;
+  disabled?: boolean;
 }) => {
   return (
     <>
-      <Select onValueChange={(value) => setValue(value)} value={value}>
+      <Select
+        onValueChange={(value) => {
+          if (disabled) {
+            return;
+          }
+          setValue(value);
+        }}
+        value={value}
+      >
         <SelectTrigger
           className={cn("w-[350px] rounded-[10px] h-[47px] py-2", className)}
         >

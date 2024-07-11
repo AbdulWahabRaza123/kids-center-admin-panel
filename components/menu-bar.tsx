@@ -59,7 +59,7 @@ export const EditDelMenuComp = ({
           <MenubarContent className="w-full shadow-md bg-[#F2F2F2] rounded-[20px]">
             <MenubarItem
               onClick={() => {
-                onClick("add");
+                onClick("edit");
               }}
               className="cursor-pointer flex flex-row items-center gap-2 rounded-[10px]"
             >

@@ -2,7 +2,7 @@
 import { PrimaryBtn } from "@/components/ui/buttons/primary-btn";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { CreateNewProfileDialog } from "@/components/ui/dialogs/create-new-profile";
+import { CreateOrEditProfileDialog } from "@/components/ui/dialogs/create-edit-profile";
 import {
   useAllFinancers,
   useAllNanies,
@@ -77,16 +77,18 @@ export default function StudentManagement() {
   }, []);
   if (!mount) return null;
   return (
-    <main className="flex flex-col px-10">
-      <div className="flex flex-row items-start justify-between">
-        <h1 className="text-[26px] font-[600]">User Management</h1>
-        <div className="flex flex-col items-end gap-2">
-          <SelectInput options={options} value={value} setValue={setValue} />
+    <>
+      <CreateOrEditProfileDialog
+        open={openUserDialog}
+        setOpen={setOpenUserDialog}
+        edit={false}
+      />
+      <main className="flex flex-col px-10">
+        <div className="flex flex-row items-start justify-between">
+          <h1 className="text-[26px] font-[600]">User Management</h1>
+          <div className="flex flex-col items-end gap-2">
+            <SelectInput options={options} value={value} setValue={setValue} />
 
-          <CreateNewProfileDialog
-            open={openUserDialog}
-            setOpen={setOpenUserDialog}
-          >
             <PrimaryBtn
               className="w-[200px] text-[16px] h-[40px] flex flex-row items-center justify-center"
               onClick={() => {
@@ -95,72 +97,72 @@ export default function StudentManagement() {
             >
               Create Profile
             </PrimaryBtn>
-          </CreateNewProfileDialog>
+          </div>
         </div>
-      </div>
-      <div className="flex flex-row items-center justify-center">
-        <div className="bg-primary p-3 flex flex-row items-center justify-start w-[300px] gap-2 rounded-[10px] mt-6 mb-2">
-          <Image
-            src="/assets/dashboard/student.svg"
-            width={70}
-            height={70}
-            alt="search"
-            className="object-cover"
-          />
-          {value === "parent" && (
+        <div className="flex flex-row items-center justify-center">
+          <div className="bg-primary p-3 flex flex-row items-center justify-start w-[300px] gap-2 rounded-[10px] mt-6 mb-2">
+            <Image
+              src="/assets/dashboard/student.svg"
+              width={70}
+              height={70}
+              alt="search"
+              className="object-cover"
+            />
+            {value === "parent" && (
+              <div className="flex flex-col items-start gap-2 text-white">
+                <p>Parents</p>
+                <p>{parentsData?.length || 0}</p>
+              </div>
+            )}
+          </div>
+          {value === "nany" && (
             <div className="flex flex-col items-start gap-2 text-white">
-              <p>Parents</p>
-              <p>{parentsData?.length || 0}</p>
+              <p>Nanies</p>
+              <p>{naniesData?.length || 0}</p>
+            </div>
+          )}
+          {value === "finance" && (
+            <div className="flex flex-col items-start gap-2 text-white">
+              <p>Financers</p>
+              <p>{financersData?.length || 0}</p>
             </div>
           )}
         </div>
-        {value === "nany" && (
-          <div className="flex flex-col items-start gap-2 text-white">
-            <p>Nanies</p>
-            <p>{naniesData?.length || 0}</p>
-          </div>
-        )}
-        {value === "finance" && (
-          <div className="flex flex-col items-start gap-2 text-white">
-            <p>Financers</p>
-            <p>{financersData?.length || 0}</p>
-          </div>
-        )}
-      </div>
 
-      <SpinnerWrapper
-        loading={
-          value === "nany"
-            ? naniesLoading
-            : value === "parent"
-            ? parentsLoading
-            : value === "finance"
-            ? financersLoading
-            : false
-        }
-      >
-        {value === "parent" && (
-          <ParentTableComp
-            headings={parentTableHeadings}
-            data={parentsData}
-            edit={true}
-          />
-        )}
-        {value === "nany" && (
-          <NanyTableComp
-            headings={nanyTableHeadings}
-            data={naniesData}
-            edit={true}
-          />
-        )}
-        {value === "finance" && (
-          <FinanceTableComp
-            headings={financeTableHeadings}
-            data={financersData}
-            edit={true}
-          />
-        )}
-      </SpinnerWrapper>
-    </main>
+        <SpinnerWrapper
+          loading={
+            value === "nany"
+              ? naniesLoading
+              : value === "parent"
+              ? parentsLoading
+              : value === "finance"
+              ? financersLoading
+              : false
+          }
+        >
+          {value === "parent" && (
+            <ParentTableComp
+              headings={parentTableHeadings}
+              data={parentsData}
+              edit={true}
+            />
+          )}
+          {value === "nany" && (
+            <NanyTableComp
+              headings={nanyTableHeadings}
+              data={naniesData}
+              edit={true}
+            />
+          )}
+          {value === "finance" && (
+            <FinanceTableComp
+              headings={financeTableHeadings}
+              data={financersData}
+              edit={true}
+            />
+          )}
+        </SpinnerWrapper>
+      </main>
+    </>
   );
 }
