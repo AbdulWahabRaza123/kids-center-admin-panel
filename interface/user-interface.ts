@@ -5,7 +5,7 @@ export interface UserDetails {
   email: string;
   role: RoleDetails;
   created_at: any;
-  disabled: DisabledTypes
+  disabled: DisabledTypes;
 }
 export interface DBUser {
   message: string;
@@ -22,7 +22,7 @@ export interface ParentDetails {
   roll_no: string;
   phone_no: string;
   user_created_at: any;
-  disabled: DisabledTypes
+  disabled: DisabledTypes;
 }
 export interface NanyDetails {
   user_id: number;
@@ -34,6 +34,5 @@ export interface NanyDetails {
   reg_no: string;
   phone_no: string;
   user_created_at: any;
-  disabled: DisabledTypes
-
+  disabled: DisabledTypes;
 }
