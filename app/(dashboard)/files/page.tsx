@@ -1,11 +1,11 @@
 "use client";
-import { useAllFees, useAllFiles } from "@/actions/queries";
+import { useAllFiles } from "@/actions/queries";
+import { Spinner } from "@/components/spinner";
 import { PrimaryBtn } from "@/components/ui/buttons/primary-btn";
 import { AssignAFileDialog } from "@/components/ui/dialogs/add-file-dialog";
 import { QRCodeDialog } from "@/components/ui/dialogs/qr-code-dialog";
 import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
-import { FeeDetails } from "@/interface/fees-intrface";
 import { FileDetails } from "@/interface/file-interface";
 import { Ellipsis } from "lucide-react";
 import Link from "next/link";
@@ -26,7 +26,12 @@ export default function FilePage() {
   useEffect(() => {
     setMount(true);
   }, []);
-  if (!mount) return null;
+  if (!mount || isLoading)
+    return (
+      <div className="flex items-center justify-center h-[60vh]">
+        <Spinner />
+      </div>
+    );
 
   return (
     <>

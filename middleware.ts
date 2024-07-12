@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-const adminRoutes = ["/", "/activities", "/attendance", "/communication", "/profile", "/user-manage", "/report", "/parent-files"]
+const adminRoutes = ["/", "/activities", "/attendance", "/communication", "/profile", "/user-manage", "/report", "/files"]
 const financeRoutes = ["/finance"]
 // const protectedRoutes = ["/", "/activities", "/attendance", "/communication", "/profile", "/user-manage", "/report", "/parent-files", "/finance"]
 export function middleware(req: NextRequest) {

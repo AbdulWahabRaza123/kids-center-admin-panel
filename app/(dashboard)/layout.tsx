@@ -41,7 +41,7 @@ const sidebarItems = [
     name: "File",
     activeIcon: "/assets/sidebar-icons/active/settings.svg",
     noneActiveIcon: "/assets/sidebar-icons/non-active/settings.svg",
-    link: "/parent-files",
+    link: "/files",
   },
   {
     name: "Logout",
