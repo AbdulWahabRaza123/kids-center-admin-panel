@@ -7,6 +7,7 @@ import {
   useAllFinancers,
   useAllNanies,
   useAllParents,
+  useAllTeachers,
 } from "@/actions/queries";
 import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { ParentTableComp } from "@/components/ui/tables/parent-table";
@@ -14,6 +15,7 @@ import { NanyTableComp } from "@/components/ui/tables/nany-table";
 import { SelectInput } from "@/components/ui/inputs/select-input";
 import { AuthStatesContext } from "@/context/auth";
 import { FinanceTableComp } from "@/components/ui/tables/finance-table";
+import { TeacherTableComp } from "@/components/ui/tables/teacher-table";
 const nanyTableHeadings = [
   "User ID",
   "Nany ID",
@@ -35,6 +37,7 @@ const parentTableHeadings = [
   "Action",
 ];
 const financeTableHeadings = ["User ID", "Email", "Action"];
+const teacherTableHeadings = ["User ID", "Email", "Action"];
 
 const options = [
   {
@@ -48,6 +51,10 @@ const options = [
   {
     title: "Finance",
     value: "finance",
+  },
+  {
+    title: "Teacher",
+    value: "teacher",
   },
 ];
 
@@ -68,6 +75,11 @@ export default function StudentManagement() {
     isLoading: financersLoading,
     error: financersError,
   } = useAllFinancers(user ?? user, token ?? token);
+  const {
+    data: teacherData,
+    isLoading: teacherLoading,
+    error: teacherError,
+  } = useAllTeachers(user ?? user, token ?? token);
   const [openUserDialog, setOpenUserDialog] = useState(false);
   const [mount, setMount] = useState<boolean>(false);
   const [value, setValue] = useState<string>("parent");
@@ -125,6 +137,12 @@ export default function StudentManagement() {
                 <p>{financersData?.length || 0}</p>
               </div>
             )}
+            {value === "teacher" && (
+              <div className="flex flex-col items-start gap-2 text-white">
+                <p>Teachers</p>
+                <p>{teacherData?.length || 0}</p>
+              </div>
+            )}
           </div>
         </div>
 
@@ -136,6 +154,8 @@ export default function StudentManagement() {
               ? parentsLoading
               : value === "finance"
               ? financersLoading
+              : value === "teacher"
+              ? teacherLoading
               : false
           }
         >
@@ -157,6 +177,13 @@ export default function StudentManagement() {
             <FinanceTableComp
               headings={financeTableHeadings}
               data={financersData}
+              edit={true}
+            />
+          )}
+          {value === "teacher" && (
+            <TeacherTableComp
+              headings={teacherTableHeadings}
+              data={teacherData}
               edit={true}
             />
           )}
