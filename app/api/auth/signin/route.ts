@@ -11,11 +11,13 @@ export async function POST(req: Request, res: NextApiResponse) {
       email,
       password,
     });
-    console.log("This is res ", res);
     if (!res) {
       return NextResponse.json({ res: "Unauthorized" }, { status: 401 });
     }
-    const user: DBUser = res.data.user;
+    const user = res.data.user;
+    if (user.role !== "admin") {
+      return NextResponse.json({ res: "Unauthorized" }, { status: 401 });
+    }
     cookieStore.set("user", JSON.stringify(user), { httpOnly: true });
     return NextResponse.json({ user: res.data }, { status: 201 });
   } catch (error) {

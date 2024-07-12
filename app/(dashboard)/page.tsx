@@ -3,11 +3,13 @@ import {
   useAllFinancers,
   useAllNanies,
   useAllParents,
+  useAllTeachers,
 } from "@/actions/queries";
 import { SelectInput } from "@/components/ui/inputs/select-input";
 import { FinanceTableComp } from "@/components/ui/tables/finance-table";
 import { NanyTableComp } from "@/components/ui/tables/nany-table";
 import { ParentTableComp } from "@/components/ui/tables/parent-table";
+import { TeacherTableComp } from "@/components/ui/tables/teacher-table";
 import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
 import { useEffect, useState } from "react";
@@ -30,6 +32,7 @@ const parentTableHeadings = [
   "Roll No",
 ];
 const financeTableHeadings = ["User ID", "Email"];
+const teacherTableHeadings = ["User ID", "Email"];
 const options = [
   {
     title: "Parent",
@@ -42,6 +45,10 @@ const options = [
   {
     title: "Financer",
     value: "finance",
+  },
+  {
+    title: "Teacher",
+    value: "teacher",
   },
 ];
 
@@ -62,6 +69,11 @@ export default function Home() {
     isLoading: financersLoading,
     error: financersError,
   } = useAllFinancers(user ?? user, token ?? token);
+  const {
+    data: teacherData,
+    isLoading: teacherLoading,
+    error: teacherError,
+  } = useAllTeachers(user ?? user, token ?? token);
   const [mount, setMount] = useState<boolean>(false);
   const [value, setValue] = useState<string>("parent");
   useEffect(() => {
@@ -82,6 +94,8 @@ export default function Home() {
             ? parentsLoading
             : value === "finance"
             ? financersLoading
+            : value === "teacher"
+            ? teacherLoading
             : false
         }
       >
@@ -103,6 +117,13 @@ export default function Home() {
           <FinanceTableComp
             headings={financeTableHeadings}
             data={financersData}
+            edit={false}
+          />
+        )}
+        {value === "teacher" && (
+          <TeacherTableComp
+            headings={teacherTableHeadings}
+            data={teacherData}
             edit={false}
           />
         )}

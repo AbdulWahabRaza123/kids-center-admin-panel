@@ -27,11 +27,11 @@ const Signin = () => {
       });
       const tempToken = res.data.user.token;
       const tempUser = res.data.user.user;
+
       localStorage.setItem("kids-token", tempToken);
       localStorage.setItem("kids-user", JSON.stringify(tempUser));
       setToken(tempToken);
       setUser(tempUser);
-      // router.push("/");
       alert("login sucessful");
     } catch (e) {
       console.log(e);
@@ -42,7 +42,10 @@ const Signin = () => {
   };
   useEffect(() => {
     if (user) {
-      router.push("/");
+      console.log("This is user ", user);
+      if (user.role === "admin") {
+        router.push("/");
+      }
     }
   }, [user, router]);
   return (

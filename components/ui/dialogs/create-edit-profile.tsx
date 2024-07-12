@@ -30,6 +30,14 @@ const options = [
     title: "Nanny",
     value: "nany",
   },
+  {
+    title: "Finance",
+    value: "finance",
+  },
+  {
+    title: "Teacher",
+    value: "teacher",
+  },
 ];
 export const CreateOrEditProfileDialog = ({
   open,
