@@ -76,15 +76,14 @@ export default function FilePage() {
                   <>
                     <tr>
                       <td className="flex flex-row items-center gap-2 w-[200px] text-start p-3">
-                        {val?.id}
+                        {val.id || "-"}
                       </td>
-                      <td className="w-[200px] text-start p-3">{val?.name}</td>
+                      <td className="w-[200px] text-start p-3">
+                        {val.name || "-"}
+                      </td>
                       <td className="w-[200px] text-start p-3">
                         {val?.file_link && (
-                          <Link
-                            href={val?.file_link || "#link"}
-                            target="_blank"
-                          >
+                          <Link href={val.file_link || "#link"} target="_blank">
                             Link
                           </Link>
                         )}

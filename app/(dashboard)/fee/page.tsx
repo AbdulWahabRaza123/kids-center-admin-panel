@@ -61,20 +61,22 @@ export default function FeePage() {
                         {val.id}
                       </td>
                       <td className="w-[200px] text-start p-3">
-                        {val.created_for_id}
+                        {val.created_for_id || "-"}
                       </td>
-                      <td className="w-[200px] text-start p-3">{val.month}</td>
+                      <td className="w-[200px] text-start p-3">
+                        {val.month || "-"}
+                      </td>
                       <td className="w-[200px] ps-5 py-3 pe-3 text-start">
-                        {val.payment_date}
+                        {val.payment_date || "-"}
                       </td>
                       <td className="w-[200px] ps-7 py-3 pe-3 text-center">
-                        {val.pay_mode}
+                        {val.pay_mode || "-"}
                       </td>
                       <td className="w-[200px] ps-7 py-3 pe-3 text-center">
-                        {val.total_pending}
+                        {val.total_pending || "-"}
                       </td>
                       <td className="w-[200px] ps-7 py-3 pe-3 text-center">
-                        {val.status}
+                        {val.status || "-"}
                       </td>
                       <td className="w-[200px] ps-7 py-3 pe-3 text-center">
                         <Ellipsis
