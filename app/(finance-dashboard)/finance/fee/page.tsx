@@ -1,5 +1,7 @@
 "use client";
 import { useAllFees } from "@/actions/queries";
+import { PrimaryBtn } from "@/components/ui/buttons/primary-btn";
+import { CreateOrEditFeeDialog } from "@/components/ui/dialogs/create-edit-fee";
 import { QRCodeDialog } from "@/components/ui/dialogs/qr-code-dialog";
 import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
@@ -18,12 +20,13 @@ const tableHeadings = [
   "More",
 ];
 
-export default function FinancePage() {
+export default function FeePage() {
   const { user, token } = AuthStatesContext();
   const { data, isLoading, isError } = useAllFees(user ?? user, token ?? token);
   const [mount, setMount] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<FeeDetails | null>(null);
   const [openQRDialog, setOpenQRDialog] = useState(false);
+  const [openAddFeeDialog, setOpenAddFeeDialog] = useState(false);
   useEffect(() => {
     setMount(true);
   }, []);
@@ -38,10 +41,25 @@ export default function FinancePage() {
           id={selectedData.id}
         />
       )}
+      {openAddFeeDialog && (
+        <CreateOrEditFeeDialog
+          open={openAddFeeDialog}
+          setOpen={setOpenAddFeeDialog}
+          edit={false}
+        />
+      )}
 
       <main className="flex flex-col px-10">
         <div className="flex flex-row items-start justify-between">
           <h1 className="text-[26px] font-[600]">Fee Details</h1>
+          <PrimaryBtn
+            className="w-[200px] text-[16px] h-[40px] flex flex-row items-center justify-center"
+            onClick={() => {
+              setOpenAddFeeDialog(true);
+            }}
+          >
+            Create Fee
+          </PrimaryBtn>
         </div>
         <SpinnerWrapper loading={isLoading}>
           <table className="w-full mt-10 max-h-[70vh] overflow-auto">

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 const adminRoutes = ["/", "/activities", "/attendance", "/communication", "/profile", "/user-manage", "/report", "/parent-files"]
 const financeRoutes = ["/finance"]
-const protectedRoutes = ["/", "/activities", "/attendance", "/communication", "/profile", "/user-manage", "/report", "/parent-files", "/finance"]
+// const protectedRoutes = ["/", "/activities", "/attendance", "/communication", "/profile", "/user-manage", "/report", "/parent-files", "/finance"]
 export function middleware(req: NextRequest) {
   const url = req.nextUrl.clone();
   const cookies = req.cookies;
@@ -9,6 +9,7 @@ export function middleware(req: NextRequest) {
   if (!temp) {
     return NextResponse.redirect(new URL("/signin", req.url));
   }
+
   const user = JSON.parse(temp);
   if (user.role === "admin" && financeRoutes.includes(url.pathname)) {
     return NextResponse.redirect(new URL("/", req.url));
@@ -19,5 +20,5 @@ export function middleware(req: NextRequest) {
   return NextResponse.next();
 }
 export const config = {
-  matcher: protectedRoutes
+  matcher: ["/", "/finance"]
 };
