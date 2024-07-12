@@ -6,7 +6,7 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import { Ban, Edit } from "lucide-react";
+import { Ban, Edit, ScanBarcode } from "lucide-react";
 import Image from "next/image";
 
 export const MenubarComp = ({
@@ -49,7 +49,7 @@ export const EditDisableMenuComp = ({
   onClick,
 }: {
   children: React.ReactNode;
-  onClick: (val: "edit" | "ban") => void;
+  onClick: (val: "edit" | "ban" | "qr") => void;
 }) => {
   return (
     <>
@@ -57,6 +57,15 @@ export const EditDisableMenuComp = ({
         <MenubarMenu>
           <MenubarTrigger className="p-3">{children}</MenubarTrigger>
           <MenubarContent className="w-full shadow-md bg-[#F2F2F2] rounded-[20px]">
+            <MenubarItem
+              onClick={() => {
+                onClick("qr");
+              }}
+              className="cursor-pointer flex flex-row items-center gap-2 rounded-[10px]"
+            >
+              <ScanBarcode className="w-[20px] h-[20px] text-[#2D8C00]" />
+              <p className="text-[#2D8C00] text-[14px]">QR Code</p>
+            </MenubarItem>
             <MenubarItem
               onClick={() => {
                 onClick("edit");
@@ -72,13 +81,6 @@ export const EditDisableMenuComp = ({
               }}
               className="cursor-pointer flex flex-row items-center gap-2 rounded-[10px]"
             >
-              {/* <Image
-                src="/assets/icons/del-table.svg"
-                alt="add table"
-                width={20}
-                height={20}
-                className="object-cover"
-              /> */}
               <Ban className="w-[20px] h-[20px] text-[#FF0000]" />
               <p className="text-[#FF0000] text-[14px]">Disable</p>
             </MenubarItem>

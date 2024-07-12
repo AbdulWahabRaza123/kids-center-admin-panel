@@ -5,6 +5,7 @@ import Image from "next/image";
 import { CreateOrEditProfileDialog } from "../dialogs/create-edit-profile";
 import { useState } from "react";
 import { UserBanConfirmationDialog } from "../dialogs/user-ban-confirmation-dialog";
+import { QRCodeDialog } from "../dialogs/qr-code-dialog";
 
 export const ParentTableComp = ({
   headings,
@@ -18,6 +19,8 @@ export const ParentTableComp = ({
   const [selectedData, setSelectedData] = useState<ParentDetails | null>(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openBanDialog, setOpenBanDialog] = useState(false);
+  const [openQRDialog, setOpenQRDialog] = useState(false);
+
   return (
     <>
       {selectedData && openEditDialog && (
@@ -34,6 +37,13 @@ export const ParentTableComp = ({
           setOpen={setOpenBanDialog}
           id={selectedData.user_id}
           role="parent"
+        />
+      )}
+      {selectedData && openQRDialog && (
+        <QRCodeDialog
+          open={openQRDialog}
+          setOpen={setOpenQRDialog}
+          id={selectedData.user_id}
         />
       )}
       <table className="w-full mt-10 max-h-[70vh] overflow-auto">
@@ -89,13 +99,16 @@ export const ParentTableComp = ({
                   {edit && (
                     <td className="w-[200px] text-start p-3">
                       <EditDisableMenuComp
-                        onClick={(selectedOpt: "edit" | "ban") => {
+                        onClick={(selectedOpt: "edit" | "ban" | "qr") => {
                           if (selectedOpt === "edit") {
                             setSelectedData(val);
                             setOpenEditDialog(true);
                           } else if (selectedOpt === "ban") {
                             setSelectedData(val);
                             setOpenBanDialog(true);
+                          } else if (selectedOpt === "qr") {
+                            setSelectedData(val);
+                            setOpenQRDialog(true);
                           }
                           console.log("This is selected option");
                         }}

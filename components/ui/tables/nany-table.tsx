@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { CreateOrEditProfileDialog } from "../dialogs/create-edit-profile";
 import { UserBanConfirmationDialog } from "../dialogs/user-ban-confirmation-dialog";
-
+import { QRCodeDialog } from "../dialogs/qr-code-dialog";
 export const NanyTableComp = ({
   headings,
   data,
@@ -19,6 +19,7 @@ export const NanyTableComp = ({
   const [selectedData, setSelectedData] = useState<NanyDetails | null>(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openBanDialog, setOpenBanDialog] = useState(false);
+  const [openQRDialog, setOpenQRDialog] = useState(false);
 
   return (
     <>
@@ -36,6 +37,13 @@ export const NanyTableComp = ({
           setOpen={setOpenBanDialog}
           id={selectedData.user_id}
           role="nany"
+        />
+      )}
+      {selectedData && openQRDialog && (
+        <QRCodeDialog
+          open={openQRDialog}
+          setOpen={setOpenQRDialog}
+          id={selectedData.user_id}
         />
       )}
       <table className="w-full mt-10 max-h-[70vh] overflow-auto">
@@ -98,6 +106,9 @@ export const NanyTableComp = ({
                           } else if (selectedOpt === "ban") {
                             setSelectedData(val);
                             setOpenBanDialog(true);
+                          } else if (selectedOpt === "qr") {
+                            setSelectedData(val);
+                            setOpenQRDialog(true);
                           }
                           console.log("This is selected option");
                         }}
