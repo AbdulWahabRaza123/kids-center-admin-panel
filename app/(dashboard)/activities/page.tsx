@@ -15,32 +15,6 @@ const tableHeadings = [
   "Checkout",
   "More",
 ];
-// const data = [
-//   {
-//     profile: "/assets/profile.svg",
-//     name: "Raza",
-//     email: "raza@gmail.com",
-//     qrCode: "6hsh7",
-//     performance: "Good",
-//     status: "active",
-//   },
-//   {
-//     profile: "/assets/profile.svg",
-//     name: "Raza",
-//     email: "raza@gmail.com",
-//     qrCode: "6hsh7",
-//     performance: "Good",
-//     status: "inactive",
-//   },
-//   {
-//     profile: "/assets/profile.svg",
-//     name: "Raza",
-//     email: "raza@gmail.com",
-//     qrCode: "6hsh7",
-//     performance: "Good",
-//     status: "active",
-//   },
-// ];
 
 export default function ActivityPage() {
   const { user, token } = AuthStatesContext();

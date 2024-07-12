@@ -1,5 +1,6 @@
 import { AuthStatesContext } from "@/context/auth";
 import { UserActivityDetails } from "@/interface/activities-interface";
+import { AttendanceDetails } from "@/interface/attendance-interface";
 import {
   NanyDetails,
   ParentDetails,
@@ -82,6 +83,26 @@ export function useAllActivities(user: UserDetails, token: string) {
         });
         const data = res.data;
         return data as UserActivityDetails[];
+      } catch (e) {
+        console.log(e);
+        throw new Error("Invalid Error found");
+      }
+    },
+  });
+}
+export function useAllAttendance(user: UserDetails, token: string) {
+  return useQuery({
+    enabled: !!user?.id,
+    queryKey: ["attendance", user?.id],
+    queryFn: async () => {
+      try {
+        const res = await client.get(`/nany/attendance/all`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = res.data;
+        return data as AttendanceDetails[];
       } catch (e) {
         console.log(e);
         throw new Error("Invalid Error found");
