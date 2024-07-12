@@ -5,58 +5,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import { LogoutDialog } from "./ui/dialogs/logout-dialog";
-const sidebarItems = [
-  {
-    name: "Dashboard",
-    activeIcon: "/assets/sidebar-icons/active/home.svg",
-    noneActiveIcon: "/assets/sidebar-icons/non-active/home.svg",
-    link: "/",
-  },
-  {
-    name: "User Management",
-    activeIcon: "/assets/sidebar-icons/active/people.svg",
-    noneActiveIcon: "/assets/sidebar-icons/non-active/people.svg",
-    link: "/user-manage",
-  },
-  {
-    name: "Activities",
-    activeIcon: "/assets/sidebar-icons/active/reports.svg",
-    noneActiveIcon: "/assets/sidebar-icons/non-active/reports.svg",
-    link: "/activities",
-  },
-  {
-    name: "Profile",
-    activeIcon: "/assets/sidebar-icons/active/profile.svg",
-    noneActiveIcon: "/assets/sidebar-icons/non-active/profile.svg",
-    link: "/profile",
-  },
-  {
-    name: "Communication",
-    activeIcon: "/assets/sidebar-icons/active/communication.svg",
-    noneActiveIcon: "/assets/sidebar-icons/non-active/communication.svg",
-    link: "/communication",
-  },
-  {
-    name: "Attendance",
-    activeIcon: "/assets/sidebar-icons/active/qr-code.svg",
-    noneActiveIcon: "/assets/sidebar-icons/non-active/qr-code.svg",
-    link: "/attendance",
-  },
-  {
-    name: "Settings",
-    activeIcon: "/assets/sidebar-icons/active/settings.svg",
-    noneActiveIcon: "/assets/sidebar-icons/non-active/settings.svg",
-    link: "#setting",
-  },
-  {
-    name: "Logout",
-    activeIcon: "/assets/sidebar-icons/active/logout.svg",
-    noneActiveIcon: "/assets/sidebar-icons/non-active/logout.svg",
-    link: "#logout",
-  },
-];
 
-export const Sidebar = () => {
+export const Sidebar = ({
+  menu,
+}: {
+  menu: {
+    name: string;
+    activeIcon: string;
+    noneActiveIcon: string;
+    link: string;
+  }[];
+}) => {
   const pathname = usePathname();
   const [active, setActive] = useState(pathname);
   return (
@@ -69,7 +28,7 @@ export const Sidebar = () => {
         className="object-cover w-full my-5"
       />
       <div className="mt-7 flex flex-col gap-3 w-full">
-        {sidebarItems?.map((item, index) => {
+        {menu?.map((item, index) => {
           if (item.link === "#logout") {
             return (
               <LogoutDialog key={index}>

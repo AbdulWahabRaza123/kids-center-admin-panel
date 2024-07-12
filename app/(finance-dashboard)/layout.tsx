@@ -20,29 +20,29 @@ const sidebarItems = [
     link: "/activities",
   },
   {
-    name: "Fee",
+    name: "Profile",
     activeIcon: "/assets/sidebar-icons/active/profile.svg",
     noneActiveIcon: "/assets/sidebar-icons/non-active/profile.svg",
-    link: "/fee",
+    link: "/profile",
   },
-  // {
-  //   name: "Communication",
-  //   activeIcon: "/assets/sidebar-icons/active/communication.svg",
-  //   noneActiveIcon: "/assets/sidebar-icons/non-active/communication.svg",
-  //   link: "/communication",
-  // },
+  {
+    name: "Communication",
+    activeIcon: "/assets/sidebar-icons/active/communication.svg",
+    noneActiveIcon: "/assets/sidebar-icons/non-active/communication.svg",
+    link: "/communication",
+  },
   {
     name: "Attendance",
     activeIcon: "/assets/sidebar-icons/active/qr-code.svg",
     noneActiveIcon: "/assets/sidebar-icons/non-active/qr-code.svg",
     link: "/attendance",
   },
-  // {
-  //   name: "Settings",
-  //   activeIcon: "/assets/sidebar-icons/active/settings.svg",
-  //   noneActiveIcon: "/assets/sidebar-icons/non-active/settings.svg",
-  //   link: "#setting",
-  // },
+  {
+    name: "Settings",
+    activeIcon: "/assets/sidebar-icons/active/settings.svg",
+    noneActiveIcon: "/assets/sidebar-icons/non-active/settings.svg",
+    link: "#setting",
+  },
   {
     name: "Logout",
     activeIcon: "/assets/sidebar-icons/active/logout.svg",

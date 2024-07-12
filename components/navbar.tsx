@@ -6,10 +6,11 @@ import { ChevronDown } from "lucide-react";
 import { MenubarComp } from "./menu-bar";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { AuthStatesContext } from "@/context/auth";
 const options = [
   {
-    name: "Profile",
-    value: "profile",
+    name: "Home",
+    value: "home",
   },
   // {
   //   name: "Logout",
@@ -17,6 +18,17 @@ const options = [
   // },
 ];
 const Navbar = () => {
+  const { user } = AuthStatesContext();
+  function maskEmail(email: string) {
+    if (!email) {
+      return "";
+    }
+    const [user, domain] = email.split("@");
+    const firstPart = user.slice(0, 3);
+    const lastPart = user.slice(-3);
+    const maskedUser = `${firstPart}...${lastPart}`;
+    return `${maskedUser}@${domain}`;
+  }
   return (
     <div className="h-[90px] w-full flex flex-row items-center justify-between px-10">
       <div className="w-[350px]">
@@ -47,9 +59,11 @@ const Navbar = () => {
               height={50}
               className="rounded-full object-cover"
             />
-            <div className="flex flex-col">
-              <p>Raza</p>
-              <p className="text-[10px] text-gray-400">admin</p>
+            <div className="flex flex-col text-start">
+              <p className="text-ellipsis line-clamp-1">
+                {maskEmail(user?.email)}
+              </p>
+              <p className="text-[10px] text-gray-400">{user?.role}</p>
             </div>
             <ChevronDown className="text-gray-400 w-7 h-7" />
           </div>
