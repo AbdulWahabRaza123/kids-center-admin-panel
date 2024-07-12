@@ -39,7 +39,7 @@ export default function FilePage() {
         <QRCodeDialog
           open={openQRDialog}
           setOpen={setOpenQRDialog}
-          id={selectedData.id}
+          id={selectedData?.id}
         />
       )}
       {openAddFileDialog && (
@@ -76,13 +76,18 @@ export default function FilePage() {
                   <>
                     <tr>
                       <td className="flex flex-row items-center gap-2 w-[200px] text-start p-3">
-                        {val.id}
+                        {val?.id}
                       </td>
-                      <td className="w-[200px] text-start p-3">{val.name}</td>
+                      <td className="w-[200px] text-start p-3">{val?.name}</td>
                       <td className="w-[200px] text-start p-3">
-                        <Link href={val.file_link} target="_blank">
-                          Link
-                        </Link>
+                        {val?.file_link && (
+                          <Link
+                            href={val?.file_link || "#link"}
+                            target="_blank"
+                          >
+                            Link
+                          </Link>
+                        )}
                       </td>
 
                       <td className="w-[200px] ps-7 py-3 pe-3 text-center">

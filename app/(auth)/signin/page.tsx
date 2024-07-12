@@ -42,7 +42,7 @@ const Signin = () => {
   };
   useEffect(() => {
     if (user) {
-      console.log("This is user ", user);
+      // console.log("This is user ", user);
       if (user.role === "admin") {
         router.push("/");
       } else if (user.role === "finance") {
