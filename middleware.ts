@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-const adminRoutes = ["/", "/activities", "/attendance", "/communication", "/profile", "/user-manage", "report"]
+const adminRoutes = ["/", "/activities", "/attendance", "/communication", "/profile", "/user-manage", "/report", "/parent-files"]
 const financeRoutes = ["/finance"]
-const protectedRoutes = ["/", "/activities", "/attendance", "/communication", "/profile", "/user-manage", "report", "/finance"]
+const protectedRoutes = ["/", "/activities", "/attendance", "/communication", "/profile", "/user-manage", "/report", "/parent-files", "/finance"]
 export function middleware(req: NextRequest) {
   const url = req.nextUrl.clone();
   const cookies = req.cookies;

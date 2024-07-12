@@ -37,12 +37,12 @@ const sidebarItems = [
     noneActiveIcon: "/assets/sidebar-icons/non-active/qr-code.svg",
     link: "/attendance",
   },
-  // {
-  //   name: "Settings",
-  //   activeIcon: "/assets/sidebar-icons/active/settings.svg",
-  //   noneActiveIcon: "/assets/sidebar-icons/non-active/settings.svg",
-  //   link: "#setting",
-  // },
+  {
+    name: "File",
+    activeIcon: "/assets/sidebar-icons/active/settings.svg",
+    noneActiveIcon: "/assets/sidebar-icons/non-active/settings.svg",
+    link: "/parent-files",
+  },
   {
     name: "Logout",
     activeIcon: "/assets/sidebar-icons/active/logout.svg",
