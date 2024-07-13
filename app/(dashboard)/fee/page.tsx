@@ -53,7 +53,7 @@ export default function FeePage() {
               ))}
             </thead>
             <tbody>
-              {data?.map((val: FeeDetails) => {
+              {data?.map((val) => {
                 return (
                   <>
                     <tr>

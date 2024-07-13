@@ -51,7 +51,7 @@ export default function FilePage() {
 
       <main className="flex flex-col px-10">
         <div className="flex flex-row items-start justify-between">
-          <h1 className="text-[26px] font-[600]">Fee Details</h1>
+          <h1 className="text-[26px] font-[600]">File Details</h1>
           <PrimaryBtn
             className="w-[200px] text-[16px] h-[40px] flex flex-row items-center justify-center"
             onClick={() => {
@@ -71,7 +71,7 @@ export default function FilePage() {
               ))}
             </thead>
             <tbody>
-              {data?.map((val: FileDetails) => {
+              {data?.map((val) => {
                 return (
                   <>
                     <tr>
