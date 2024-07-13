@@ -1,6 +1,8 @@
 import { AuthStatesContext } from "@/context/auth";
 import { UserActivityDetails } from "@/interface/activities-interface";
 import { AttendanceDetails } from "@/interface/attendance-interface";
+import { CommentDetails } from "@/interface/comment-interface";
+import { feedbackDetails } from "@/interface/feedback-interface";
 import { FeeDetails } from "@/interface/fees-intrface";
 import { FileDetails } from "@/interface/file-interface";
 import {
@@ -165,6 +167,46 @@ export function useAllFiles(user: UserDetails, token: string) {
         });
         const data = res.data;
         return data as FileDetails[];
+      } catch (e) {
+        console.log(e);
+        throw new Error("Invalid Error found");
+      }
+    },
+  });
+}
+export function useAllComments(user: UserDetails, token: string) {
+  return useQuery({
+    enabled: !!user?.id,
+    queryKey: ["comments", user?.id],
+    queryFn: async () => {
+      try {
+        const res = await client.get(`/comment/all`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = res.data;
+        return data as CommentDetails[];
+      } catch (e) {
+        console.log(e);
+        throw new Error("Invalid Error found");
+      }
+    },
+  });
+}
+export function useAllFeedback(user: UserDetails, token: string) {
+  return useQuery({
+    enabled: !!user?.id,
+    queryKey: ["feedback", user?.id],
+    queryFn: async () => {
+      try {
+        const res = await client.get(`/feedback`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = res.data;
+        return data as feedbackDetails[];
       } catch (e) {
         console.log(e);
         throw new Error("Invalid Error found");

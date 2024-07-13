@@ -25,12 +25,18 @@ const sidebarItems = [
     noneActiveIcon: "/assets/sidebar-icons/non-active/profile.svg",
     link: "/fee",
   },
-  // {
-  //   name: "Communication",
-  //   activeIcon: "/assets/sidebar-icons/active/communication.svg",
-  //   noneActiveIcon: "/assets/sidebar-icons/non-active/communication.svg",
-  //   link: "/communication",
-  // },
+  {
+    name: "Comments",
+    activeIcon: "/assets/sidebar-icons/active/communication.svg",
+    noneActiveIcon: "/assets/sidebar-icons/non-active/communication.svg",
+    link: "/comments",
+  },
+  {
+    name: "Feedback",
+    activeIcon: "/assets/sidebar-icons/active/communication.svg",
+    noneActiveIcon: "/assets/sidebar-icons/non-active/communication.svg",
+    link: "/feedbacks",
+  },
   {
     name: "Attendance",
     activeIcon: "/assets/sidebar-icons/active/qr-code.svg",
