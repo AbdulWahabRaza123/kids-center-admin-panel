@@ -36,6 +36,7 @@ import {
 } from "../select";
 import { cn } from "@/lib/utils";
 import { connectStorageEmulator } from "firebase/storage";
+import { useNotify } from "../toast/notify";
 const options = [
   {
     title: "Pending",
@@ -70,6 +71,7 @@ export const CreateOrEditFeeDialog = ({
   id?: number;
   edit: boolean;
 }) => {
+  const notify = useNotify();
   const { user, token } = AuthStatesContext();
   const {
     data: parentsData,
@@ -86,7 +88,10 @@ export const CreateOrEditFeeDialog = ({
 
   const handleAddFee = async () => {
     if (!selectedId || !month || !payMode || !status) {
-      alert("Please fill all the fields");
+      notify({
+        type: "warning",
+        title: "Please fill all the fields",
+      });
       return;
     }
     try {
@@ -110,9 +115,16 @@ export const CreateOrEditFeeDialog = ({
       );
       refetch();
       setOpen(false);
+      notify({
+        type: "success",
+        title: "Fee added successfully",
+      });
     } catch (e) {
       console.log(e);
-      alert("Error adding fee");
+      notify({
+        type: "error",
+        title: "Error adding new field",
+      });
     } finally {
       setLoading(false);
     }

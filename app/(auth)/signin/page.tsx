@@ -8,15 +8,20 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { SpinnerBtn } from "@/components/spinner-btn";
 import { AuthStatesContext } from "@/context/auth";
+import { useNotify } from "@/components/ui/toast/notify";
 const Signin = () => {
   const router = useRouter();
+  const notify = useNotify();
   const { user, setUser, setToken } = AuthStatesContext();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleSignin = async () => {
     if (!email || !password) {
-      alert("Fill all the fields");
+      notify({
+        type: "warning",
+        title: "Please fill all the fields",
+      });
       return;
     }
     try {
@@ -32,10 +37,16 @@ const Signin = () => {
       localStorage.setItem("kids-user", JSON.stringify(tempUser));
       setToken(tempToken);
       setUser(tempUser);
-      alert("login sucessful");
+      notify({
+        type: "success",
+        title: "Signin successful",
+      });
     } catch (e) {
       console.log(e);
-      alert("Invalid error occured");
+      notify({
+        type: "error",
+        title: "Invalid error",
+      });
     } finally {
       setLoading(false);
     }

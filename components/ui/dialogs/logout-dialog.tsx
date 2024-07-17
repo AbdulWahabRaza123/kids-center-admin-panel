@@ -7,7 +7,9 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { SpinnerBtn } from "@/components/spinner-btn";
 import { AuthStatesContext } from "@/context/auth";
+import { useNotify } from "../toast/notify";
 export const LogoutDialog = ({ children }: { children: React.ReactNode }) => {
+  const notify = useNotify();
   const router = useRouter();
   const { setUser, setToken } = AuthStatesContext();
   const [loading, setLoading] = useState(false);
@@ -28,14 +30,23 @@ export const LogoutDialog = ({ children }: { children: React.ReactNode }) => {
         setUser(null);
         setToken("");
         localStorage.clear();
-        alert("logout success");
+        notify({
+          type: "success",
+          title: "Logout successful",
+        });
         router.push("/signin");
       } else {
-        alert("Invalid error occured");
+        notify({
+          type: "error",
+          title: "Invalid error",
+        });
       }
     } catch (e) {
       console.log(e);
-      alert("invalid error");
+      notify({
+        type: "error",
+        title: "Invalid error",
+      });
     } finally {
       setLoading(false);
     }

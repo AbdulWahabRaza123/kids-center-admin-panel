@@ -32,6 +32,7 @@ import { Select, SelectTrigger, SelectValue } from "@radix-ui/react-select";
 import { cn } from "@/lib/utils";
 import { SelectContent, SelectItem } from "../select";
 import { loadBindings } from "next/dist/build/swc";
+import { useNotify } from "../toast/notify";
 const options = [
   {
     title: "Parent",
@@ -57,6 +58,7 @@ export const AssignAFileDialog = ({
   open: boolean;
   setOpen: (value: boolean) => void;
 }) => {
+  const notify = useNotify();
   const { user, token } = AuthStatesContext();
   const {
     data: parentsData,
@@ -70,7 +72,10 @@ export const AssignAFileDialog = ({
   const [loading, setLoading] = useState(false);
   const handleSubmit = async () => {
     if (!fileName || !fileLink) {
-      alert("Please fill all the fields");
+      notify({
+        type: "warning",
+        title: "Please fill all the fields",
+      });
       return;
     }
     try {
@@ -90,9 +95,16 @@ export const AssignAFileDialog = ({
       );
       refetch();
       setOpen(false);
-      console.log(res);
+      notify({
+        type: "success",
+        title: "File added successfully",
+      });
     } catch (e) {
       console.log(e);
+      notify({
+        type: "error",
+        title: "Invaid error",
+      });
     } finally {
       setLoading(false);
     }
@@ -166,7 +178,10 @@ export const AssignAFileDialog = ({
                 setFileLink(link);
               } catch (e) {
                 console.log(e);
-                alert("invalid error");
+                notify({
+                  type: "error",
+                  title: "Invaid error",
+                });
               }
             }}
           />

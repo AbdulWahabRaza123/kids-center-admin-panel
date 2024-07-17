@@ -9,6 +9,8 @@ import { Ban, Trash2, X } from "lucide-react";
 import { client } from "@/lib/client";
 import { RoleDetails } from "@/interface/user-interface";
 import { useAllNanies, useAllParents } from "@/actions/queries";
+import { useToast } from "../use-toast";
+import { useNotify } from "../toast/notify";
 export const UserBanConfirmationDialog = ({
   open,
   setOpen,
@@ -20,6 +22,7 @@ export const UserBanConfirmationDialog = ({
   role: RoleDetails;
   id: number;
 }) => {
+  const notify = useNotify();
   const { user, token } = AuthStatesContext();
   const { refetch: refetchNanies } = useAllNanies(user ?? user, token ?? token);
   const { refetch: refetchParents } = useAllParents(
@@ -29,11 +32,17 @@ export const UserBanConfirmationDialog = ({
   const [loading, setLoading] = useState(false);
   const handleBan = async () => {
     if (!id || !role || !token) {
-      alert("invalid token, id or role");
+      notify({
+        type: "warning",
+        title: "Invalid error",
+      });
       return;
     }
     if (role !== "parent" && role !== "nany") {
-      alert("this role is not banable");
+      notify({
+        type: "warning",
+        title: "This user cannot be disabled",
+      });
       return;
     }
     try {
@@ -44,7 +53,6 @@ export const UserBanConfirmationDialog = ({
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("This is my response parent ", res);
         refetchParents();
       } else if (role === "nany") {
         const res = await client.get(`/auth/users/disable/${id}`, {
@@ -56,11 +64,17 @@ export const UserBanConfirmationDialog = ({
 
         refetchNanies();
       }
-      alert("user disabled successfully");
+      notify({
+        type: "success",
+        title: "User disabled successfully",
+      });
       setOpen(false);
     } catch (e) {
       console.log(e);
-      alert("invalid error");
+      notify({
+        type: "error",
+        title: "Invalid error",
+      });
     } finally {
       setLoading(false);
     }
