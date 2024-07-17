@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import QueryProvider from "@/lib/query-provider";
 import { AuthContextProvider } from "@/context/auth";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Kids Center",
@@ -24,7 +25,12 @@ export default function RootLayout({
       </head>
       <body>
         <QueryProvider>
-          <AuthContextProvider>{children}</AuthContextProvider>
+          <AuthContextProvider>
+            <>
+              <main>{children}</main>
+              <Toaster />
+            </>
+          </AuthContextProvider>
         </QueryProvider>
       </body>
     </html>

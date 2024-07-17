@@ -1,3 +1,4 @@
+"use client";
 import { useToast } from "../use-toast";
 
 export interface NotifyProps {
@@ -11,19 +12,19 @@ export const useNotify = () => {
       toast({
         title: title,
         className:
-          "text-green-600 rounded-[10px] z-[10000] font-[700] border-[1px] border-green-600 bg-primary",
+          "text-green-600 rounded-[10px] z-[10000] font-[700] border-[1px] border-green-600 bg-white",
       });
     } else if (type === "error") {
       toast({
         title: title,
         className:
-          "text-rose-400 rounded-[10px] z-[10000] font-[700] border-[1px] border-rose-400 bg-primary",
+          "text-rose-400 rounded-[10px] z-[10000] font-[700] border-[1px] border-rose-400 bg-white",
       });
     } else if (type === "warning") {
       toast({
         title: title,
         className:
-          "text-yellow-600 rounded-[10px] z-[10000] font-[700] border-[1px] border-yellow-600 bg-primary",
+          "text-yellow-600 rounded-[10px] z-[10000] font-[700] border-[1px] border-yellow-600 bg-white",
       });
     } else {
       toast({
