@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/drawer";
 import { UserActivityDetails } from "@/interface/activities-interface";
 import { QRCodeCanvas } from "qrcode.react";
+import { toPng } from "html-to-image";
+import { PrimaryBtn } from "../buttons/primary-btn";
 export const ActivityDrawer = ({
   children,
   data,
@@ -16,6 +18,17 @@ export const ActivityDrawer = ({
   children: React.ReactNode;
   data: UserActivityDetails;
 }) => {
+  const qrRef = useRef(null);
+
+  const handleDownload = async () => {
+    if (qrRef.current) {
+      const dataUrl = await toPng(qrRef.current);
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = "qr-code.png";
+      link.click();
+    }
+  };
   const traverseDetails = (data: UserActivityDetails) => {
     const myDetails = [];
     for (const key in data.details) {
@@ -76,12 +89,17 @@ export const ActivityDrawer = ({
             </div>
             <div className="mt-2 flex flex-col">
               <h1 className="text-[24px] font-[700] mt-5">QR Code</h1>
-              <QRCodeCanvas
-                value={data.id.toString()}
-                size={200}
-                level={"H"}
-                includeMargin={true}
-              />
+              <div ref={qrRef}>
+                <QRCodeCanvas
+                  value={data.id.toString()}
+                  size={200}
+                  level={"H"}
+                  includeMargin={true}
+                />
+              </div>
+              <PrimaryBtn className="w-[220px]" onClick={handleDownload}>
+                Download
+              </PrimaryBtn>
             </div>
           </div>
         </DrawerContent>
