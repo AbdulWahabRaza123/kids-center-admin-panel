@@ -12,12 +12,7 @@ import { PrimaryBtn } from "../buttons/primary-btn";
 import { SelectInput } from "../inputs/select-input";
 import { client } from "@/lib/client";
 import { AuthStatesContext } from "@/context/auth";
-import {
-  useAllFinancers,
-  useAllNanies,
-  useAllParents,
-  useAllTeachers,
-} from "@/actions/queries";
+import { useAllNanies, useAllParents } from "@/actions/queries";
 import { SpinnerBtn } from "@/components/spinner-btn";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
@@ -34,14 +29,6 @@ const options = [
   {
     title: "Nanny",
     value: "nany",
-  },
-  {
-    title: "Finance",
-    value: "finance",
-  },
-  {
-    title: "Teacher",
-    value: "teacher",
   },
 ];
 export const CreateOrEditProfileDialog = ({
@@ -61,14 +48,7 @@ export const CreateOrEditProfileDialog = ({
     user ?? user,
     token ?? token
   );
-  const { refetch: financeRefetch } = useAllFinancers(
-    user ?? user,
-    token ?? token
-  );
-  const { refetch: teacherRefetch } = useAllTeachers(
-    user ?? user,
-    token ?? token
-  );
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("parent");
@@ -137,10 +117,6 @@ export const CreateOrEditProfileDialog = ({
           await handleLinkParent(id);
         } else if (role === "nany") {
           await handleLinkNany(id);
-        } else if (role === "finance") {
-          financeRefetch();
-        } else if (role === "teacher") {
-          teacherRefetch();
         }
         setOpen(false);
       }
@@ -187,16 +163,6 @@ export const CreateOrEditProfileDialog = ({
         setNanyPhoneNo(nanyData.phone_no);
         setNanyRegNo(nanyData.reg_no);
         setNanyQualification(nanyData.qualification);
-      } else if (data.role === "finance") {
-        const financeData: UserDetails = data as UserDetails;
-        setEmail(financeData.email);
-        setPassword("*****");
-        setRole(data.role);
-      } else if (data.role === "teacher") {
-        const teacherData: UserDetails = data as UserDetails;
-        setEmail(teacherData.email);
-        setPassword("*****");
-        setRole(data.role);
       }
     }
   }, [edit, data]);

@@ -1,4 +1,5 @@
 "use client";
+import { RoleDetails } from "@/interface/user-interface";
 import React, {
   createContext,
   useState,
@@ -12,11 +13,14 @@ interface AuthContextType {
   setUser: (value: any) => void;
   token: string;
   setToken: (value: string) => void;
+  selectedOption: RoleDetails;
+  setSelectedOption: (val: RoleDetails) => void;
 }
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState("");
+  const [selectedOption, setSelectedOption] = useState<RoleDetails>("parent");
   useEffect(() => {
     const user = localStorage.getItem("kids-user");
     const token = localStorage.getItem("kids-token");
@@ -28,7 +32,16 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
   return (
-    <AuthContext.Provider value={{ user, setUser, token, setToken }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        setUser,
+        token,
+        setToken,
+        setSelectedOption,
+        selectedOption,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

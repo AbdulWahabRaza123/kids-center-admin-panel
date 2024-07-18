@@ -1,4 +1,4 @@
-export type RoleDetails = "admin" | "parent" | "nany" | "finance" | "teacher";
+export type RoleDetails = "admin" | "parent" | "nany" | "finance";
 export type DisabledTypes = 0 | 1;
 export interface UserDetails {
   id: number;

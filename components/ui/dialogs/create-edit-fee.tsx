@@ -12,13 +12,7 @@ import { PrimaryBtn } from "../buttons/primary-btn";
 import { SelectInput } from "../inputs/select-input";
 import { client } from "@/lib/client";
 import { AuthStatesContext } from "@/context/auth";
-import {
-  useAllFees,
-  useAllFinancers,
-  useAllNanies,
-  useAllParents,
-  useAllTeachers,
-} from "@/actions/queries";
+import { useAllFees, useAllNanies, useAllParents } from "@/actions/queries";
 import { SpinnerBtn } from "@/components/spinner-btn";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
