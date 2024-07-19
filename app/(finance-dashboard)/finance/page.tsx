@@ -4,6 +4,7 @@ import { QRCodeDialog } from "@/components/ui/dialogs/qr-code-dialog";
 import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
 import { FeeDetails } from "@/interface/fees-intrface";
+import { iSOFormattedDate } from "@/logic/date-logic";
 import { Ellipsis } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -57,15 +58,13 @@ export default function FinancePage() {
                 return (
                   <>
                     <tr>
-                      <td className="flex flex-row items-center gap-2 w-[200px] text-start p-3">
-                        {val.id}
-                      </td>
-                      <td className="w-[200px] text-start p-3">
+                      <td className="w-[50px] text-start p-3">{val.id}</td>
+                      <td className="w-[100px] text-start p-3">
                         {val.created_for_id}
                       </td>
                       <td className="w-[200px] text-start p-3">{val.month}</td>
-                      <td className="w-[200px] ps-5 py-3 pe-3 text-start">
-                        {val.payment_date}
+                      <td className="w-[250px] ps-5 py-3 pe-3 text-start">
+                        {iSOFormattedDate(val.payment_date)}
                       </td>
                       <td className="w-[200px] ps-7 py-3 pe-3 text-center">
                         {val.pay_mode}
