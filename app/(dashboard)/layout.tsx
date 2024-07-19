@@ -62,11 +62,11 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="flex flex-row gap-20 items-start">
+    <main className="flex flex-row items-start">
       <aside>
         <Sidebar menu={sidebarItems} />
       </aside>
-      <section className="flex flex-col gap-3 w-full ms-[230px] h-screen overflow-auto">
+      <section className="flex flex-col gap-3 w-full ms-[210px] h-screen overflow-auto">
         <nav>
           <Navbar />
         </nav>

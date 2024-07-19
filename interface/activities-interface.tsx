@@ -1,22 +1,43 @@
-interface Activity {
-  activityId: number;
-  time: string;
-  attributes: {
-    name: string;
-    value: string;
-  }[];
+interface ActivityAttribute {
+  name: string;
+  value: string;
 }
 
-interface Details {
-  [key: string]: Activity;
+interface Activity {
+  id: number;
+  type: string;
+  time: string;
+  attributes: ActivityAttribute[];
+}
+
+interface NanyDetails {
+  name: string;
+  qualification: string;
+  regNo: string;
+  phoneNo: string;
+}
+
+interface StudentDetails {
+  name: string;
+  class: string;
+  rollNo: string;
+  phoneNo: string;
+}
+
+interface User {
+  id: number;
+  email: string;
+  role: "nany" | "parent";
+  nanyDetails?: NanyDetails | null;
+  studentDetails?: StudentDetails | null;
 }
 
 export interface UserActivityDetails {
   id: number;
-  createdById: number;
-  createdForId: number;
-  currentDate: string; //"2024-07-03T19:00:00.000Z"
+  createdBy: User;
+  createdFor: User;
+  currentDate: string;
   checkinTime: string;
-  checkoutTime: string; //"17:00:00"
-  details: Details;
+  checkoutTime: string;
+  activities: Activity[];
 }

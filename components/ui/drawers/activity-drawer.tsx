@@ -11,6 +11,7 @@ import { UserActivityDetails } from "@/interface/activities-interface";
 import { QRCodeCanvas } from "qrcode.react";
 import { toPng } from "html-to-image";
 import { PrimaryBtn } from "../buttons/primary-btn";
+
 export const ActivityDrawer = ({
   children,
   data,
@@ -19,7 +20,7 @@ export const ActivityDrawer = ({
   data: UserActivityDetails;
 }) => {
   const qrRef = useRef(null);
-
+  console.log("This is data from daily activity ", data);
   const handleDownload = async () => {
     if (qrRef.current) {
       const dataUrl = await toPng(qrRef.current);
@@ -29,23 +30,7 @@ export const ActivityDrawer = ({
       link.click();
     }
   };
-  const traverseDetails = (data: UserActivityDetails) => {
-    const myDetails = [];
-    for (const key in data.details) {
-      if (data.details.hasOwnProperty(key)) {
-        const activity = data.details[key];
-        const myObj = {
-          activityName: key,
-          activityId: activity.activityId,
-          time: activity.time,
-          attributes: activity.attributes,
-        };
-        myDetails.push(myObj);
-      }
-    }
 
-    return myDetails;
-  };
   return (
     <>
       <Drawer>
@@ -58,37 +43,29 @@ export const ActivityDrawer = ({
           </DrawerHeader>
           <div className="p-3">
             <div className="flex flex-row items-center gap-3 flex-wrap">
-              {traverseDetails(data)?.map((item) => {
-                return (
-                  <>
-                    <div
-                      key={item.activityName}
-                      className="rounded-[8px] w-[300px] bg-gray-400/40 border-[1px] border-gray-400 flex flex-col gap-2 px-3 py-2"
-                    >
-                      <div className="flex flex-row items-center justify-between">
-                        <p>{item.activityName}</p>
-                        <p>{item.time}</p>
+              {data.activities.map((item) => (
+                <div
+                  key={item.type}
+                  className="mb-4 p-4 bg-gray-50 border border-gray-300 rounded-[7px] shadow-md"
+                >
+                  <h3 className="text-lg font-bold">{item.type}</h3>
+                  <p>Time: {item.time}</p>
+                  <div className="mt-2">
+                    {item.attributes.map((attribute) => (
+                      <div
+                        key={attribute.name}
+                        className="flex flex-row items-center gap-1 px-2 py-1 bg-white text-black text-[12px] border-[1px] border-gray-400 rounded-full"
+                      >
+                        <p className="font-semibold">{attribute.name}:</p>
+                        <p>{attribute.value}</p>
                       </div>
-                      <div className="flex flex-row items-center flex-wrap gap-2">
-                        {item.attributes.map((attribute) => {
-                          return (
-                            <div
-                              key={attribute.name}
-                              className="flex flex-row items-center gap-1 px-2 py-1 bg-white text-black text-[12px] border-[1px] border-gray-400 rounded-full"
-                            >
-                              <p>{attribute.name}:</p>
-                              <p>{attribute.value}</p>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </>
-                );
-              })}
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="mt-2 flex flex-col">
-              <h1 className="text-[24px] font-[700] mt-5">QR Code</h1>
+            {/* <div className="mt-2 flex flex-col">
+              <h1 className="text-[20px] font-[700] mt-5">QR Code</h1>
               <div ref={qrRef}>
                 <QRCodeCanvas
                   value={data.id.toString()}
@@ -97,10 +74,13 @@ export const ActivityDrawer = ({
                   includeMargin={true}
                 />
               </div>
-              <PrimaryBtn className="w-[220px]" onClick={handleDownload}>
+              <PrimaryBtn
+                className="w-[200px] py-2 text-[18px]"
+                onClick={handleDownload}
+              >
                 Download
               </PrimaryBtn>
-            </div>
+            </div> */}
           </div>
         </DrawerContent>
       </Drawer>

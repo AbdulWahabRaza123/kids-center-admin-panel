@@ -80,7 +80,7 @@ export function useAllActivities(user: UserDetails, token: string) {
     queryKey: ["activities", user?.id],
     queryFn: async () => {
       try {
-        const res = await client.get(`/activities/all`, {
+        const res = await client.get(`/activities/all-data`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

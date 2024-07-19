@@ -47,9 +47,13 @@ export const MenubarComp = ({
 export const EditDisableMenuComp = ({
   children,
   onClick,
+  edit = true,
+  ban = true,
 }: {
   children: React.ReactNode;
   onClick: (val: "edit" | "ban" | "qr") => void;
+  edit?: boolean;
+  ban?: boolean;
 }) => {
   return (
     <>
@@ -66,24 +70,30 @@ export const EditDisableMenuComp = ({
               <ScanBarcode className="w-[20px] h-[20px] text-[#2D8C00]" />
               <p className="text-[#2D8C00] text-[14px]">QR Code</p>
             </MenubarItem>
-            <MenubarItem
-              onClick={() => {
-                onClick("edit");
-              }}
-              className="cursor-pointer flex flex-row items-center gap-2 rounded-[10px]"
-            >
-              <Edit className="w-[20px] h-[20px] text-[#2D8C00]" />
-              <p className="text-[#2D8C00] text-[14px]">Edit</p>
-            </MenubarItem>
-            <MenubarItem
-              onClick={() => {
-                onClick("ban");
-              }}
-              className="cursor-pointer flex flex-row items-center gap-2 rounded-[10px]"
-            >
-              <Ban className="w-[20px] h-[20px] text-[#FF0000]" />
-              <p className="text-[#FF0000] text-[14px]">Disable</p>
-            </MenubarItem>
+            {edit && (
+              <MenubarItem
+                onClick={() => {
+                  onClick("edit");
+                }}
+                className="cursor-pointer flex flex-row items-center gap-2 rounded-[10px]"
+              >
+                <Edit className="w-[20px] h-[20px] text-[#2D8C00]" />
+                <p className="text-[#2D8C00] text-[14px]">Edit</p>
+              </MenubarItem>
+            )}
+            {ban && (
+              <MenubarItem
+                onClick={() => {
+                  onClick("ban");
+                }}
+                className="cursor-pointer flex flex-row items-center gap-2 rounded-[10px]"
+              >
+                <Ban className="w-[20px] h-[20px] text-[#FF0000]" />
+                <p className="text-[#FF0000] text-[14px]">
+                  {!edit ? "Delete" : "Disable"}
+                </p>
+              </MenubarItem>
+            )}
           </MenubarContent>
         </MenubarMenu>
       </Menubar>

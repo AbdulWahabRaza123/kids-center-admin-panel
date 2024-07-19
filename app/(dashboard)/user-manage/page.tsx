@@ -87,11 +87,11 @@ export default function StudentManagement() {
         <div className="flex flex-row items-start justify-between">
           <h1 className="text-[26px] font-[600]">User Management</h1>
           <div className="flex flex-col items-end gap-2">
-            <SelectInput
+            {/* <SelectInput
               options={options}
               value={selectedOption}
               setValue={setSelectedOption}
-            />
+            /> */}
 
             <PrimaryBtn
               className="w-[200px] text-[16px] h-[40px] flex flex-row items-center justify-center"

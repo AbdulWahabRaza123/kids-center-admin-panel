@@ -10,75 +10,19 @@ import { client } from "@/lib/client";
 import { RoleDetails } from "@/interface/user-interface";
 import { useAllNanies, useAllParents } from "@/actions/queries";
 import { useNotify } from "../toast/notify";
-export const UserBanConfirmationDialog = ({
+export const DeleteConfirmationDialog = ({
   open,
   setOpen,
   id,
-  role,
+  onSelect,
+  loading,
 }: {
   open: boolean;
   setOpen: (value: boolean) => void;
-  role: RoleDetails;
   id: number;
+  loading: boolean;
+  onSelect: (id: number) => void;
 }) => {
-  const notify = useNotify();
-  const { user, token } = AuthStatesContext();
-
-  const { refetch: refetchNanies } = useAllNanies(user ?? user, token ?? token);
-  const { refetch: refetchParents } = useAllParents(
-    user ?? user,
-    token ?? token
-  );
-  const [loading, setLoading] = useState(false);
-  const handleBan = async () => {
-    if (!id || !role || !token) {
-      notify({
-        type: "warning",
-        title: "Invalid error",
-      });
-      return;
-    }
-    if (role !== "parent" && role !== "nany") {
-      notify({
-        type: "warning",
-        title: "This user cannot be disabled",
-      });
-      return;
-    }
-    try {
-      setLoading(true);
-      if (role === "parent") {
-        const res = await client.get(`/auth/users/disable/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        refetchParents();
-      } else if (role === "nany") {
-        const res = await client.get(`/auth/users/disable/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        console.log("This is my response nany ", res);
-
-        refetchNanies();
-      }
-      notify({
-        type: "success",
-        title: "User disabled successfully",
-      });
-      setOpen(false);
-    } catch (e) {
-      console.log(e);
-      notify({
-        type: "error",
-        title: "Invalid error",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
   return (
     <Dialog open={open}>
       <DialogContent className="bg-white border-[1px] border-[#00f4ff] rounded-[20px] max-w-[700px] max-h-[60vh] overflow-auto flex flex-col items-center justify-center gap-3 p-5">
@@ -86,22 +30,22 @@ export const UserBanConfirmationDialog = ({
           <X onClick={() => setOpen(false)} className="h-4 w-4" />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>
-        <Ban className="w-[50px] h-[50px] text-[#FF0000]" />
+        <Trash2 className="w-[50px] h-[50px] text-[#FF0000]" />
         <h1 className="text-[20px] font-[700] text-center text-primary">
-          Disable
+          Delete
         </h1>
-        <p>Are you sure you want to disable?</p>
+        <p>Are you sure you want to delete?</p>
 
         <div className="flex flex-row items-center justify-center w-full gap-4">
           <PrimaryBtn
             onClick={() => {
-              handleBan();
+              onSelect(id);
             }}
             className="w-[100px] h-[45px] text-[16px] rounded-[9px] flex flex-row items-center justify-center"
           >
             <div className="flex flex-row items-center justify-center gap-2">
               {loading && <SpinnerBtn />}
-              <div>Disable</div>
+              <div>Delete</div>
             </div>
           </PrimaryBtn>
         </div>
