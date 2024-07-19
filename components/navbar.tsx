@@ -35,13 +35,13 @@ const Navbar = () => {
         <SearchInput />
       </div>
       <div className="flex flex-row items-center gap-2">
-        <Image
+        {/* <Image
           src={"/assets/icons/bell.svg"}
           width={30}
           height={30}
           alt="bell"
           className="object-cover mt-2"
-        />
+        /> */}
         <MenubarComp
           options={options}
           onClick={(selectedOpt) => {

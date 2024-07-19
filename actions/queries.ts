@@ -114,26 +114,6 @@ export function useAllAttendance(user: UserDetails, token: string) {
     },
   });
 }
-export function useAllTeachers(user: UserDetails, token: string) {
-  return useQuery({
-    enabled: !!user?.id,
-    queryKey: ["teacher", user?.id],
-    queryFn: async () => {
-      try {
-        const res = await client.get(`/auth/users/teachers`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = res.data;
-        return data as UserDetails[];
-      } catch (e) {
-        console.log(e);
-        throw new Error("Invalid Error found");
-      }
-    },
-  });
-}
 export function useAllFees(user: UserDetails, token: string) {
   return useQuery({
     enabled: !!user?.id,

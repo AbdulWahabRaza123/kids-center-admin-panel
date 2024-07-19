@@ -17,7 +17,6 @@ import {
   useAllFinancers,
   useAllNanies,
   useAllParents,
-  useAllTeachers,
 } from "@/actions/queries";
 import { SpinnerBtn } from "@/components/spinner-btn";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
@@ -45,10 +44,6 @@ const options = [
   {
     title: "Finance",
     value: "finance",
-  },
-  {
-    title: "Teacher",
-    value: "teacher",
   },
 ];
 export const AssignAFileDialog = ({

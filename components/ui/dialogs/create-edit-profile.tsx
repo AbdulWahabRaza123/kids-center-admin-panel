@@ -16,7 +16,6 @@ import {
   useAllFinancers,
   useAllNanies,
   useAllParents,
-  useAllTeachers,
 } from "@/actions/queries";
 import { SpinnerBtn } from "@/components/spinner-btn";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
@@ -39,10 +38,6 @@ const options = [
     title: "Finance",
     value: "finance",
   },
-  {
-    title: "Teacher",
-    value: "teacher",
-  },
 ];
 export const CreateOrEditProfileDialog = ({
   open,
@@ -62,10 +57,6 @@ export const CreateOrEditProfileDialog = ({
     token ?? token
   );
   const { refetch: financeRefetch } = useAllFinancers(
-    user ?? user,
-    token ?? token
-  );
-  const { refetch: teacherRefetch } = useAllTeachers(
     user ?? user,
     token ?? token
   );
@@ -139,8 +130,6 @@ export const CreateOrEditProfileDialog = ({
           await handleLinkNany(id);
         } else if (role === "finance") {
           financeRefetch();
-        } else if (role === "teacher") {
-          teacherRefetch();
         }
         setOpen(false);
       }
@@ -190,11 +179,6 @@ export const CreateOrEditProfileDialog = ({
       } else if (data.role === "finance") {
         const financeData: UserDetails = data as UserDetails;
         setEmail(financeData.email);
-        setPassword("*****");
-        setRole(data.role);
-      } else if (data.role === "teacher") {
-        const teacherData: UserDetails = data as UserDetails;
-        setEmail(teacherData.email);
         setPassword("*****");
         setRole(data.role);
       }
