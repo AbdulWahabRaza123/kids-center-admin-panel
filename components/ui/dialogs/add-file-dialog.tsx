@@ -30,7 +30,6 @@ import uploadProfilePicture from "@/firebase/storage/uploadFile";
 import { Select, SelectTrigger, SelectValue } from "@radix-ui/react-select";
 import { cn } from "@/lib/utils";
 import { SelectContent, SelectItem } from "../select";
-import { loadBindings } from "next/dist/build/swc";
 import { useNotify } from "../toast/notify";
 const options = [
   {
