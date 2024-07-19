@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 
 const tableHeadings = [
   "Id",
-  "Sender Id",
+  "User Id",
   "Rating",
   "Date",
   "Description",

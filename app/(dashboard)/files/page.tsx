@@ -7,11 +7,12 @@ import { QRCodeDialog } from "@/components/ui/dialogs/qr-code-dialog";
 import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
 import { FileDetails } from "@/interface/file-interface";
+import { maskEmail } from "@/logic/user-logic";
 import { Ellipsis } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const tableHeadings = ["Id", "Name", "link", "More"];
+const tableHeadings = ["Id", "Nanny", "Parent", "Name", "link", "More"];
 
 export default function FilePage() {
   const { user, token } = AuthStatesContext();
@@ -19,11 +20,15 @@ export default function FilePage() {
     user ?? user,
     token ?? token
   );
-  console.log("data", data);
+  // console.log("data", data);
   const [mount, setMount] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<FileDetails | null>(null);
   const [openQRDialog, setOpenQRDialog] = useState(false);
   const [openAddFileDialog, setOpenAddFileDialog] = useState(false);
+  const [fileItems, setFileItems] = useState<FileDetails[]>([]);
+  useEffect(() => {
+    setFileItems(data || []);
+  }, [data]);
   useEffect(() => {
     setMount(true);
   }, []);
@@ -72,12 +77,18 @@ export default function FilePage() {
               ))}
             </thead>
             <tbody>
-              {data?.map((val) => {
+              {fileItems?.map((val: FileDetails) => {
                 return (
                   <>
                     <tr>
-                      <td className="flex flex-row items-center gap-2 w-[200px] text-start p-3">
+                      <td className="w-[50px] text-start p-3">
                         {val.id || "-"}
+                      </td>
+                      <td className="w-[200px] text-start p-3">
+                        {maskEmail(val.createdByEmail) || "-"}
+                      </td>
+                      <td className="w-[200px] text-start p-3">
+                        {maskEmail(val.createdForEmail) || "-"}
                       </td>
                       <td className="w-[200px] text-start p-3">
                         {val.name || "-"}

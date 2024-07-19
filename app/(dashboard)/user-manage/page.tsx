@@ -153,7 +153,7 @@ export default function StudentManagement() {
     if (financersData) {
       setFinancerItems(financersData);
     }
-  }, []);
+  }, [naniesData, parentsData, financersData]);
   useEffect(() => {
     setMount(true);
   }, []);

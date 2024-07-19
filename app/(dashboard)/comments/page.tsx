@@ -11,8 +11,8 @@ import { useEffect, useState } from "react";
 
 const tableHeadings = [
   "Id",
-  "Sender Id",
-  "Receiver Id",
+  "Parent Id",
+  "Nanny Id",
   "Activity Id",
   "Date",
   "Description",

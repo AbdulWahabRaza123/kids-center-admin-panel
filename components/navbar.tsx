@@ -12,6 +12,7 @@ import {
   useAllNanies,
   useAllParents,
 } from "@/actions/queries";
+import { maskEmail } from "@/logic/user-logic";
 const options = [
   {},
   // {
@@ -43,31 +44,29 @@ const Navbar = () => {
   } = useAllFinancers(user ?? user, token ?? token);
   const [search, setSearch] = useState("");
   const [recommededData, setRecommededData] = useState<any>([]);
-  function maskEmail(email: string) {
-    if (!email) {
-      return "";
-    }
-    const [user, domain] = email.split("@");
-    const firstPart = user.slice(0, 3);
-    const lastPart = user.slice(-3);
-    const maskedUser = `${firstPart}...${lastPart}`;
-    return `${maskedUser}@${domain}`;
-  }
+
   const onSearchData = (e: any) => {
     const value = e.target.value;
     setSearch(value);
     //going to search the data and store in recommendedData according to the options
     if (user.role !== "finance") {
       if (selectedOption === "parent") {
-        const filteredData = parentData?.filter((data) =>
-          data.email.includes(value)
+        const filteredData = parentData?.filter(
+          (data) =>
+            data.email.includes(value) ||
+            data.student_id === value ||
+            data.roll_no === value ||
+            data.class === value
         );
         if (filteredData && filteredData?.length > 0) {
           setRecommededData(filteredData);
         }
       } else if (selectedOption === "nany") {
-        const filteredData = nanyData?.filter((data) =>
-          data.email.includes(value)
+        const filteredData = nanyData?.filter(
+          (data) =>
+            data.email.includes(value) ||
+            data.qualification.includes(value) ||
+            data.reg_no.includes(value)
         );
         if (filteredData && filteredData?.length > 0) {
           setRecommededData(filteredData);

@@ -107,7 +107,7 @@ export default function ActivityPage() {
     if (data) {
       setActivitiesItems(data);
     }
-  }, []);
+  }, [data]);
   useEffect(() => {
     setMount(true);
   }, []);
