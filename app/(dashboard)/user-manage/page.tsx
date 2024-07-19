@@ -89,6 +89,12 @@ export default function StudentManagement() {
   const [nanyItems, setNanyItems] = useState<NanyDetails[]>([]);
   const [financerItems, setFinancerItems] = useState<UserDetails[]>([]);
   const [parentItems, setParentItems] = useState<ParentDetails[]>([]);
+  const reset = () => {
+    setSelectOption("");
+    setNanyItems(naniesData || []);
+    setParentItems(parentsData || []);
+    setFinancerItems(financersData || []);
+  };
   const applyingNanyFiltersIfSelected = (filter: string) => {
     if (selectedOption === "nany" && naniesData) {
       const sortedData = [...naniesData].sort((a, b) => {
@@ -172,7 +178,15 @@ export default function StudentManagement() {
               Create Profile
             </PrimaryBtn>
             <div className="w-full flex flex-col items-end gap-2 justify-end">
-              <p className="text-[14px] text-gray-400">Filter by</p>
+              <p className="text-[14px] text-gray-400">
+                Filter by{" "}
+                <span
+                  onClick={reset}
+                  className="text-rose-400 underline cursor-pointer"
+                >
+                  /(reset filter)
+                </span>
+              </p>
               <SelectInput
                 options={
                   selectedOption === "nany"

@@ -4,6 +4,7 @@ import { EditDisableMenuComp } from "@/components/menu-bar";
 import { DeleteConfirmationDialog } from "@/components/ui/dialogs/delete-confirmation";
 import { QRCodeDialog } from "@/components/ui/dialogs/qr-code-dialog";
 import { ActivityDrawer } from "@/components/ui/drawers/activity-drawer";
+import { SelectInput } from "@/components/ui/inputs/select-input";
 import { useNotify } from "@/components/ui/toast/notify";
 import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
@@ -21,7 +22,16 @@ const tableHeadings = [
   "Options",
   "More",
 ];
-
+const activitiesFilterOption = [
+  {
+    title: "Check In",
+    value: "check-in",
+  },
+  {
+    title: "Check Out",
+    value: "check-out",
+  },
+];
 export default function ActivityPage() {
   const notify = useNotify();
 
@@ -37,6 +47,29 @@ export default function ActivityPage() {
   const [selectedData, setSelectedData] = useState<UserActivityDetails | null>(
     null
   );
+  const [selectOption, setSelectOption] = useState<string>("");
+  const [activitiesItems, setActivitiesItems] = useState<UserActivityDetails[]>(
+    []
+  );
+  const reset = () => {
+    setSelectOption("");
+    setActivitiesItems(data || []);
+  };
+  const onChangeFilter = (filter: string) => {
+    setSelectOption(filter);
+    //setting the filters for daily activities as well in the ascending order
+    let filteredData = data?.sort(
+      (a: UserActivityDetails, b: UserActivityDetails) => {
+        if (filter === "check-in") {
+          return a.checkinTime.localeCompare(b.checkinTime);
+        } else if (filter === "check-out") {
+          return a.checkoutTime.localeCompare(b.checkoutTime);
+        }
+        return 0; // Return a default value when the filter option is neither "check-in" nor "check-out"
+      }
+    );
+    setActivitiesItems(filteredData || []);
+  };
   const handleDelete = async (id: number) => {
     if (!id || !token) {
       notify({
@@ -71,6 +104,11 @@ export default function ActivityPage() {
     }
   };
   useEffect(() => {
+    if (data) {
+      setActivitiesItems(data);
+    }
+  }, []);
+  useEffect(() => {
     setMount(true);
   }, []);
   if (!mount) return null;
@@ -94,8 +132,26 @@ export default function ActivityPage() {
         />
       )}
       <main className="flex flex-col px-10">
-        <div className="flex flex-row items-start justify-between">
-          <h1 className="text-[26px] font-[600]">Daily Activities</h1>
+        <div className="flex flex-row items-end justify-between">
+          <div>
+            <h1 className="text-[26px] font-[600]">Daily Activities</h1>
+          </div>
+          <div className="flex flex-col items-end gap-2 justify-end">
+            <p className="text-[14px] text-gray-400">
+              Filter by{" "}
+              <span
+                onClick={reset}
+                className="text-rose-400 underline cursor-pointer"
+              >
+                /(reset filter)
+              </span>
+            </p>
+            <SelectInput
+              options={activitiesFilterOption}
+              value={selectOption}
+              setValue={onChangeFilter}
+            />
+          </div>
         </div>
         <SpinnerWrapper loading={isLoading}>
           <table className="w-full mt-10 max-h-[70vh] overflow-auto">
@@ -107,7 +163,7 @@ export default function ActivityPage() {
               ))}
             </thead>
             <tbody>
-              {data?.map((val) => {
+              {activitiesItems?.map((val) => {
                 return (
                   <>
                     <tr>
