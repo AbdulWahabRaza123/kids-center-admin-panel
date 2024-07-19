@@ -1,12 +1,13 @@
 "use client";
 import { useAllFees } from "@/actions/queries";
+import { EditDisableMenuComp } from "@/components/menu-bar";
 import { QRCodeDialog } from "@/components/ui/dialogs/qr-code-dialog";
 import { SelectInput } from "@/components/ui/inputs/select-input";
 import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
 import { FeeDetails } from "@/interface/fees-intrface";
 import { iSOFormattedDate } from "@/logic/date-logic";
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, EllipsisVertical } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const tableHeadings = [
@@ -124,7 +125,7 @@ export default function FeePage() {
               ))}
             </thead>
             <tbody>
-              {data?.map((val) => {
+              {feeItems?.map((val) => {
                 return (
                   <>
                     <tr>
@@ -149,14 +150,19 @@ export default function FeePage() {
                       <td className="w-[200px] ps-4 py-3 pe-3 text-start">
                         {val.status || "-"}
                       </td>
-                      <td className="w-[200px] ps-4 py-3 pe-3 text-start">
-                        <Ellipsis
-                          onClick={() => {
-                            setSelectedData(val);
-                            setOpenQRDialog(true);
+                      <td className="w-[200px] text-start p-3">
+                        <EditDisableMenuComp
+                          edit={false}
+                          ban={false}
+                          onClick={(selectedOpt: "edit" | "ban" | "qr") => {
+                            if (selectedOpt === "qr") {
+                              setSelectedData(val);
+                              setOpenQRDialog(true);
+                            }
                           }}
-                          className="cursor-pointer"
-                        />
+                        >
+                          <EllipsisVertical className="cursor-pointer" />
+                        </EditDisableMenuComp>
                       </td>
                     </tr>
                   </>

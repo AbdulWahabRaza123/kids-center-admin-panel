@@ -1,12 +1,13 @@
 "use client";
 import { useAllComments } from "@/actions/queries";
+import { EditDisableMenuComp } from "@/components/menu-bar";
 import { QRCodeDialog } from "@/components/ui/dialogs/qr-code-dialog";
 import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
 import { CommentDetails } from "@/interface/comment-interface";
 import { cn } from "@/lib/utils";
 import { iSOFormattedDate } from "@/logic/date-logic";
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, EllipsisVertical } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const tableHeadings = [
@@ -83,14 +84,19 @@ export default function CommentPage() {
                       <td className="w-[400px] ps-7 py-3 pe-3 text-start">
                         {val.description || "-"}
                       </td>
-                      <td className="w-[150px] ps-7 py-3 pe-3 text-center">
-                        <Ellipsis
-                          onClick={() => {
-                            setSelectedData(val);
-                            setOpenQRDialog(true);
+                      <td className="w-[200px] text-start p-3">
+                        <EditDisableMenuComp
+                          edit={false}
+                          ban={false}
+                          onClick={(selectedOpt: "edit" | "ban" | "qr") => {
+                            if (selectedOpt === "qr") {
+                              setSelectedData(val);
+                              setOpenQRDialog(true);
+                            }
                           }}
-                          className="cursor-pointer"
-                        />
+                        >
+                          <EllipsisVertical className="cursor-pointer" />
+                        </EditDisableMenuComp>
                       </td>
                     </tr>
                   </>

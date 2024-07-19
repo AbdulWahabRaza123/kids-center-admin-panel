@@ -186,16 +186,10 @@ export default function ActivityPage() {
                           edit={false}
                           ban={false}
                           onClick={(selectedOpt: "edit" | "ban" | "qr") => {
-                            // if (selectedOpt === "ban") {
-                            //   setSelectedData(val);
-                            //   setOpenConfirm(true);
-                            // } else
-
                             if (selectedOpt === "qr") {
                               setSelectedData(val);
                               setOpenQRDialog(true);
                             }
-                            console.log("This is selected option");
                           }}
                         >
                           <EllipsisVertical className="cursor-pointer" />

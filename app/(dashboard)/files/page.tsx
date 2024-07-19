@@ -1,5 +1,6 @@
 "use client";
 import { useAllFiles } from "@/actions/queries";
+import { EditDisableMenuComp } from "@/components/menu-bar";
 import { Spinner } from "@/components/spinner";
 import { PrimaryBtn } from "@/components/ui/buttons/primary-btn";
 import { AssignAFileDialog } from "@/components/ui/dialogs/add-file-dialog";
@@ -8,7 +9,7 @@ import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
 import { FileDetails } from "@/interface/file-interface";
 import { maskEmail } from "@/logic/user-logic";
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, EllipsisVertical } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -103,14 +104,19 @@ export default function FilePage() {
                         )}
                       </td>
 
-                      <td className="w-[200px] ps-7 py-3 pe-3 text-center">
-                        <Ellipsis
-                          onClick={() => {
-                            setSelectedData(val);
-                            setOpenQRDialog(true);
+                      <td className="w-[200px] text-start p-3">
+                        <EditDisableMenuComp
+                          edit={false}
+                          ban={false}
+                          onClick={(selectedOpt: "edit" | "ban" | "qr") => {
+                            if (selectedOpt === "qr") {
+                              setSelectedData(val);
+                              setOpenQRDialog(true);
+                            }
                           }}
-                          className="cursor-pointer"
-                        />
+                        >
+                          <EllipsisVertical className="cursor-pointer" />
+                        </EditDisableMenuComp>
                       </td>
                     </tr>
                   </>
