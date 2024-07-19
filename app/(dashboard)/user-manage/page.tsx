@@ -14,8 +14,12 @@ import { NanyTableComp } from "@/components/ui/tables/nany-table";
 import { SelectInput } from "@/components/ui/inputs/select-input";
 import { AuthStatesContext } from "@/context/auth";
 import { FinanceTableComp } from "@/components/ui/tables/finance-table";
+import {
+  NanyDetails,
+  ParentDetails,
+  UserDetails,
+} from "@/interface/user-interface";
 const nanyTableHeadings = [
-  // "User ID",
   "Nany ID",
   "Name",
   "Email",
@@ -25,7 +29,6 @@ const nanyTableHeadings = [
   "Action",
 ];
 const parentTableHeadings = [
-  // "User ID",
   "Student ID",
   "Name",
   "Email",
@@ -35,19 +38,28 @@ const parentTableHeadings = [
   "Action",
 ];
 const financeTableHeadings = ["User ID", "Email", "Action"];
-
-const options = [
+const parentFilterOptions = [
   {
-    title: "Parent",
-    value: "parent",
+    title: "Roll No",
+    value: "roll-no",
   },
   {
-    title: "Nanny",
-    value: "nany",
+    title: "Class",
+    value: "class",
   },
   {
-    title: "Finance",
-    value: "finance",
+    title: "Student Id",
+    value: "student-id",
+  },
+];
+const nanyFilterOption = [
+  {
+    title: "Qualification",
+    value: "qualification",
+  },
+  {
+    title: "Registration No",
+    value: "reg-no",
   },
 ];
 
@@ -71,7 +83,71 @@ export default function StudentManagement() {
   } = useAllFinancers(user ?? user, token ?? token);
   const [openUserDialog, setOpenUserDialog] = useState(false);
   const [mount, setMount] = useState<boolean>(false);
-  // const [value, setValue] = useState<string>("parent");
+  const [selectOption, setSelectOption] = useState<string>(
+    selectedOption === "parent" ? "" : ""
+  );
+  const [nanyItems, setNanyItems] = useState<NanyDetails[]>([]);
+  const [financerItems, setFinancerItems] = useState<UserDetails[]>([]);
+  const [parentItems, setParentItems] = useState<ParentDetails[]>([]);
+  const applyingNanyFiltersIfSelected = (filter: string) => {
+    if (selectedOption === "nany" && naniesData) {
+      const sortedData = [...naniesData].sort((a, b) => {
+        switch (filter) {
+          case "qualification":
+            return a.qualification?.localeCompare(b.qualification || "") || 0;
+
+          case "reg-no":
+            return a.reg_no?.localeCompare(b.reg_no || "") || 0;
+
+          default:
+            return 0;
+        }
+      });
+
+      setNanyItems(sortedData);
+    }
+  };
+  const applyingParentFiltersIfSelected = (filter: string) => {
+    if (selectedOption === "parent" && parentsData) {
+      const sortedData = [...parentsData].sort((a, b) => {
+        switch (filter) {
+          case "roll-no":
+            return a.roll_no?.localeCompare(b.roll_no || "") || 0;
+
+          case "class":
+            return a.class?.localeCompare(b.class || "") || 0;
+
+          case "student-id":
+            return (
+              String(a.student_id)?.localeCompare(String(b.student_id) || "") ||
+              0
+            );
+
+          default:
+            return 0;
+        }
+      });
+
+      setParentItems(sortedData);
+    }
+  };
+
+  const onChangeFilter = (filter: string) => {
+    setSelectOption(filter);
+    applyingNanyFiltersIfSelected(filter);
+    applyingParentFiltersIfSelected(filter);
+  };
+  useEffect(() => {
+    if (naniesData) {
+      setNanyItems(naniesData);
+    }
+    if (parentsData) {
+      setParentItems(parentsData);
+    }
+    if (financersData) {
+      setFinancerItems(financersData);
+    }
+  }, []);
   useEffect(() => {
     setMount(true);
   }, []);
@@ -87,12 +163,6 @@ export default function StudentManagement() {
         <div className="flex flex-row items-start justify-between">
           <h1 className="text-[26px] font-[600]">User Management</h1>
           <div className="flex flex-col items-end gap-2">
-            {/* <SelectInput
-              options={options}
-              value={selectedOption}
-              setValue={setSelectedOption}
-            /> */}
-
             <PrimaryBtn
               className="w-[200px] text-[16px] h-[40px] flex flex-row items-center justify-center"
               onClick={() => {
@@ -101,6 +171,20 @@ export default function StudentManagement() {
             >
               Create Profile
             </PrimaryBtn>
+            <div className="w-full flex flex-col items-end gap-2 justify-end">
+              <p className="text-[14px] text-gray-400">Filter by</p>
+              <SelectInput
+                options={
+                  selectedOption === "nany"
+                    ? nanyFilterOption
+                    : selectedOption === "parent"
+                    ? parentFilterOptions
+                    : []
+                }
+                value={selectOption}
+                setValue={onChangeFilter}
+              />
+            </div>
           </div>
         </div>
         <div className="flex flex-row items-center justify-center">
@@ -115,19 +199,19 @@ export default function StudentManagement() {
             {selectedOption === "parent" && (
               <div className="flex flex-col items-start gap-2 text-white">
                 <p>Parents</p>
-                <p>{parentsData?.length || 0}</p>
+                <p>{parentItems?.length || 0}</p>
               </div>
             )}
             {selectedOption === "nany" && (
               <div className="flex flex-col items-start gap-2 text-white">
                 <p>Nanies</p>
-                <p>{naniesData?.length || 0}</p>
+                <p>{nanyItems?.length || 0}</p>
               </div>
             )}
             {selectedOption === "finance" && (
               <div className="flex flex-col items-start gap-2 text-white">
                 <p>Financers</p>
-                <p>{financersData?.length || 0}</p>
+                <p>{financerItems?.length || 0}</p>
               </div>
             )}
           </div>
@@ -147,21 +231,21 @@ export default function StudentManagement() {
           {selectedOption === "parent" && (
             <ParentTableComp
               headings={parentTableHeadings}
-              data={parentsData}
+              data={parentItems}
               edit={true}
             />
           )}
           {selectedOption === "nany" && (
             <NanyTableComp
               headings={nanyTableHeadings}
-              data={naniesData}
+              data={nanyItems}
               edit={true}
             />
           )}
           {selectedOption === "finance" && (
             <FinanceTableComp
               headings={financeTableHeadings}
-              data={financersData}
+              data={financerItems}
               edit={true}
             />
           )}
