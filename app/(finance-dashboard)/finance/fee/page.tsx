@@ -4,6 +4,7 @@ import { EditDisableMenuComp } from "@/components/menu-bar";
 import { PrimaryBtn } from "@/components/ui/buttons/primary-btn";
 import { CreateOrEditFeeDialog } from "@/components/ui/dialogs/create-edit-fee";
 import { QRCodeDialog } from "@/components/ui/dialogs/qr-code-dialog";
+import { SelectInput } from "@/components/ui/inputs/select-input";
 import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
 import { FeeDetails } from "@/interface/fees-intrface";
@@ -22,6 +23,24 @@ const tableHeadings = [
   "More",
 ];
 
+const FeeFilterOptions = [
+  {
+    title: "Date",
+    value: "date",
+  },
+  {
+    title: "Mode",
+    value: "mode",
+  },
+  {
+    title: "Pending",
+    value: "pending",
+  },
+  {
+    title: "Status",
+    value: "status",
+  },
+];
 export default function FeePage() {
   const { user, token } = AuthStatesContext();
   const { data, isLoading, isError } = useAllFees(user ?? user, token ?? token);
@@ -29,6 +48,42 @@ export default function FeePage() {
   const [selectedData, setSelectedData] = useState<FeeDetails | null>(null);
   const [openQRDialog, setOpenQRDialog] = useState(false);
   const [openAddFeeDialog, setOpenAddFeeDialog] = useState(false);
+  const [selectOption, setSelectOption] = useState<string>("");
+  const [feeItems, setFeeItems] = useState<FeeDetails[]>([]);
+  const reset = () => {
+    setSelectOption("");
+    setFeeItems(data || []);
+  };
+  const onChangeFilter = (filter: string) => {
+    setSelectOption(filter);
+    if (filter === "date") {
+      const sortedData = data?.sort((a, b) => {
+        return (
+          new Date(a.payment_date).getTime() -
+          new Date(b.payment_date).getTime()
+        );
+      });
+      setFeeItems(sortedData || []);
+    } else if (filter === "mode") {
+      const sortedData = data?.sort((a, b) => {
+        return a.pay_mode.localeCompare(b.pay_mode);
+      });
+      setFeeItems(sortedData || []);
+    } else if (filter === "pending") {
+      const sortedData = data?.sort((a, b) => {
+        return Number(a.total_pending) - Number(b.total_pending);
+      });
+      setFeeItems(sortedData || []);
+    } else if (filter === "status") {
+      const sortedData = data?.sort((a, b) => {
+        return a.status.localeCompare(b.status);
+      });
+      setFeeItems(sortedData || []);
+    }
+  };
+  useEffect(() => {
+    setMount(true);
+  }, []);
   useEffect(() => {
     setMount(true);
   }, []);
@@ -54,14 +109,31 @@ export default function FeePage() {
       <main className="flex flex-col px-10">
         <div className="flex flex-row items-start justify-between">
           <h1 className="text-[26px] font-[600]">Fee Details</h1>
-          <PrimaryBtn
-            className="w-[200px] text-[16px] h-[40px] flex flex-row items-center justify-center"
-            onClick={() => {
-              setOpenAddFeeDialog(true);
-            }}
-          >
-            Create Fee
-          </PrimaryBtn>
+
+          <div className="flex flex-col items-end gap-2 justify-end">
+            <p className="text-[14px] text-gray-400">
+              Filter by{" "}
+              <span
+                onClick={reset}
+                className="text-rose-400 underline cursor-pointer"
+              >
+                /(reset filter)
+              </span>
+            </p>
+            <SelectInput
+              options={FeeFilterOptions}
+              value={selectOption}
+              setValue={onChangeFilter}
+            />
+            <PrimaryBtn
+              className="w-[200px] text-[16px] h-[40px] flex flex-row items-center justify-center"
+              onClick={() => {
+                setOpenAddFeeDialog(true);
+              }}
+            >
+              Create Fee
+            </PrimaryBtn>
+          </div>
         </div>
         <SpinnerWrapper loading={isLoading}>
           <table className="w-full mt-10 max-h-[70vh] overflow-auto">
@@ -73,7 +145,7 @@ export default function FeePage() {
               ))}
             </thead>
             <tbody>
-              {data?.map((val: FeeDetails) => {
+              {feeItems?.map((val: FeeDetails) => {
                 return (
                   <>
                     <tr>
@@ -82,16 +154,16 @@ export default function FeePage() {
                         {val.created_for_id}
                       </td>
                       <td className="w-[200px] text-start p-3">{val.month}</td>
-                      <td className="w-[250px] ps-5 py-3 pe-3 text-start">
+                      <td className="w-[300px] ps-3 py-3 pe-3 text-start">
                         {iSOFormattedDate(val.payment_date)}
                       </td>
-                      <td className="w-[200px] ps-7 py-3 pe-3 text-center">
+                      <td className="w-[200px] ps-4 py-3 pe-3 text-start">
                         {val.pay_mode}
                       </td>
-                      <td className="w-[200px] ps-7 py-3 pe-3 text-center">
+                      <td className="w-[200px] ps-4 py-3 pe-3 text-start">
                         {val.total_pending}
                       </td>
-                      <td className="w-[200px] ps-7 py-3 pe-3 text-center">
+                      <td className="w-[200px] ps-4 py-3 pe-3 text-start">
                         {val.status}
                       </td>
                       <td className="w-[200px] text-start p-3">

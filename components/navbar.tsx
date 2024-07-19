@@ -8,6 +8,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { AuthStatesContext } from "@/context/auth";
 import {
+  useAllFees,
   useAllFinancers,
   useAllNanies,
   useAllParents,
@@ -42,6 +43,11 @@ const Navbar = () => {
     isLoading: isFinanceLoading,
     isError: isFinanceError,
   } = useAllFinancers(user ?? user, token ?? token);
+  const { data: feeData, isLoading: isFeeLoading } = useAllFees(
+    user ?? user,
+    token ?? token
+  );
+
   const [search, setSearch] = useState("");
   const [recommededData, setRecommededData] = useState<any>([]);
 
@@ -73,11 +79,23 @@ const Navbar = () => {
         }
       }
     } else {
-      const filteredData = financeData?.filter((data) =>
-        data.email.includes(value)
-      );
-      if (filteredData && filteredData?.length > 0) {
-        setRecommededData(filteredData);
+      if (user.role === "finance") {
+        const filteredData = feeData?.filter(
+          (data) =>
+            data.id === value ||
+            data.status === value ||
+            data.created_for_id === value
+        );
+        if (filteredData && filteredData?.length > 0) {
+          setRecommededData(filteredData);
+        }
+      } else {
+        const filteredData = financeData?.filter(
+          (data) => data.email.includes(value) || data.role.includes(value)
+        );
+        if (filteredData && filteredData?.length > 0) {
+          setRecommededData(filteredData);
+        }
       }
       setSearch(value);
     }
@@ -95,24 +113,41 @@ const Navbar = () => {
         />
         {recommededData.length > 0 && (
           <div className="absolute top-[50px] w-full bg-white shadow-lg rounded-[10px]">
-            {recommededData.map((data: any) => (
-              <div
-                className="flex flex-row items-center gap-2 p-2 hover:bg-slate-400/10"
-                key={data.id}
-              >
-                <Image
-                  src="/assets/profile.svg"
-                  alt="profile"
-                  width={50}
-                  height={50}
-                  className="rounded-full object-cover"
-                />
-                <div className="flex flex-col text-start">
-                  <p className="text-ellipsis line-clamp-1">{data.email}</p>
-                  <p className="text-[10px] text-gray-400">{data.role}</p>
+            {recommededData.map((data: any) =>
+              user.role === "finance" ? (
+                <>
+                  <div
+                    className="flex flex-col items-start p-2 hover:bg-slate-400/10"
+                    key={data.id}
+                  >
+                    {/* <p className="text-ellipsis line-clamp-1">{data.id}</p> */}
+                    <p className="text-ellipsis line-clamp-1">
+                      Created For: {data.created_for_id}
+                    </p>
+                    <p className="text-ellipsis line-clamp-1 text-[12px]">
+                      Status:{data.status}
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <div
+                  className="flex flex-row items-center gap-2 p-2 hover:bg-slate-400/10"
+                  key={data.id}
+                >
+                  <Image
+                    src="/assets/profile.svg"
+                    alt="profile"
+                    width={50}
+                    height={50}
+                    className="rounded-full object-cover"
+                  />
+                  <div className="flex flex-col text-start">
+                    <p className="text-ellipsis line-clamp-1">{data.email}</p>
+                    <p className="text-[10px] text-gray-400">{data.role}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            )}
           </div>
         )}
       </div>

@@ -64,16 +64,16 @@ export default function FinancePage() {
                         {val.created_for_id}
                       </td>
                       <td className="w-[200px] text-start p-3">{val.month}</td>
-                      <td className="w-[250px] ps-5 py-3 pe-3 text-start">
+                      <td className="w-[300px] ps-4 py-3 pe-3 text-start">
                         {iSOFormattedDate(val.payment_date)}
                       </td>
-                      <td className="w-[200px] ps-7 py-3 pe-3 text-center">
+                      <td className="w-[200px] ps-4 py-3 pe-3 text-start">
                         {val.pay_mode}
                       </td>
-                      <td className="w-[200px] ps-7 py-3 pe-3 text-center">
+                      <td className="w-[200px] ps-4 py-3 pe-3 text-start">
                         {val.total_pending}
                       </td>
-                      <td className="w-[200px] ps-7 py-3 pe-3 text-center">
+                      <td className="w-[200px] ps-4 py-3 pe-3 text-start">
                         {val.status}
                       </td>
                       <td className="w-[200px] text-start p-3">

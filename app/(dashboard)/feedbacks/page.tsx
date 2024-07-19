@@ -2,6 +2,7 @@
 import { useAllComments, useAllFeedback } from "@/actions/queries";
 import { EditDisableMenuComp } from "@/components/menu-bar";
 import { QRCodeDialog } from "@/components/ui/dialogs/qr-code-dialog";
+import { SelectInput } from "@/components/ui/inputs/select-input";
 import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
 import { feedbackDetails } from "@/interface/feedback-interface";
@@ -18,7 +19,16 @@ const tableHeadings = [
   "Description",
   "More",
 ];
-
+const feedbackFilterOptions = [
+  {
+    title: "Rating",
+    value: "rating",
+  },
+  {
+    title: "Date",
+    value: "date",
+  },
+];
 export default function FeedbackPage() {
   const { user, token } = AuthStatesContext();
   const { data, isLoading, isError } = useAllFeedback(
@@ -26,10 +36,35 @@ export default function FeedbackPage() {
     token ?? token
   );
   const [mount, setMount] = useState<boolean>(false);
+  const [selectOption, setSelectOption] = useState<string>("");
   const [selectedData, setSelectedData] = useState<feedbackDetails | null>(
     null
   );
+  const [feedbackItems, setFeedbackItems] = useState<feedbackDetails[]>([]);
   const [openQRDialog, setOpenQRDialog] = useState(false);
+  const reset = () => {
+    setSelectOption("");
+    setFeedbackItems(data || []);
+  };
+  const onChangeFilter = (filter: string) => {
+    setSelectOption(filter);
+    if (filter === "rating") {
+      const sortedData = data?.sort((a, b) => {
+        return Number(a.rating) - Number(b.rating);
+      });
+      setFeedbackItems(sortedData || []);
+    } else if (filter === "date") {
+      const sortedData = data?.sort((a, b) => {
+        return (
+          new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+        );
+      });
+      setFeedbackItems(sortedData || []);
+    }
+  };
+  useEffect(() => {
+    setFeedbackItems(data || []);
+  }, [data]);
   useEffect(() => {
     setMount(true);
   }, []);
@@ -48,6 +83,22 @@ export default function FeedbackPage() {
       <main className="flex flex-col px-10">
         <div className="flex flex-row items-start justify-between">
           <h1 className="text-[26px] font-[600]">Feedback Details</h1>
+          <div className="flex flex-col items-end gap-2 justify-end">
+            <p className="text-[14px] text-gray-400">
+              Filter by{" "}
+              <span
+                onClick={reset}
+                className="text-rose-400 underline cursor-pointer"
+              >
+                /(reset filter)
+              </span>
+            </p>
+            <SelectInput
+              options={feedbackFilterOptions}
+              value={selectOption}
+              setValue={onChangeFilter}
+            />
+          </div>
         </div>
         <SpinnerWrapper loading={isLoading}>
           <table className="w-full mt-10 max-h-[70vh] overflow-auto">
@@ -65,7 +116,7 @@ export default function FeedbackPage() {
               ))}
             </thead>
             <tbody>
-              {data?.map((val) => {
+              {feedbackItems?.map((val) => {
                 return (
                   <>
                     <tr>
