@@ -5,6 +5,7 @@ import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
 import { CommentDetails } from "@/interface/comment-interface";
 import { cn } from "@/lib/utils";
+import { iSOFormattedDate } from "@/logic/date-logic";
 import { Ellipsis } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -66,20 +67,18 @@ export default function CommentPage() {
                 return (
                   <>
                     <tr>
-                      <td className="flex flex-row items-center gap-2 w-[200px] text-start p-3">
-                        {val.id}
-                      </td>
-                      <td className="w-[150px] text-start p-3">
+                      <td className="w-[50px] text-start p-3">{val.id}</td>
+                      <td className="w-[50px] text-start p-3">
                         {val.userId || "-"}
                       </td>
-                      <td className="w-[150px] text-start p-3">
+                      <td className="w-[50px] text-start p-3">
                         {val.targetUserId || "-"}
                       </td>
-                      <td className="w-[150px] ps-5 py-3 pe-3 text-start">
+                      <td className="w-[50px] ps-5 py-3 pe-3 text-start">
                         {val.activityId || "-"}
                       </td>
-                      <td className="w-[150px] ps-5 py-3 pe-3 text-start">
-                        {val.timestamp || "-"}
+                      <td className="w-[250px] ps-5 py-3 pe-3 text-start">
+                        {iSOFormattedDate(val.timestamp) || "-"}
                       </td>
                       <td className="w-[400px] ps-7 py-3 pe-3 text-start">
                         {val.description || "-"}

@@ -15,7 +15,7 @@ import { SelectInput } from "@/components/ui/inputs/select-input";
 import { AuthStatesContext } from "@/context/auth";
 import { FinanceTableComp } from "@/components/ui/tables/finance-table";
 const nanyTableHeadings = [
-  "User ID",
+  // "User ID",
   "Nany ID",
   "Name",
   "Email",
@@ -25,7 +25,7 @@ const nanyTableHeadings = [
   "Action",
 ];
 const parentTableHeadings = [
-  "User ID",
+  // "User ID",
   "Student ID",
   "Name",
   "Email",

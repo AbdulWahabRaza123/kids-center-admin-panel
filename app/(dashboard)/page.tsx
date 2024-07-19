@@ -12,7 +12,7 @@ import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
 import { useEffect, useState } from "react";
 const nanyTableHeadings = [
-  "User ID",
+  // "User ID",
   "Nany ID",
   "Name",
   "Email",
@@ -21,7 +21,7 @@ const nanyTableHeadings = [
   "Reg No",
 ];
 const parentTableHeadings = [
-  "User ID",
+  // "User ID",
   "Student ID",
   "Name",
   "Email",

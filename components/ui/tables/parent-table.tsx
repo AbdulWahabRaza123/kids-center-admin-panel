@@ -62,9 +62,9 @@ export const ParentTableComp = ({
             return (
               <>
                 <tr>
-                  <td className="w-[200px] text-start p-3">
+                  {/* <td className="w-[200px] text-start p-3">
                     {val.user_id || "-"}
-                  </td>
+                  </td> */}
                   <td className="w-[200px] text-start p-3">
                     {val.student_id || "-"}
                   </td>

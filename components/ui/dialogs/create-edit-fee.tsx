@@ -1,31 +1,16 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import React, { useState } from "react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import Image from "next/image";
 import { TextInput } from "../inputs/text-input";
 import { PrimaryBtn } from "../buttons/primary-btn";
 import { SelectInput } from "../inputs/select-input";
 import { client } from "@/lib/client";
 import { AuthStatesContext } from "@/context/auth";
-import {
-  useAllFees,
-  useAllFinancers,
-  useAllNanies,
-  useAllParents,
-} from "@/actions/queries";
+import { useAllFees, useAllParents } from "@/actions/queries";
 import { SpinnerBtn } from "@/components/spinner-btn";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
-import {
-  NanyDetails,
-  ParentDetails,
-  UserDetails,
-} from "@/interface/user-interface";
 import {
   Select,
   SelectContent,

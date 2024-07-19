@@ -19,6 +19,7 @@ export default function FilePage() {
     user ?? user,
     token ?? token
   );
+  console.log("data", data);
   const [mount, setMount] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<FileDetails | null>(null);
   const [openQRDialog, setOpenQRDialog] = useState(false);
@@ -82,10 +83,12 @@ export default function FilePage() {
                         {val.name || "-"}
                       </td>
                       <td className="w-[200px] text-start p-3">
-                        {val?.file_link && (
+                        {val?.file_link ? (
                           <Link href={val.file_link || "#link"} target="_blank">
                             Link
                           </Link>
+                        ) : (
+                          "-"
                         )}
                       </td>
 

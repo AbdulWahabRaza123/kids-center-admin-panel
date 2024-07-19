@@ -15,7 +15,7 @@ export const NanyTableComp = ({
   data: NanyDetails[] | undefined;
   edit: boolean;
 }) => {
-  console.log("This is nany details data ", data);
+  // console.log("This is nany details data ", data);
   const [selectedData, setSelectedData] = useState<NanyDetails | null>(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openBanDialog, setOpenBanDialog] = useState(false);
@@ -62,9 +62,9 @@ export const NanyTableComp = ({
             return (
               <>
                 <tr>
-                  <td className="w-[200px] text-start p-3">
+                  {/* <td className="w-[200px] text-start p-3">
                     {val.user_id || "-"}
-                  </td>
+                  </td> */}
                   <td className="w-[200px] text-start p-3">
                     {val.nany_id || "-"}
                   </td>
