@@ -52,7 +52,8 @@ const options = [
 ];
 
 export default function StudentManagement() {
-  const { user, token } = AuthStatesContext();
+  const { user, token, selectedOption, setSelectedOption } =
+    AuthStatesContext();
   const {
     data: naniesData,
     isLoading: naniesLoading,
@@ -70,7 +71,7 @@ export default function StudentManagement() {
   } = useAllFinancers(user ?? user, token ?? token);
   const [openUserDialog, setOpenUserDialog] = useState(false);
   const [mount, setMount] = useState<boolean>(false);
-  const [value, setValue] = useState<string>("parent");
+  // const [value, setValue] = useState<string>("parent");
   useEffect(() => {
     setMount(true);
   }, []);
@@ -86,7 +87,11 @@ export default function StudentManagement() {
         <div className="flex flex-row items-start justify-between">
           <h1 className="text-[26px] font-[600]">User Management</h1>
           <div className="flex flex-col items-end gap-2">
-            <SelectInput options={options} value={value} setValue={setValue} />
+            <SelectInput
+              options={options}
+              value={selectedOption}
+              setValue={setSelectedOption}
+            />
 
             <PrimaryBtn
               className="w-[200px] text-[16px] h-[40px] flex flex-row items-center justify-center"
@@ -107,19 +112,19 @@ export default function StudentManagement() {
               alt="search"
               className="object-cover"
             />
-            {value === "parent" && (
+            {selectedOption === "parent" && (
               <div className="flex flex-col items-start gap-2 text-white">
                 <p>Parents</p>
                 <p>{parentsData?.length || 0}</p>
               </div>
             )}
-            {value === "nany" && (
+            {selectedOption === "nany" && (
               <div className="flex flex-col items-start gap-2 text-white">
                 <p>Nanies</p>
                 <p>{naniesData?.length || 0}</p>
               </div>
             )}
-            {value === "finance" && (
+            {selectedOption === "finance" && (
               <div className="flex flex-col items-start gap-2 text-white">
                 <p>Financers</p>
                 <p>{financersData?.length || 0}</p>
@@ -130,30 +135,30 @@ export default function StudentManagement() {
 
         <SpinnerWrapper
           loading={
-            value === "nany"
+            selectedOption === "nany"
               ? naniesLoading
-              : value === "parent"
+              : selectedOption === "parent"
               ? parentsLoading
-              : value === "finance"
+              : selectedOption === "finance"
               ? financersLoading
               : false
           }
         >
-          {value === "parent" && (
+          {selectedOption === "parent" && (
             <ParentTableComp
               headings={parentTableHeadings}
               data={parentsData}
               edit={true}
             />
           )}
-          {value === "nany" && (
+          {selectedOption === "nany" && (
             <NanyTableComp
               headings={nanyTableHeadings}
               data={naniesData}
               edit={true}
             />
           )}
-          {value === "finance" && (
+          {selectedOption === "finance" && (
             <FinanceTableComp
               headings={financeTableHeadings}
               data={financersData}

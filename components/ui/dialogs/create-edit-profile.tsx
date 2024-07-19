@@ -50,7 +50,8 @@ export const CreateOrEditProfileDialog = ({
   edit: boolean;
   data?: ParentDetails | NanyDetails | UserDetails;
 }) => {
-  const { user, token } = AuthStatesContext();
+  const { user, token, selectedOption, setSelectedOption } =
+    AuthStatesContext();
   const { refetch: refetchNanies } = useAllNanies(user ?? user, token ?? token);
   const { refetch: refetchParents } = useAllParents(
     user ?? user,
@@ -62,7 +63,7 @@ export const CreateOrEditProfileDialog = ({
   );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("parent");
+  // const [role, setRole] = useState("parent");
   //for student/parent
   const [studentName, setStudentName] = useState("");
   const [studentClass, setStudentClass] = useState("");
@@ -120,15 +121,15 @@ export const CreateOrEditProfileDialog = ({
       const res = await client.post("/auth", {
         email,
         password,
-        role,
+        role: selectedOption,
       });
       const id = res.data.id;
       if (id > 0) {
-        if (role === "parent") {
+        if (selectedOption === "parent") {
           await handleLinkParent(id);
-        } else if (role === "nany") {
+        } else if (selectedOption === "nany") {
           await handleLinkNany(id);
-        } else if (role === "finance") {
+        } else if (selectedOption === "finance") {
           financeRefetch();
         }
         setOpen(false);
@@ -142,10 +143,10 @@ export const CreateOrEditProfileDialog = ({
   const handleEditUser = async () => {
     try {
       setLoading(true);
-      if (role === "parent") {
+      if (selectedOption === "parent") {
         const parentData: ParentDetails = data as ParentDetails;
         await handleLinkParent(parentData.user_id);
-      } else if (role === "nany") {
+      } else if (selectedOption === "nany") {
         const nanyData: NanyDetails = data as NanyDetails;
         await handleLinkNany(nanyData.user_id);
       }
@@ -162,7 +163,7 @@ export const CreateOrEditProfileDialog = ({
         const parentData: ParentDetails = data as ParentDetails;
         setEmail(parentData.email);
         setPassword("*****");
-        setRole(data.role);
+        setSelectedOption(data.role);
         setStudentName(parentData.student_name);
         setStudentClass(parentData.class);
         setStudentRollNo(parentData.roll_no);
@@ -171,7 +172,7 @@ export const CreateOrEditProfileDialog = ({
         const nanyData: NanyDetails = data as NanyDetails;
         setEmail(nanyData.email);
         setPassword("*****");
-        setRole(data.role);
+        setSelectedOption(data.role);
         setNanyName(nanyData.nany_name);
         setNanyPhoneNo(nanyData.phone_no);
         setNanyRegNo(nanyData.reg_no);
@@ -180,7 +181,7 @@ export const CreateOrEditProfileDialog = ({
         const financeData: UserDetails = data as UserDetails;
         setEmail(financeData.email);
         setPassword("*****");
-        setRole(data.role);
+        setSelectedOption(data.role);
       }
     }
   }, [edit, data]);
@@ -217,8 +218,8 @@ export const CreateOrEditProfileDialog = ({
             <h1 className=" text-black">Role</h1>
             <SelectInput
               options={options}
-              value={role}
-              setValue={setRole}
+              value={selectedOption}
+              setValue={setSelectedOption}
               disabled={edit}
             />
           </div>
@@ -232,7 +233,7 @@ export const CreateOrEditProfileDialog = ({
           className="w-full"
           disabled={edit}
         />
-        {role == "parent" && (
+        {selectedOption == "parent" && (
           <div>
             <div className="flex flex-row items-center gap-3 mt-3">
               <TextInput
@@ -272,7 +273,7 @@ export const CreateOrEditProfileDialog = ({
             </div>
           </div>
         )}
-        {role == "nany" && (
+        {selectedOption == "nany" && (
           <div>
             <div className="flex flex-row items-center gap-3 mt-3">
               <TextInput

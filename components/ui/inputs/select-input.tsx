@@ -6,6 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { OptionTypes } from "@/interface/user-interface";
 import { cn } from "@/lib/utils";
 
 export const SelectInput = ({
@@ -27,7 +28,7 @@ export const SelectInput = ({
   return (
     <>
       <Select
-        onValueChange={(value) => {
+        onValueChange={(value: string) => {
           if (disabled) {
             return;
           }

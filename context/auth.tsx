@@ -1,4 +1,5 @@
 "use client";
+import { OptionTypes } from "@/interface/user-interface";
 import React, {
   createContext,
   useState,
@@ -12,11 +13,14 @@ interface AuthContextType {
   setUser: (value: any) => void;
   token: string;
   setToken: (value: string) => void;
+  selectedOption: string;
+  setSelectedOption: (value: string) => void;
 }
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState("");
+  const [selectedOption, setSelectedOption] = useState<string>("parent");
   useEffect(() => {
     const user = localStorage.getItem("kids-user");
     const token = localStorage.getItem("kids-token");
@@ -28,7 +32,16 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
   return (
-    <AuthContext.Provider value={{ user, setUser, token, setToken }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        setUser,
+        token,
+        setToken,
+        selectedOption,
+        setSelectedOption,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

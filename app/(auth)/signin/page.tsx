@@ -12,7 +12,6 @@ import { useNotify } from "@/components/ui/toast/notify";
 import { useToast } from "@/components/ui/use-toast";
 const Signin = () => {
   const router = useRouter();
-  const { toast } = useToast();
   const notify = useNotify();
   const { user, setUser, setToken } = AuthStatesContext();
   const [loading, setLoading] = useState(false);
@@ -32,14 +31,12 @@ const Signin = () => {
         email,
         password,
       });
-
       notify({
         type: "success",
         title: "Signin successful",
       });
       const tempToken = res.data.user.token;
       const tempUser = res.data.user.user;
-
       localStorage.setItem("kids-token", tempToken);
       localStorage.setItem("kids-user", JSON.stringify(tempUser));
       setToken(tempToken);
@@ -56,7 +53,7 @@ const Signin = () => {
   };
   useEffect(() => {
     if (user) {
-      // console.log("This is user ", user);
+      console.log("This is user ", user);
       if (user.role === "admin") {
         router.push("/");
       } else if (user.role === "finance") {

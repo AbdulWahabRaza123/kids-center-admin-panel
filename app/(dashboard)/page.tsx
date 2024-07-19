@@ -46,7 +46,8 @@ const options = [
 ];
 
 export default function Home() {
-  const { user, token } = AuthStatesContext();
+  const { user, token, selectedOption, setSelectedOption } =
+    AuthStatesContext();
   const {
     data: naniesData,
     isLoading: naniesLoading,
@@ -63,7 +64,6 @@ export default function Home() {
     error: financersError,
   } = useAllFinancers(user ?? user, token ?? token);
   const [mount, setMount] = useState<boolean>(false);
-  const [value, setValue] = useState<string>("parent");
   useEffect(() => {
     setMount(true);
   }, []);
@@ -72,34 +72,38 @@ export default function Home() {
     <main className="flex flex-col px-10">
       <div className="flex flex-row items-center justify-between">
         <h1 className="text-[26px] font-[600]">Welcome!</h1>
-        <SelectInput options={options} value={value} setValue={setValue} />
+        <SelectInput
+          options={options}
+          value={selectedOption}
+          setValue={setSelectedOption}
+        />
       </div>
       <SpinnerWrapper
         loading={
-          value === "nany"
+          selectedOption === "nany"
             ? naniesLoading
-            : value === "parent"
+            : selectedOption === "parent"
             ? parentsLoading
-            : value === "finance"
+            : selectedOption === "finance"
             ? financersLoading
             : false
         }
       >
-        {value === "parent" && (
+        {selectedOption === "parent" && (
           <ParentTableComp
             headings={parentTableHeadings}
             data={parentsData}
             edit={false}
           />
         )}
-        {value === "nany" && (
+        {selectedOption === "nany" && (
           <NanyTableComp
             headings={nanyTableHeadings}
             data={naniesData}
             edit={false}
           />
         )}
-        {value === "finance" && (
+        {selectedOption === "finance" && (
           <FinanceTableComp
             headings={financeTableHeadings}
             data={financersData}
