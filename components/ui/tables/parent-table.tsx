@@ -46,15 +46,15 @@ export const ParentTableComp = ({
           id={selectedData.user_id}
         />
       )}
-      <table className="w-full mt-10 max-h-[70vh] overflow-auto">
-        <thead className="bg-[#7A1FA01A]">
+      <table className="w-full mt-10 max-h-[75vh] overflow-auto">
+        <thead className="bg-[#7A1FA01A] shadow-md">
           {headings.map((heading) => (
             <th key={heading} className="w-[200px] text-start p-3">
               {heading}
             </th>
           ))}
         </thead>
-        <tbody>
+        <tbody className=" shadow-sm py-14">
           {data?.map((val: ParentDetails) => {
             if (val?.disabled === 1) {
               return <></>;

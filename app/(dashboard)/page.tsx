@@ -10,6 +10,7 @@ import { NanyTableComp } from "@/components/ui/tables/nany-table";
 import { ParentTableComp } from "@/components/ui/tables/parent-table";
 import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
+import { Activity } from "lucide-react";
 import { useEffect, useState } from "react";
 const nanyTableHeadings = [
   // "User ID",
@@ -77,6 +78,22 @@ export default function Home() {
           value={selectedOption}
           setValue={setSelectedOption}
         />
+      </div>
+      <div className="flex items-center gap-5 flex-wrap mt-7 mb-3">
+        {[naniesData?.length, parentsData?.length, financersData?.length].map(
+          (item, index) => (
+            <div
+              key={index}
+              className="flex flex-col relative items-start px-10 justify-center w-[320px] h-[100px] shadow-md border-[1px] border-gray-400/40 gap-1 rounded-[14px]"
+            >
+              <p className="text-[24px] text-black/60 font-[700]">
+                {options[index].title}
+              </p>
+              <p className="text-[24px] text-black/60 font-[600]">{item}</p>
+              <Activity className="absolute top-[15px] right-[10px] text-primary" />
+            </div>
+          )
+        )}
       </div>
       <SpinnerWrapper
         loading={
