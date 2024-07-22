@@ -1,6 +1,7 @@
 "use client";
 import { useAllActivities } from "@/actions/queries";
 import { EditDisableMenuComp } from "@/components/menu-bar";
+import { OverviewCard } from "@/components/ui/cards/overview-card";
 import { DeleteConfirmationDialog } from "@/components/ui/dialogs/delete-confirmation";
 import { QRCodeDialog } from "@/components/ui/dialogs/qr-code-dialog";
 import { ActivityDrawer } from "@/components/ui/drawers/activity-drawer";
@@ -19,6 +20,7 @@ const tableHeadings = [
   "Parent Name",
   "Checkin",
   "Checkout",
+  "Total Activities",
   "Options",
   "More",
 ];
@@ -132,7 +134,7 @@ export default function ActivityPage() {
         />
       )}
       <main className="flex flex-col px-10">
-        <div className="flex flex-row items-end justify-between">
+        <div className="flex flex-row items-start justify-between">
           <div>
             <h1 className="text-[26px] font-[600]">Daily Activities</h1>
           </div>
@@ -153,9 +155,25 @@ export default function ActivityPage() {
             />
           </div>
         </div>
+        {data && (
+          <div className="mt-10 flex items-center gap-5 flex-wrap">
+            {[
+              {
+                title: "All Activities",
+                value: data.length | 0,
+              },
+            ].map((item) => (
+              <OverviewCard
+                key={item.title}
+                title={item.title}
+                value={item.value}
+              />
+            ))}
+          </div>
+        )}
         <SpinnerWrapper loading={isLoading}>
           <table className="w-full mt-10 max-h-[70vh] overflow-auto">
-            <thead className="bg-[#7A1FA01A]">
+            <thead className="bg-[#7A1FA01A] shadow-md">
               {tableHeadings.map((heading) => (
                 <th key={heading} className="w-[200px] text-start p-3">
                   {heading}
@@ -177,8 +195,11 @@ export default function ActivityPage() {
                       <td className="w-[200px] ps-5 py-3 pe-3 text-start">
                         {val.checkinTime}
                       </td>
-                      <td className="w-[200px] ps-7 py-3 pe-3 text-center">
+                      <td className="w-[200px] ps-7 py-3 pe-3 text-start">
                         {val.checkoutTime}
+                      </td>
+                      <td className="w-[200px] py-3 text-center">
+                        {val.activities.length}
                       </td>
 
                       <td className="w-[200px] text-start p-3">

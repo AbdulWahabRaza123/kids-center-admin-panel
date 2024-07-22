@@ -123,6 +123,11 @@ export const NanyTableComp = ({
           })}
         </tbody>
       </table>
+      {data?.length === 0 && (
+        <div className="h-[60vh] flex items-center justify-center text-gray-400">
+          No data found
+        </div>
+      )}
     </>
   );
 };

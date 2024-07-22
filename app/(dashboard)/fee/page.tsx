@@ -1,11 +1,14 @@
 "use client";
 import { useAllFees } from "@/actions/queries";
 import { EditDisableMenuComp } from "@/components/menu-bar";
+import { OverviewCard } from "@/components/ui/cards/overview-card";
 import { QRCodeDialog } from "@/components/ui/dialogs/qr-code-dialog";
 import { SelectInput } from "@/components/ui/inputs/select-input";
+import { useNotify } from "@/components/ui/toast/notify";
 import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
 import { FeeDetails } from "@/interface/fees-intrface";
+import { client } from "@/lib/client";
 import { iSOFormattedDate } from "@/logic/date-logic";
 import { Ellipsis, EllipsisVertical } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -39,13 +42,18 @@ const feeFilterOptions = [
   },
 ];
 export default function FeePage() {
+  const notify = useNotify();
   const { user, token } = AuthStatesContext();
-  const { data, isLoading, isError } = useAllFees(user ?? user, token ?? token);
+  const { data, isLoading, isError, refetch } = useAllFees(
+    user ?? user,
+    token ?? token
+  );
   const [mount, setMount] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<FeeDetails | null>(null);
   const [openQRDialog, setOpenQRDialog] = useState(false);
   const [selectOption, setSelectOption] = useState<string>("");
   const [feeItems, setFeeItems] = useState<FeeDetails[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const reset = () => {
     setSelectOption("");
     setFeeItems(data || []);
@@ -75,6 +83,39 @@ export default function FeePage() {
         return a.status.localeCompare(b.status);
       });
       setFeeItems(sortedData || []);
+    }
+  };
+  const findingTotalPending = (items: FeeDetails[]) => {
+    const sum = items?.reduce((acc, val) => acc + Number(val.total_pending), 0);
+    return sum;
+  };
+  const deleteFee = async (id: number) => {
+    if (!id) {
+      notify({
+        title: "Id not found",
+        type: "warning",
+      });
+    }
+    try {
+      setLoading(true);
+      const res = await client.delete(`/parent/fee/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      refetch();
+      notify({
+        title: "Fee deleted successfully",
+        type: "success",
+      });
+    } catch (e) {
+      console.log(e);
+      notify({
+        title: "Invalid error",
+        type: "error",
+      });
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -115,9 +156,31 @@ export default function FeePage() {
             />
           </div>
         </div>
+
+        {data && (
+          <div className="mt-10 flex items-center gap-5 flex-wrap">
+            {[
+              {
+                title: "Total Pending",
+                value: findingTotalPending(data),
+              },
+              {
+                title: "No of Fee's",
+                value: data?.length,
+              },
+            ].map((item) => (
+              <OverviewCard
+                key={item.title}
+                title={item.title}
+                value={item.value}
+              />
+            ))}
+          </div>
+        )}
+
         <SpinnerWrapper loading={isLoading}>
           <table className="w-full mt-10 max-h-[70vh] overflow-auto">
-            <thead className="bg-[#7A1FA01A]">
+            <thead className="bg-[#7A1FA01A] shadow-md">
               {tableHeadings.map((heading) => (
                 <th key={heading} className="w-[200px] text-start p-3">
                   {heading}
@@ -153,11 +216,12 @@ export default function FeePage() {
                       <td className="w-[200px] text-start p-3">
                         <EditDisableMenuComp
                           edit={false}
-                          ban={false}
                           onClick={(selectedOpt: "edit" | "ban" | "qr") => {
                             if (selectedOpt === "qr") {
                               setSelectedData(val);
                               setOpenQRDialog(true);
+                            } else if (selectedOpt === "ban") {
+                              deleteFee(val.id);
                             }
                           }}
                         >
@@ -171,6 +235,11 @@ export default function FeePage() {
             </tbody>
           </table>
         </SpinnerWrapper>
+        {data?.length === 0 && (
+          <div className="h-[60vh] flex items-center justify-center text-gray-400">
+            No data found
+          </div>
+        )}
       </main>
     </>
   );

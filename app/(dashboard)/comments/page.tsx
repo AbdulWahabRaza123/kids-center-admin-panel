@@ -1,10 +1,13 @@
 "use client";
 import { useAllComments } from "@/actions/queries";
 import { EditDisableMenuComp } from "@/components/menu-bar";
+import { OverviewCard } from "@/components/ui/cards/overview-card";
 import { QRCodeDialog } from "@/components/ui/dialogs/qr-code-dialog";
+import { useNotify } from "@/components/ui/toast/notify";
 import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
 import { CommentDetails } from "@/interface/comment-interface";
+import { client } from "@/lib/client";
 import { cn } from "@/lib/utils";
 import { iSOFormattedDate } from "@/logic/date-logic";
 import { Ellipsis, EllipsisVertical } from "lucide-react";
@@ -21,14 +24,41 @@ const tableHeadings = [
 ];
 
 export default function CommentPage() {
+  const notify = useNotify();
   const { user, token } = AuthStatesContext();
-  const { data, isLoading, isError } = useAllComments(
+  const { data, isLoading, isError, refetch } = useAllComments(
     user ?? user,
     token ?? token
   );
   const [mount, setMount] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<CommentDetails | null>(null);
   const [openQRDialog, setOpenQRDialog] = useState(false);
+  const deleteComment = async (id: number) => {
+    if (!id) {
+      notify({
+        title: "Id not found",
+        type: "warning",
+      });
+    }
+    try {
+      const res = await client.delete(`/comment/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      notify({
+        title: "Comment deleted successfully",
+        type: "success",
+      });
+      refetch();
+    } catch (e) {
+      console.log(e);
+      notify({
+        title: "Invalid error",
+        type: "error",
+      });
+    }
+  };
   useEffect(() => {
     setMount(true);
   }, []);
@@ -48,9 +78,27 @@ export default function CommentPage() {
         <div className="flex flex-row items-start justify-between">
           <h1 className="text-[26px] font-[600]">Comment Details</h1>
         </div>
+
+        {data && (
+          <div className="mt-10 flex items-center gap-5 flex-wrap">
+            {[
+              {
+                title: "Total Comments",
+                value: data.length,
+              },
+            ].map((item) => (
+              <OverviewCard
+                key={item.title}
+                title={item.title}
+                value={item.value}
+              />
+            ))}
+          </div>
+        )}
+
         <SpinnerWrapper loading={isLoading}>
           <table className="w-full mt-10 max-h-[70vh] overflow-auto">
-            <thead className="bg-[#7A1FA01A]">
+            <thead className="bg-[#7A1FA01A] shadow-md">
               {tableHeadings.map((heading, index) => (
                 <th
                   key={heading}
@@ -87,11 +135,12 @@ export default function CommentPage() {
                       <td className="w-[200px] text-start p-3">
                         <EditDisableMenuComp
                           edit={false}
-                          ban={false}
                           onClick={(selectedOpt: "edit" | "ban" | "qr") => {
                             if (selectedOpt === "qr") {
                               setSelectedData(val);
                               setOpenQRDialog(true);
+                            } else if (selectedOpt === "ban") {
+                              deleteComment(val.id);
                             }
                           }}
                         >
@@ -105,6 +154,11 @@ export default function CommentPage() {
             </tbody>
           </table>
         </SpinnerWrapper>
+        {data?.length === 0 && (
+          <div className="h-[60vh] flex items-center justify-center text-gray-400">
+            No data found
+          </div>
+        )}
       </main>
     </>
   );

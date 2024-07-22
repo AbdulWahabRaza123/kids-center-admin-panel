@@ -3,11 +3,14 @@ import { useAllFiles } from "@/actions/queries";
 import { EditDisableMenuComp } from "@/components/menu-bar";
 import { Spinner } from "@/components/spinner";
 import { PrimaryBtn } from "@/components/ui/buttons/primary-btn";
+import { OverviewCard } from "@/components/ui/cards/overview-card";
 import { AssignAFileDialog } from "@/components/ui/dialogs/add-file-dialog";
 import { QRCodeDialog } from "@/components/ui/dialogs/qr-code-dialog";
+import { useNotify } from "@/components/ui/toast/notify";
 import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
 import { FileDetails } from "@/interface/file-interface";
+import { client } from "@/lib/client";
 import { maskEmail } from "@/logic/user-logic";
 import { Ellipsis, EllipsisVertical } from "lucide-react";
 import Link from "next/link";
@@ -16,8 +19,9 @@ import { useEffect, useState } from "react";
 const tableHeadings = ["Id", "Nanny", "Parent", "Name", "link", "More"];
 
 export default function FilePage() {
+  const notify = useNotify();
   const { user, token } = AuthStatesContext();
-  const { data, isLoading, isError } = useAllFiles(
+  const { data, isLoading, isError, refetch } = useAllFiles(
     user ?? user,
     token ?? token
   );
@@ -27,6 +31,32 @@ export default function FilePage() {
   const [openQRDialog, setOpenQRDialog] = useState(false);
   const [openAddFileDialog, setOpenAddFileDialog] = useState(false);
   const [fileItems, setFileItems] = useState<FileDetails[]>([]);
+  const deleteFile = async (id: number) => {
+    if (!id) {
+      notify({
+        title: "Id not found",
+        type: "warning",
+      });
+    }
+    try {
+      const res = await client.delete(`/parent/file/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      refetch();
+      notify({
+        title: "File deleted successfully",
+        type: "success",
+      });
+    } catch (e) {
+      console.log(e);
+      notify({
+        title: "Invalid error",
+        type: "error",
+      });
+    }
+  };
   useEffect(() => {
     setFileItems(data || []);
   }, [data]);
@@ -68,9 +98,25 @@ export default function FilePage() {
             Assign File
           </PrimaryBtn>
         </div>
+        {data && (
+          <div className="mt-10 flex items-center gap-5 flex-wrap">
+            {[
+              {
+                title: "Total Files",
+                value: data.length,
+              },
+            ].map((item) => (
+              <OverviewCard
+                key={item.title}
+                title={item.title}
+                value={item.value}
+              />
+            ))}
+          </div>
+        )}
         <SpinnerWrapper loading={isLoading}>
           <table className="w-full mt-10 max-h-[70vh] overflow-auto">
-            <thead className="bg-[#7A1FA01A]">
+            <thead className="bg-[#7A1FA01A] shadow-md">
               {tableHeadings.map((heading) => (
                 <th key={heading} className="w-[200px] text-start p-3">
                   {heading}
@@ -107,11 +153,12 @@ export default function FilePage() {
                       <td className="w-[200px] text-start p-3">
                         <EditDisableMenuComp
                           edit={false}
-                          ban={false}
                           onClick={(selectedOpt: "edit" | "ban" | "qr") => {
                             if (selectedOpt === "qr") {
                               setSelectedData(val);
                               setOpenQRDialog(true);
+                            } else if (selectedOpt === "ban") {
+                              deleteFile(val.id);
                             }
                           }}
                         >
@@ -125,6 +172,11 @@ export default function FilePage() {
             </tbody>
           </table>
         </SpinnerWrapper>
+        {data?.length === 0 && (
+          <div className="h-[60vh] flex items-center justify-center text-gray-400">
+            No data found
+          </div>
+        )}
       </main>
     </>
   );

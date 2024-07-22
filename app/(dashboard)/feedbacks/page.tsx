@@ -1,11 +1,14 @@
 "use client";
 import { useAllComments, useAllFeedback } from "@/actions/queries";
 import { EditDisableMenuComp } from "@/components/menu-bar";
+import { OverviewCard } from "@/components/ui/cards/overview-card";
 import { QRCodeDialog } from "@/components/ui/dialogs/qr-code-dialog";
 import { SelectInput } from "@/components/ui/inputs/select-input";
+import { useNotify } from "@/components/ui/toast/notify";
 import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
 import { feedbackDetails } from "@/interface/feedback-interface";
+import { client } from "@/lib/client";
 import { cn } from "@/lib/utils";
 import { iSOFormattedDate } from "@/logic/date-logic";
 import { Ellipsis, EllipsisVertical } from "lucide-react";
@@ -30,8 +33,9 @@ const feedbackFilterOptions = [
   },
 ];
 export default function FeedbackPage() {
+  const notify = useNotify();
   const { user, token } = AuthStatesContext();
-  const { data, isLoading, isError } = useAllFeedback(
+  const { data, isLoading, isError, refetch } = useAllFeedback(
     user ?? user,
     token ?? token
   );
@@ -60,6 +64,39 @@ export default function FeedbackPage() {
         );
       });
       setFeedbackItems(sortedData || []);
+    }
+  };
+  const findAverageRating = (items: feedbackDetails[]) => {
+    let sum = 0;
+    items.forEach((item) => {
+      sum += parseFloat(item.rating);
+    });
+    return (sum / feedbackItems.length).toFixed(2);
+  };
+  const deleteFeedback = async (id: number) => {
+    if (!id) {
+      notify({
+        title: "Id not found",
+        type: "warning",
+      });
+    }
+    try {
+      const res = await client.delete(`/feedback/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      refetch();
+      notify({
+        title: "Feedback deleted successfully",
+        type: "success",
+      });
+    } catch (e) {
+      console.log(e);
+      notify({
+        title: "Invalid error",
+        type: "error",
+      });
     }
   };
   useEffect(() => {
@@ -100,9 +137,30 @@ export default function FeedbackPage() {
             />
           </div>
         </div>
+
+        {data && (
+          <div className="mt-10 flex items-center gap-5 flex-wrap">
+            {[
+              {
+                title: "Total Feedbacks",
+                value: data.length,
+              },
+              {
+                title: "Average Rating",
+                value: parseFloat(findAverageRating(data)),
+              },
+            ].map((item) => (
+              <OverviewCard
+                key={item.title}
+                title={item.title}
+                value={item.value}
+              />
+            ))}
+          </div>
+        )}
         <SpinnerWrapper loading={isLoading}>
           <table className="w-full mt-10 max-h-[70vh] overflow-auto">
-            <thead className="bg-[#7A1FA01A]">
+            <thead className="bg-[#7A1FA01A] shadow-md">
               {tableHeadings.map((heading, index) => (
                 <th
                   key={heading}
@@ -136,11 +194,12 @@ export default function FeedbackPage() {
                       <td className="w-[200px] text-start p-3">
                         <EditDisableMenuComp
                           edit={false}
-                          ban={false}
                           onClick={(selectedOpt: "edit" | "ban" | "qr") => {
                             if (selectedOpt === "qr") {
                               setSelectedData(val);
                               setOpenQRDialog(true);
+                            } else if (selectedOpt === "ban") {
+                              deleteFeedback(val.id);
                             }
                           }}
                         >
@@ -154,6 +213,11 @@ export default function FeedbackPage() {
             </tbody>
           </table>
         </SpinnerWrapper>
+        {data?.length === 0 && (
+          <div className="h-[60vh] flex items-center justify-center text-gray-400">
+            No data found
+          </div>
+        )}
       </main>
     </>
   );

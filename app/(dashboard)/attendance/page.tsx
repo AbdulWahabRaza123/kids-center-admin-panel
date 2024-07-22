@@ -1,11 +1,14 @@
 "use client";
 import { useAllAttendance } from "@/actions/queries";
 import { EditDisableMenuComp } from "@/components/menu-bar";
+import { OverviewCard } from "@/components/ui/cards/overview-card";
 import { QRCodeDialog } from "@/components/ui/dialogs/qr-code-dialog";
 import { SelectInput } from "@/components/ui/inputs/select-input";
+import { useNotify } from "@/components/ui/toast/notify";
 import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
 import { AttendanceDetails } from "@/interface/attendance-interface";
+import { client } from "@/lib/client";
 import { cn } from "@/lib/utils";
 import { iSOFormattedDate } from "@/logic/date-logic";
 import { Ellipsis, EllipsisVertical } from "lucide-react";
@@ -31,8 +34,9 @@ const attendanceFilterOptions = [
   },
 ];
 export default function AttendancePage() {
+  const notify = useNotify();
   const { user, token } = AuthStatesContext();
-  const { data, isLoading, isError } = useAllAttendance(
+  const { data, isLoading, isError, refetch } = useAllAttendance(
     user ?? user,
     token ?? token
   );
@@ -63,6 +67,32 @@ export default function AttendancePage() {
         return new Date(a.checkIn).getTime() - new Date(b.checkIn).getTime();
       });
       setAttendanceItems(sortedData || []);
+    }
+  };
+  const deleteAttendanxe = async (id: number) => {
+    if (!id) {
+      notify({
+        title: "Id not found",
+        type: "warning",
+      });
+    }
+    try {
+      const res = await client.delete(`/nany/attendance/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      refetch();
+      notify({
+        title: "Attendance deleted successfully",
+        type: "success",
+      });
+    } catch (e) {
+      console.log(e);
+      notify({
+        title: "Invalid error",
+        type: "error",
+      });
     }
   };
   useEffect(() => {
@@ -103,9 +133,25 @@ export default function AttendancePage() {
             />
           </div>
         </div>
+        {data && (
+          <div className="mt-10 flex items-center gap-5 flex-wrap">
+            {[
+              {
+                title: "Total Attendances",
+                value: data.length,
+              },
+            ].map((item) => (
+              <OverviewCard
+                key={item.title}
+                title={item.title}
+                value={item.value}
+              />
+            ))}
+          </div>
+        )}
         <SpinnerWrapper loading={isLoading}>
           <table className="w-full mt-10 max-h-[70vh] overflow-auto">
-            <thead className="bg-[#7A1FA01A]">
+            <thead className="bg-[#7A1FA01A] shadow-md">
               {tableHeadings.map((heading, index) => (
                 <th
                   key={heading}
@@ -144,11 +190,12 @@ export default function AttendancePage() {
                       <td className="w-[200px] text-start p-3">
                         <EditDisableMenuComp
                           edit={false}
-                          ban={false}
                           onClick={(selectedOpt: "edit" | "ban" | "qr") => {
                             if (selectedOpt === "qr") {
                               setSelectedData(val);
                               setOpenQRDialog(true);
+                            } else if (selectedOpt === "ban") {
+                              deleteAttendanxe(val.attendanceId);
                             }
                           }}
                         >
@@ -162,6 +209,11 @@ export default function AttendancePage() {
             </tbody>
           </table>
         </SpinnerWrapper>
+        {data?.length === 0 && (
+          <div className="h-[60vh] flex items-center justify-center text-gray-400">
+            No data found
+          </div>
+        )}
       </main>
     </>
   );
