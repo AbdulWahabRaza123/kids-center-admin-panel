@@ -37,6 +37,7 @@ const Signin = () => {
       });
       const tempToken = res.data.user.token;
       const tempUser = res.data.user.user;
+      console.log("This is my temp user ", tempUser);
       localStorage.setItem("kids-token", tempToken);
       localStorage.setItem("kids-user", JSON.stringify(tempUser));
       setToken(tempToken);
@@ -55,6 +56,8 @@ const Signin = () => {
     if (user) {
       if (user.role === "admin") {
         router.push("/");
+      } else if (user.role === "finance") {
+        router.push("/finance");
       }
     }
   }, [user, router]);

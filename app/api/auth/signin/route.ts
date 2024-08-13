@@ -17,10 +17,14 @@ export async function POST(req: Request, res: NextApiResponse) {
     const user = res.data.user;
     console.log("This is user ", user);
     if (user.role === "admin") {
-      console.log("check has been passed");
       cookieStore.set("user", JSON.stringify(user), { httpOnly: true });
       return NextResponse.json({ user: res.data }, { status: 201 });
-    } else {
+    }
+    else if (user.role === "finance") {
+      cookieStore.set("user", JSON.stringify(user), { httpOnly: true });
+      return NextResponse.json({ user: res.data }, { status: 201 });
+    }
+    else {
       return NextResponse.json({ res: "Unauthorized" }, { status: 401 });
     }
   } catch (error) {
