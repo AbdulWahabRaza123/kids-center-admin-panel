@@ -1,6 +1,6 @@
 import { EditDisableMenuComp } from "@/components/menu-bar";
 import { NanyDetails } from "@/interface/user-interface";
-import { EllipsisVertical } from "lucide-react";
+import { ChevronLeft, ChevronRight, EllipsisVertical } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { CreateOrEditProfileDialog } from "../dialogs/create-edit-profile";
@@ -15,6 +15,7 @@ export const NanyTableComp = ({
   data: NanyDetails[] | undefined;
   edit: boolean;
 }) => {
+  const [cursor, setCursor] = useState(0);
   const [selectedData, setSelectedData] = useState<NanyDetails | null>(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openBanDialog, setOpenBanDialog] = useState(false);
@@ -54,7 +55,7 @@ export const NanyTableComp = ({
           ))}
         </thead>
         <tbody>
-          {data?.map((val: NanyDetails) => {
+          {data?.slice(cursor, cursor + 8)?.map((val: NanyDetails) => {
             if (val?.disabled === 1) {
               return <></>;
             }
@@ -121,11 +122,35 @@ export const NanyTableComp = ({
           })}
         </tbody>
       </table>
-      {data?.length === 0 && (
+      {(!data || data?.length === 0) && (
         <div className="h-[60vh] flex items-center justify-center text-gray-400">
           No data found
         </div>
       )}
+      <div className="flex items-center justify-end gap-4 my-7">
+        {data && cursor > 0 && (
+          <div
+            onClick={() => {
+              setCursor(cursor - 8);
+            }}
+            className="flex items-center gap-1 cursor-pointer"
+          >
+            <ChevronLeft className="w-5 h-5 " />
+            <p className="text-[12px]">Prev</p>
+          </div>
+        )}
+        {data && cursor + 8 < data?.length && (
+          <div
+            onClick={() => {
+              setCursor(cursor + 8);
+            }}
+            className="flex items-center gap-1 cursor-pointer"
+          >
+            <p className="text-[12px]">Next</p>
+            <ChevronRight className="w-5 h-5 " />
+          </div>
+        )}
+      </div>
     </>
   );
 };

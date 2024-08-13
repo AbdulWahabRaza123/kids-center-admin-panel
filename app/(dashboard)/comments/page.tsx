@@ -10,7 +10,12 @@ import { CommentDetails } from "@/interface/comment-interface";
 import { client } from "@/lib/client";
 import { cn } from "@/lib/utils";
 import { iSOFormattedDate } from "@/logic/date-logic";
-import { Ellipsis, EllipsisVertical } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Ellipsis,
+  EllipsisVertical,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 
 const tableHeadings = [
@@ -30,6 +35,7 @@ export default function CommentPage() {
     user ?? user,
     token ?? token
   );
+  const [cursor, setCursor] = useState(0);
   const [mount, setMount] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<CommentDetails | null>(null);
   const [openQRDialog, setOpenQRDialog] = useState(false);
@@ -112,7 +118,7 @@ export default function CommentPage() {
               ))}
             </thead>
             <tbody>
-              {data?.map((val) => {
+              {data?.slice(cursor, cursor + 8)?.map((val) => {
                 return (
                   <>
                     <tr>
@@ -154,11 +160,35 @@ export default function CommentPage() {
             </tbody>
           </table>
         </SpinnerWrapper>
-        {data?.length === 0 && (
+        {(!data || data?.length === 0) && (
           <div className="h-[60vh] flex items-center justify-center text-gray-400">
             No data found
           </div>
         )}
+        <div className="flex items-center justify-end gap-4 my-7">
+          {data && cursor > 0 && (
+            <div
+              onClick={() => {
+                setCursor(cursor - 8);
+              }}
+              className="flex items-center gap-1 cursor-pointer"
+            >
+              <ChevronLeft className="w-5 h-5 " />
+              <p className="text-[12px]">Prev</p>
+            </div>
+          )}
+          {data && cursor + 8 < data?.length && (
+            <div
+              onClick={() => {
+                setCursor(cursor + 8);
+              }}
+              className="flex items-center gap-1 cursor-pointer"
+            >
+              <p className="text-[12px]">Next</p>
+              <ChevronRight className="w-5 h-5 " />
+            </div>
+          )}
+        </div>
       </main>
     </>
   );
