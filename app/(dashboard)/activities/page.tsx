@@ -186,10 +186,10 @@ export default function ActivityPage() {
                     <tr>
                       <td className="w-[50px] text-start p-3">{val.id}</td>
                       <td className="w-[200px] text-start p-3">
-                        {maskEmail(val.createdBy?.email || "")}
+                        {val.createdBy?.email || "-"}
                       </td>
                       <td className="w-[50px] text-start p-3">
-                        {maskEmail(val.createdFor?.email || "")}
+                        {val.createdFor?.email || "-"}
                       </td>
                       <td className="w-[200px] ps-5 py-3 pe-3 text-start">
                         {val.checkinTime}
