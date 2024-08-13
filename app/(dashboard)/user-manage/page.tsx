@@ -138,14 +138,20 @@ export default function StudentManagement() {
       setParentItems(sortedData);
     }
   };
-  // const onSearchRoleBasedData = (e: any) => {
-  //   setSearch(e.target.value);
-  //   if (selectedOption === "parent") {
+  //   const onSearchRoleBasedData = (e: any) => {
+  //     const value=e.target.value;
+  //     if (selectedOption === "parent") {
+  //       //I am gonna filter all the data based on email, id and name for parents
+  //       parentsData?.filter((data)=>{
+  // if(data)
+  //       })
 
-  //   } else if (selectedOption === "nany") {
-  //   } else if (selectedOption === "finance") {
-  //   }
-  // };
+  //     } else if (selectedOption === "nany") {
+  //     } else if (selectedOption === "finance") {
+  //     }
+  //     setSearch(e.target.value);
+
+  //   };
   const onChangeFilter = (filter: string) => {
     setSelectOption(filter);
     applyingNanyFiltersIfSelected(filter);

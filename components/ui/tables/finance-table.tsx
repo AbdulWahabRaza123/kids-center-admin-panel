@@ -1,7 +1,6 @@
 import { EditDisableMenuComp } from "@/components/menu-bar";
 import { UserDetails } from "@/interface/user-interface";
 import { EllipsisVertical } from "lucide-react";
-import Image from "next/image";
 
 export const FinanceTableComp = ({
   headings,
