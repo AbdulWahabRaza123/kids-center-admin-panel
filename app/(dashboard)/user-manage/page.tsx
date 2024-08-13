@@ -89,6 +89,7 @@ export default function StudentManagement() {
   const [nanyItems, setNanyItems] = useState<NanyDetails[]>([]);
   const [financerItems, setFinancerItems] = useState<UserDetails[]>([]);
   const [parentItems, setParentItems] = useState<ParentDetails[]>([]);
+  const [search, setSearch] = useState("");
   const reset = () => {
     setSelectOption("");
     setNanyItems(naniesData || []);
@@ -137,7 +138,14 @@ export default function StudentManagement() {
       setParentItems(sortedData);
     }
   };
+  // const onSearchRoleBasedData = (e: any) => {
+  //   setSearch(e.target.value);
+  //   if (selectedOption === "parent") {
 
+  //   } else if (selectedOption === "nany") {
+  //   } else if (selectedOption === "finance") {
+  //   }
+  // };
   const onChangeFilter = (filter: string) => {
     setSelectOption(filter);
     applyingNanyFiltersIfSelected(filter);

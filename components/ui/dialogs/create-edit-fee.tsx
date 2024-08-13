@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import Image from "next/image";
 import { TextInput } from "../inputs/text-input";
@@ -21,6 +21,7 @@ import {
 import { cn } from "@/lib/utils";
 import { connectStorageEmulator } from "firebase/storage";
 import { useNotify } from "../toast/notify";
+import { FeeDetails } from "@/interface/fees-intrface";
 const options = [
   {
     title: "Pending",
@@ -49,11 +50,13 @@ export const CreateOrEditFeeDialog = ({
   setOpen,
   id,
   edit = false,
+  data,
 }: {
   open: boolean;
   setOpen: (value: boolean) => void;
   id?: number;
   edit: boolean;
+  data?: FeeDetails | null;
 }) => {
   const notify = useNotify();
   const { user, token } = AuthStatesContext();
@@ -113,6 +116,61 @@ export const CreateOrEditFeeDialog = ({
       setLoading(false);
     }
   };
+
+  const handleEditFee = async (id: string) => {
+    if (!selectedId || !month || !payMode || !status) {
+      notify({
+        type: "warning",
+        title: "Please fill all the fields",
+      });
+      return;
+    }
+    try {
+      setLoading(true);
+      const paymentDate = getCurrentFormattedDate();
+      const res = await client.post(
+        "/parent/fee/edit",
+        {
+          id,
+          month,
+          payment_date: paymentDate,
+          pay_mode: payMode,
+          total_pending: pendingAmount,
+          status,
+          createdForId: selectedId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      refetch();
+      setOpen(false);
+      notify({
+        type: "success",
+        title: "Fee updated successfully",
+      });
+    } catch (e) {
+      console.log(e);
+      notify({
+        type: "error",
+        title: "Error updating new field",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (data && edit) {
+      setMonth(data?.month || "");
+      setPayMode(data?.pay_mode || "");
+      setPendingAmount(data?.total_pending || "");
+      setStatus(data?.status || "");
+      setSelectedId(data?.created_for_id?.toString() || "");
+    }
+  }, [data, edit]);
   return (
     <Dialog open={open}>
       <DialogContent className="bg-white border-[1px] border-[#00f4ff] rounded-[20px] max-w-[900px] max-h-[80vh] overflow-auto flex flex-col gap-7 p-5">
@@ -138,7 +196,6 @@ export const CreateOrEditFeeDialog = ({
           title="Month"
           value={month}
           setValue={setMonth}
-          disabled={edit}
         />
         <div className="flex flex-row items-center gap-3 mt-3">
           <div className="flex flex-col gap-2">
@@ -154,7 +211,7 @@ export const CreateOrEditFeeDialog = ({
               >
                 <SelectValue placeholder="Select a parent" />
               </SelectTrigger>
-              <SelectContent className="bg-white">
+              <SelectContent className="bg-white max-h-[300px] overflow-y-auto">
                 {parentsData?.map((val) => {
                   return (
                     <SelectItem
@@ -175,7 +232,6 @@ export const CreateOrEditFeeDialog = ({
               options={options}
               value={status}
               setValue={setStatus}
-              disabled={edit}
               className="w-[410px]"
             />
           </div>
@@ -188,7 +244,6 @@ export const CreateOrEditFeeDialog = ({
           value={payMode}
           setValue={setPayMode}
           className="w-full"
-          disabled={edit}
         />
         <TextInput
           type="text"
@@ -197,14 +252,17 @@ export const CreateOrEditFeeDialog = ({
           value={pendingAmount}
           setValue={setPendingAmount}
           className="w-full"
-          disabled={edit}
         />
 
         <div className="flex flex-row items-center justify-end w-full gap-4">
           <PrimaryBtn
             loading={loading}
             onClick={() => {
-              handleAddFee();
+              if (!edit) {
+                handleAddFee();
+              } else {
+                handleEditFee(data ? data?.id?.toString() : "");
+              }
             }}
             className="w-[100px] h-[45px] text-[16px] rounded-[9px] flex flex-row items-center justify-center"
           >

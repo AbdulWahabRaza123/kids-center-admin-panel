@@ -9,6 +9,10 @@ const financePaths = [
   "/attendance",
   "/files"
 ]
+const adminPaths = [
+  "/finance",
+  "/finance/fee"
+]
 export function middleware(req: NextRequest) {
   const url = req.nextUrl.clone();
   const cookies = req.cookies;
@@ -16,9 +20,8 @@ export function middleware(req: NextRequest) {
   if (!temp) {
     return NextResponse.redirect(new URL("/signin", req.url));
   }
-
   const user = JSON.parse(temp);
-  if (user.role === "admin" && url.pathname.startsWith("/finance")) {
+  if (user.role === "admin" && adminPaths.includes(url.pathname)) {
     return NextResponse.redirect(new URL("/", req.url));
   } else if (user.role === "finance" && financePaths.includes(url.pathname)) {
     return NextResponse.redirect(new URL("/finance", req.url));
@@ -27,5 +30,5 @@ export function middleware(req: NextRequest) {
   return NextResponse.next();
 }
 export const config = {
-  matcher: ["/", "/finance"],
+  matcher: ["/", "/finance", "/finance/fee"],
 };

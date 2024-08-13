@@ -60,7 +60,6 @@ export const UserBanConfirmationDialog = ({
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("This is my response nany ", res);
 
         refetchNanies();
       }

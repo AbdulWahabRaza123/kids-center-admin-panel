@@ -11,13 +11,14 @@ import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
 import { UserActivityDetails } from "@/interface/activities-interface";
 import { client } from "@/lib/client";
+import { maskEmail } from "@/logic/user-logic";
 import { Ellipsis, EllipsisVertical } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const tableHeadings = [
   "Id",
-  "Nanny Name",
-  "Parent Name",
+  "Nanny Email",
+  "Parent Email",
   "Checkin",
   "Checkout",
   "Total Activities",
@@ -88,7 +89,6 @@ export default function ActivityPage() {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("This is my response nany ", res);
       refetch();
       notify({
         type: "success",
@@ -114,7 +114,6 @@ export default function ActivityPage() {
     setMount(true);
   }, []);
   if (!mount) return null;
-
   return (
     <>
       {selectedData && openQRDialog && (
@@ -187,10 +186,10 @@ export default function ActivityPage() {
                     <tr>
                       <td className="w-[50px] text-start p-3">{val.id}</td>
                       <td className="w-[200px] text-start p-3">
-                        {val.createdBy.nanyDetails?.name}
+                        {maskEmail(val.createdBy?.email || "")}
                       </td>
                       <td className="w-[50px] text-start p-3">
-                        {val.createdFor.studentDetails?.name}
+                        {maskEmail(val.createdFor?.email || "")}
                       </td>
                       <td className="w-[200px] ps-5 py-3 pe-3 text-start">
                         {val.checkinTime}

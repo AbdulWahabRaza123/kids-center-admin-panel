@@ -25,7 +25,6 @@ export function useAllParents(user: UserDetails, token: string) {
           },
         });
         const data = res.data;
-        console.log("This is res ", res);
         return data as ParentDetails[];
       } catch (e) {
         console.log(e);

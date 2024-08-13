@@ -59,10 +59,10 @@ const Navbar = () => {
       if (selectedOption === "parent") {
         const filteredData = parentData?.filter(
           (data) =>
-            data.email.includes(value) ||
-            data.student_id === value ||
-            data.roll_no === value ||
-            data.class === value
+            data?.email?.includes(value) ||
+            data?.student_id === value ||
+            data?.roll_no === value ||
+            data?.class === value
         );
         if (filteredData && filteredData?.length > 0) {
           setRecommededData(filteredData);
@@ -70,9 +70,9 @@ const Navbar = () => {
       } else if (selectedOption === "nany") {
         const filteredData = nanyData?.filter(
           (data) =>
-            data.email.includes(value) ||
-            data.qualification.includes(value) ||
-            data.reg_no.includes(value)
+            data?.email?.includes(value) ||
+            data?.qualification?.includes(value) ||
+            data?.reg_no?.includes(value)
         );
         if (filteredData && filteredData?.length > 0) {
           setRecommededData(filteredData);
@@ -82,16 +82,16 @@ const Navbar = () => {
       if (user.role === "finance") {
         const filteredData = feeData?.filter(
           (data) =>
-            data.id === value ||
-            data.status === value ||
-            data.created_for_id === value
+            data?.id === value ||
+            data?.status === value ||
+            data?.created_for_id === value
         );
         if (filteredData && filteredData?.length > 0) {
           setRecommededData(filteredData);
         }
       } else {
         const filteredData = financeData?.filter(
-          (data) => data.email.includes(value) || data.role.includes(value)
+          (data) => data?.email?.includes(value) || data.role.includes(value)
         );
         if (filteredData && filteredData?.length > 0) {
           setRecommededData(filteredData);
@@ -153,22 +153,6 @@ const Navbar = () => {
       </div>
 
       <div className="flex flex-row items-center gap-2">
-        {/* <Image
-          src={"/assets/icons/bell.svg"}
-          width={30}
-          height={30}
-          alt="bell"
-          className="object-cover mt-2"
-        /> */}
-        {/* <MenubarComp
-          options={options}
-          onClick={(selectedOpt) => {
-            // if (selectedOpt === "logout") {
-            //   handleLogout();
-            // }
-            // console.log("This is selected option ", selectedOpt);
-          }}
-        > */}
         <div className="flex flex-row items-center gap-2 cursor-pointer hover:bg-slate-400/10 active:bg-slate-400/20 p-2 rounded-[10px]">
           <Image
             src="/assets/profile.svg"

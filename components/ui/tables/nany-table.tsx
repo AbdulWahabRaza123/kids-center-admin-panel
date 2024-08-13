@@ -15,7 +15,6 @@ export const NanyTableComp = ({
   data: NanyDetails[] | undefined;
   edit: boolean;
 }) => {
-  // console.log("This is nany details data ", data);
   const [selectedData, setSelectedData] = useState<NanyDetails | null>(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openBanDialog, setOpenBanDialog] = useState(false);
@@ -110,7 +109,6 @@ export const NanyTableComp = ({
                             setSelectedData(val);
                             setOpenQRDialog(true);
                           }
-                          console.log("This is selected option");
                         }}
                       >
                         <EllipsisVertical className="cursor-pointer" />

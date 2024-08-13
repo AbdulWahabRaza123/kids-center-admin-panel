@@ -15,7 +15,6 @@ export async function POST(req: Request, res: NextApiResponse) {
       return NextResponse.json({ res: "Unauthorized" }, { status: 401 });
     }
     const user = res.data.user;
-    console.log("This is user ", user);
     if (user.role === "admin") {
       cookieStore.set("user", JSON.stringify(user), { httpOnly: true });
       return NextResponse.json({ user: res.data }, { status: 201 });

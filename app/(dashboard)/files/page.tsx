@@ -25,7 +25,6 @@ export default function FilePage() {
     user ?? user,
     token ?? token
   );
-  // console.log("data", data);
   const [mount, setMount] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<FileDetails | null>(null);
   const [openQRDialog, setOpenQRDialog] = useState(false);

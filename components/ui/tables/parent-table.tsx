@@ -110,7 +110,6 @@ export const ParentTableComp = ({
                             setSelectedData(val);
                             setOpenQRDialog(true);
                           }
-                          console.log("This is selected option");
                         }}
                       >
                         <EllipsisVertical className="cursor-pointer" />

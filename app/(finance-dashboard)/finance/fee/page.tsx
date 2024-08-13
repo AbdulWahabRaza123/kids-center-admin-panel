@@ -44,12 +44,14 @@ const FeeFilterOptions = [
 export default function FeePage() {
   const { user, token } = AuthStatesContext();
   const { data, isLoading, isError } = useAllFees(user ?? user, token ?? token);
+
   const [mount, setMount] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<FeeDetails | null>(null);
   const [openQRDialog, setOpenQRDialog] = useState(false);
   const [openAddFeeDialog, setOpenAddFeeDialog] = useState(false);
   const [selectOption, setSelectOption] = useState<string>("");
   const [feeItems, setFeeItems] = useState<FeeDetails[]>([]);
+  const [isEdit, setIsEdit] = useState(false);
   const reset = () => {
     setSelectOption("");
     setFeeItems(data || []);
@@ -85,8 +87,10 @@ export default function FeePage() {
     setMount(true);
   }, []);
   useEffect(() => {
-    setMount(true);
-  }, []);
+    if (data) {
+      setFeeItems(data);
+    }
+  }, [data]);
   if (!mount) return null;
 
   return (
@@ -102,7 +106,8 @@ export default function FeePage() {
         <CreateOrEditFeeDialog
           open={openAddFeeDialog}
           setOpen={setOpenAddFeeDialog}
-          edit={false}
+          edit={isEdit}
+          data={selectedData}
         />
       )}
 
@@ -168,12 +173,16 @@ export default function FeePage() {
                       </td>
                       <td className="w-[200px] text-start p-3">
                         <EditDisableMenuComp
-                          edit={false}
                           ban={false}
                           onClick={(selectedOpt: "edit" | "ban" | "qr") => {
                             if (selectedOpt === "qr") {
+                              setIsEdit(false);
                               setSelectedData(val);
                               setOpenQRDialog(true);
+                            } else if (selectedOpt === "edit") {
+                              setIsEdit(true);
+                              setSelectedData(val);
+                              setOpenAddFeeDialog(true);
                             }
                           }}
                         >

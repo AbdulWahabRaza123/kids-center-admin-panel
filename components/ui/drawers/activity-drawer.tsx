@@ -20,7 +20,6 @@ export const ActivityDrawer = ({
   data: UserActivityDetails;
 }) => {
   const qrRef = useRef(null);
-  console.log("This is data from daily activity ", data);
   const handleDownload = async () => {
     if (qrRef.current) {
       const dataUrl = await toPng(qrRef.current);
