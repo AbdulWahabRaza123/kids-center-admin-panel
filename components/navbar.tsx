@@ -82,9 +82,9 @@ const Navbar = () => {
       if (user.role === "finance") {
         const filteredData = feeData?.filter(
           (data) =>
-            data?.id === value ||
-            data?.status === value ||
-            data?.created_for_id === value
+            data?.id.toString().includes(value) ||
+            data?.status.includes(value) ||
+            data?.created_for_id.toString().includes(value)
         );
         if (filteredData && filteredData?.length > 0) {
           setRecommededData(filteredData);

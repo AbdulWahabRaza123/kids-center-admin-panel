@@ -25,6 +25,7 @@ export default function FilePage() {
     user ?? user,
     token ?? token
   );
+  console.log("This is user files ", data);
   const [mount, setMount] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<FileDetails | null>(null);
   const [openQRDialog, setOpenQRDialog] = useState(false);
@@ -171,7 +172,7 @@ export default function FilePage() {
             </tbody>
           </table>
         </SpinnerWrapper>
-        {data?.length === 0 && (
+        {(!data || data?.length === 0) && (
           <div className="h-[60vh] flex items-center justify-center text-gray-400">
             No data found
           </div>

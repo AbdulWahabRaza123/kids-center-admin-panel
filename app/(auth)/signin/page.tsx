@@ -102,10 +102,10 @@ const Signin = () => {
             <p>Submit</p>
           </div>
         </PrimaryBtn>
-        <div className="flex flex-row items-center justify-between w-full py-5 px-3">
+        {/* <div className="flex flex-row items-center justify-between w-full py-5 px-3">
           <p className="text-[14px]">New User? Sign Up</p>
           <p className="text-[14px]">Forget Password?</p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

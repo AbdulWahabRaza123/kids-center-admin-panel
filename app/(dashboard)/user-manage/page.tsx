@@ -19,6 +19,7 @@ import {
   ParentDetails,
   UserDetails,
 } from "@/interface/user-interface";
+import { SearchInput } from "@/components/ui/inputs/search-input";
 const nanyTableHeadings = [
   "Nany ID",
   "Name",
@@ -138,20 +139,45 @@ export default function StudentManagement() {
       setParentItems(sortedData);
     }
   };
-  //   const onSearchRoleBasedData = (e: any) => {
-  //     const value=e.target.value;
-  //     if (selectedOption === "parent") {
-  //       //I am gonna filter all the data based on email, id and name for parents
-  //       parentsData?.filter((data)=>{
-  // if(data)
-  //       })
-
-  //     } else if (selectedOption === "nany") {
-  //     } else if (selectedOption === "finance") {
-  //     }
-  //     setSearch(e.target.value);
-
-  //   };
+  const onSearchRoleBasedData = (e: any) => {
+    const value = e.target.value;
+    if (selectedOption === "parent") {
+      const temp = parentsData?.filter(
+        (data) =>
+          data?.email.includes(value) ||
+          data?.student_name?.toLowerCase()?.includes(value) ||
+          data?.user_id?.toString()?.includes(value)
+      );
+      if (temp) {
+        setParentItems(temp);
+      }
+    } else if (selectedOption === "nany") {
+      const temp = naniesData?.filter(
+        (data) =>
+          data?.email?.toString()?.includes(value) ||
+          data?.nany_name?.toLowerCase()?.includes(value) ||
+          data?.user_id?.toString()?.includes(value)
+      );
+      if (temp) {
+        setNanyItems(temp);
+      }
+    } else if (selectedOption === "finance") {
+      const temp = financersData?.filter((data) => data?.email.includes(value));
+      if (temp) {
+        setFinancerItems(temp);
+      }
+    }
+    if (!value) {
+      if (selectedOption === "parent") {
+        setParentItems(parentsData || []);
+      } else if (selectedOption === "nany") {
+        setNanyItems(naniesData || []);
+      }
+    } else if (selectedOption === "finance") {
+      setFinancerItems(financersData || []);
+    }
+    setSearch(value);
+  };
   const onChangeFilter = (filter: string) => {
     setSelectOption(filter);
     applyingNanyFiltersIfSelected(filter);
@@ -183,6 +209,7 @@ export default function StudentManagement() {
         <div className="flex flex-row items-start justify-between">
           <h1 className="text-[26px] font-[600]">User Management</h1>
           <div className="flex flex-col items-end gap-2">
+            <SearchInput value={search} setValue={onSearchRoleBasedData} />
             <PrimaryBtn
               className="w-[200px] text-[16px] h-[40px] flex flex-row items-center justify-center"
               onClick={() => {

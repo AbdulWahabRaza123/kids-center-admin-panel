@@ -4,6 +4,7 @@ import { EditDisableMenuComp } from "@/components/menu-bar";
 import { PrimaryBtn } from "@/components/ui/buttons/primary-btn";
 import { CreateOrEditFeeDialog } from "@/components/ui/dialogs/create-edit-fee";
 import { QRCodeDialog } from "@/components/ui/dialogs/qr-code-dialog";
+import { SearchInput } from "@/components/ui/inputs/search-input";
 import { SelectInput } from "@/components/ui/inputs/select-input";
 import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
@@ -52,9 +53,29 @@ export default function FeePage() {
   const [selectOption, setSelectOption] = useState<string>("");
   const [feeItems, setFeeItems] = useState<FeeDetails[]>([]);
   const [isEdit, setIsEdit] = useState(false);
+  const [search, setSearch] = useState("");
   const reset = () => {
     setSelectOption("");
     setFeeItems(data || []);
+  };
+  const onSearchRoleBasedData = (e: any) => {
+    const value = e.target.value;
+
+    const temp = data?.filter(
+      (d) =>
+        d.id.toString()?.includes(value) ||
+        d.month?.includes(value?.toLowerCase()) ||
+        d?.createdByEmail.includes(value) ||
+        d?.createdForEmail?.includes(value)
+    );
+    if (temp) {
+      setFeeItems(temp);
+    }
+
+    if (!value) {
+      setFeeItems(data || []);
+    }
+    setSearch(value);
   };
   const onChangeFilter = (filter: string) => {
     setSelectOption(filter);
@@ -116,6 +137,7 @@ export default function FeePage() {
           <h1 className="text-[26px] font-[600]">Fee Details</h1>
 
           <div className="flex flex-col items-end gap-2 justify-end">
+            <SearchInput value={search} setValue={onSearchRoleBasedData} />
             <p className="text-[14px] text-gray-400">
               Filter by{" "}
               <span

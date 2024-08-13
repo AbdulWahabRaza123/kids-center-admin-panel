@@ -136,7 +136,7 @@ export function useAllFees(user: UserDetails, token: string) {
 export function useAllFiles(user: UserDetails, token: string) {
   return useQuery({
     enabled: !!user?.id,
-    queryKey: ["fees", user?.id],
+    queryKey: ["files", user?.id],
     queryFn: async () => {
       try {
         const res = await client.get(`/parent/file/all`, {
