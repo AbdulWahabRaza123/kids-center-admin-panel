@@ -223,36 +223,36 @@ export default function FeePage() {
             </tbody>
           </table>
         </SpinnerWrapper>
-      </main>
-      {(!data || data?.length === 0) && (
-        <div className="h-[60vh] flex items-center justify-center text-gray-400">
-          No data found
+        {(!data || data?.length === 0) && (
+          <div className="h-[60vh] flex items-center justify-center text-gray-400">
+            No data found
+          </div>
+        )}
+        <div className="flex items-center justify-end gap-4 my-7">
+          {data && cursor > 0 && (
+            <div
+              onClick={() => {
+                setCursor(cursor - 8);
+              }}
+              className="flex items-center gap-1 cursor-pointer"
+            >
+              <ChevronLeft className="w-5 h-5 " />
+              <p className="text-[12px]">Prev</p>
+            </div>
+          )}
+          {data && cursor + 8 < data?.length && (
+            <div
+              onClick={() => {
+                setCursor(cursor + 8);
+              }}
+              className="flex items-center gap-1 cursor-pointer"
+            >
+              <p className="text-[12px]">Next</p>
+              <ChevronRight className="w-5 h-5 " />
+            </div>
+          )}
         </div>
-      )}
-      <div className="flex items-center justify-end gap-4 my-7">
-        {data && cursor > 0 && (
-          <div
-            onClick={() => {
-              setCursor(cursor - 8);
-            }}
-            className="flex items-center gap-1 cursor-pointer"
-          >
-            <ChevronLeft className="w-5 h-5 " />
-            <p className="text-[12px]">Prev</p>
-          </div>
-        )}
-        {data && cursor + 8 < data?.length && (
-          <div
-            onClick={() => {
-              setCursor(cursor + 8);
-            }}
-            className="flex items-center gap-1 cursor-pointer"
-          >
-            <p className="text-[12px]">Next</p>
-            <ChevronRight className="w-5 h-5 " />
-          </div>
-        )}
-      </div>
+      </main>
     </>
   );
 }
