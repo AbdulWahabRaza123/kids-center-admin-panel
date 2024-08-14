@@ -199,7 +199,7 @@ export const CreateOrEditFeeDialog = ({
         />
         <div className="flex flex-row items-center gap-3 mt-3">
           <div className="flex flex-col gap-2">
-            <p>Select a parent</p>
+            <p>Select a student</p>
             <Select
               onValueChange={(value) => {
                 setSelectedId(value);
@@ -209,7 +209,7 @@ export const CreateOrEditFeeDialog = ({
               <SelectTrigger
                 className={cn("w-[410px] rounded-[10px] h-[47px] py-2")}
               >
-                <SelectValue placeholder="Select a parent" />
+                <SelectValue placeholder="Select a student" />
               </SelectTrigger>
               <SelectContent className="bg-white max-h-[300px] overflow-y-auto">
                 {parentsData?.map((val) => {

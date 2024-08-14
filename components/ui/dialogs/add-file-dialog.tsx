@@ -33,7 +33,7 @@ import { SelectContent, SelectItem } from "../select";
 import { useNotify } from "../toast/notify";
 const options = [
   {
-    title: "Parent",
+    title: "Students",
     value: "parent",
   },
   {
@@ -119,7 +119,7 @@ export const AssignAFileDialog = ({
             height={20}
             className="object-cover"
           />
-          <h1 className="text-[20px]">Assign a file to Parent</h1>
+          <h1 className="text-[20px]">Assign a file to Student</h1>
         </div>
         <div className="flex flex-row items-end gap-3 mt-3">
           <TextInput
@@ -131,7 +131,7 @@ export const AssignAFileDialog = ({
             className="w-full"
           />
           <div className="flex flex-col gap-2">
-            <p>Select a parent</p>
+            <p>Select a student</p>
             <Select
               onValueChange={(value) => {
                 setSelectedId(value);
@@ -143,7 +143,7 @@ export const AssignAFileDialog = ({
                   "w-[350px] rounded-[10px] h-[47px] py-2 px-3 border-[1px] border-gray-400 flex justify-start items-center"
                 )}
               >
-                <SelectValue placeholder="Select a parent" />
+                <SelectValue placeholder="Select a student" />
               </SelectTrigger>
               <SelectContent className="bg-white">
                 {parentsData?.map((val) => {

@@ -34,7 +34,7 @@ const parentTableHeadings = [
 const financeTableHeadings = ["User ID", "Email"];
 const options = [
   {
-    title: "Parent",
+    title: "Student",
     value: "parent",
   },
   {

@@ -253,7 +253,7 @@ export default function StudentManagement() {
             />
             {selectedOption === "parent" && (
               <div className="flex flex-col items-start gap-2 text-white">
-                <p>Parents</p>
+                <p>Students</p>
                 <p>{parentItems?.length || 0}</p>
               </div>
             )}

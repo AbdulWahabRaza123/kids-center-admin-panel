@@ -1,6 +1,7 @@
 export interface feedbackDetails {
-    id: number;
+    feedbackId: number;
     userId: number;
+    userEmail: string;
     rating: string;
     timestamp: string;
     description: string;

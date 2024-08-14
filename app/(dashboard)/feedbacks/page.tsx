@@ -20,14 +20,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const tableHeadings = [
-  "Id",
-  "User Id",
-  "Rating",
-  "Date",
-  "Description",
-  "More",
-];
+const tableHeadings = ["Id", "email", "Rating", "Date", "Description", "More"];
 const feedbackFilterOptions = [
   {
     title: "Rating",
@@ -63,7 +56,7 @@ export default function FeedbackPage() {
 
     const temp = data?.filter(
       (d) =>
-        d.id?.toString().includes(value) ||
+        d.feedbackId?.toString().includes(value) ||
         d.userId?.toString()?.includes(value)
     );
     if (temp) {
@@ -138,7 +131,7 @@ export default function FeedbackPage() {
         <QRCodeDialog
           open={openQRDialog}
           setOpen={setOpenQRDialog}
-          id={selectedData.id}
+          id={selectedData.feedbackId}
         />
       )}
 
@@ -204,9 +197,11 @@ export default function FeedbackPage() {
                 return (
                   <>
                     <tr>
-                      <td className="w-[50px] text-start p-3">{val.id}</td>
                       <td className="w-[50px] text-start p-3">
-                        {val.userId || "-"}
+                        {val.feedbackId}
+                      </td>
+                      <td className="w-[50px] text-start p-3">
+                        {val.userEmail || "-"}
                       </td>
                       <td className="w-[50px] text-start p-3">
                         {val.rating || "-"}
@@ -225,7 +220,7 @@ export default function FeedbackPage() {
                               setSelectedData(val);
                               setOpenQRDialog(true);
                             } else if (selectedOpt === "ban") {
-                              deleteFeedback(val.id);
+                              deleteFeedback(val.feedbackId);
                             }
                           }}
                         >

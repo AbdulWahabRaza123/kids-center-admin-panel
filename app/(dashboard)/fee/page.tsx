@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 
 const tableHeadings = [
   "Id",
-  "Receiver Id",
+  "Received from",
   "Month",
   "Date",
   "Mode",
@@ -220,11 +220,9 @@ export default function FeePage() {
                 return (
                   <>
                     <tr>
-                      <td className="flex flex-row items-center gap-2 w-[30px] text-start p-3">
-                        {val.id}
-                      </td>
+                      <td className="w-[30px] text-start p-3">{val.id}</td>
                       <td className="w-[30px] text-start p-3">
-                        {val.created_for_id || "-"}
+                        {val.createdForEmail || "-"}
                       </td>
                       <td className="w-[200px] text-start p-3">
                         {val.month || "-"}

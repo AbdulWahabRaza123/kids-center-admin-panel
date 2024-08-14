@@ -27,7 +27,7 @@ import {
 } from "@/interface/user-interface";
 const options = [
   {
-    title: "Parent",
+    title: "Student",
     value: "parent",
   },
   {

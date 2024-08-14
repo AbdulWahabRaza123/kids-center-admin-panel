@@ -20,7 +20,7 @@ import { useEffect, useState } from "react";
 
 const tableHeadings = [
   "Id",
-  "Parent Id",
+  "Student Id",
   "Nanny Id",
   "Activity Id",
   "Date",
@@ -76,7 +76,7 @@ export default function CommentPage() {
         <QRCodeDialog
           open={openQRDialog}
           setOpen={setOpenQRDialog}
-          id={selectedData.id}
+          id={selectedData.commentId}
         />
       )}
 
@@ -122,12 +122,14 @@ export default function CommentPage() {
                 return (
                   <>
                     <tr>
-                      <td className="w-[50px] text-start p-3">{val.id}</td>
                       <td className="w-[50px] text-start p-3">
-                        {val.userId || "-"}
+                        {val.commentId}
                       </td>
                       <td className="w-[50px] text-start p-3">
-                        {val.targetUserId || "-"}
+                        {val.userEmail || "-"}
+                      </td>
+                      <td className="w-[50px] text-start p-3">
+                        {val.targetUserEmail || "-"}
                       </td>
                       <td className="w-[50px] ps-5 py-3 pe-3 text-start">
                         {val.activityId || "-"}
@@ -146,7 +148,7 @@ export default function CommentPage() {
                               setSelectedData(val);
                               setOpenQRDialog(true);
                             } else if (selectedOpt === "ban") {
-                              deleteComment(val.id);
+                              deleteComment(val.commentId);
                             }
                           }}
                         >

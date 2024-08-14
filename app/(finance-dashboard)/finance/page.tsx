@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 
 const tableHeadings = [
   "Id",
-  "Receiver Id",
+  "Received from",
   "Month",
   "Date",
   "Mode",
@@ -67,7 +67,7 @@ export default function FinancePage() {
                     <tr>
                       <td className="w-[50px] text-start p-3">{val.id}</td>
                       <td className="w-[100px] text-start p-3">
-                        {val.created_for_id}
+                        {val.createdForEmail}
                       </td>
                       <td className="w-[200px] text-start p-3">{val.month}</td>
                       <td className="w-[300px] ps-4 py-3 pe-3 text-start">
