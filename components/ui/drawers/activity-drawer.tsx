@@ -11,6 +11,7 @@ import { UserActivityDetails } from "@/interface/activities-interface";
 import { QRCodeCanvas } from "qrcode.react";
 import { toPng } from "html-to-image";
 import { PrimaryBtn } from "../buttons/primary-btn";
+import { removeSeconds } from "@/logic/date-logic";
 
 export const ActivityDrawer = ({
   children,
@@ -48,7 +49,7 @@ export const ActivityDrawer = ({
                   className="mb-4 p-4 bg-gray-50 border border-gray-300 rounded-[7px] shadow-md"
                 >
                   <h3 className="text-lg font-bold">{item.type}</h3>
-                  <p>Time: {item.time}</p>
+                  <p>Time: {removeSeconds(item.time) || "-"}</p>
                   <div className="mt-2">
                     {item.attributes.map((attribute) => (
                       <div

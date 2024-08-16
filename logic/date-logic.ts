@@ -14,3 +14,16 @@ export function iSOFormattedDate(dateString: string) {
 
     return `${day}${ordinalSuffix(day)} ${month} ${year}`;
 }
+export function removeSeconds(timeString: string) {
+    if (!timeString) return null;
+
+    // Split the time string by colon
+    const timeParts = timeString.split(':');
+
+    if (timeParts.length < 2) {
+        return null; // Invalid time format
+    }
+
+    // Return the time in HH:MM format
+    return `${timeParts[0]}:${timeParts[1]}`;
+}

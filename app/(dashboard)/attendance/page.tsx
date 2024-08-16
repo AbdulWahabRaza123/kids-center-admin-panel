@@ -10,7 +10,7 @@ import { AuthStatesContext } from "@/context/auth";
 import { AttendanceDetails } from "@/interface/attendance-interface";
 import { client } from "@/lib/client";
 import { cn } from "@/lib/utils";
-import { iSOFormattedDate } from "@/logic/date-logic";
+import { iSOFormattedDate, removeSeconds } from "@/logic/date-logic";
 import {
   ChevronLeft,
   ChevronRight,
@@ -24,7 +24,8 @@ const tableHeadings = [
   "Nanny Name",
   "Student Name",
   "Date",
-  "Time",
+  "Checkin",
+  "Checkout",
   "Note",
   "More",
 ];
@@ -190,7 +191,10 @@ export default function AttendancePage() {
                           {iSOFormattedDate(val.enteredDate)}
                         </td>
                         <td className="w-[200px] ps-4 py-3 pe-3 text-start">
-                          {val.checkIn}
+                          {removeSeconds(val.checkIn) || "-"}
+                        </td>
+                        <td className="w-[200px] ps-4 py-3 pe-3 text-start">
+                          {removeSeconds(val.checkoutTime) || "-"}
                         </td>
                         <td className="w-[200px] ps-4 py-3 pe-3 text-start">
                           {val.note}

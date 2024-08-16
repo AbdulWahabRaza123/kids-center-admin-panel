@@ -7,6 +7,7 @@ export interface AttendanceDetails {
   attendanceName: string;
   enteredDate: string; // Using string here to accommodate ISO date strings
   checkIn: string;
+  checkoutTime: string;
   note: string;
   createdAt: string; // Using string here to accommodate ISO date strings
 }

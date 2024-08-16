@@ -11,6 +11,7 @@ import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
 import { UserActivityDetails } from "@/interface/activities-interface";
 import { client } from "@/lib/client";
+import { removeSeconds } from "@/logic/date-logic";
 import { maskEmail } from "@/logic/user-logic";
 import {
   ChevronLeft,
@@ -199,10 +200,10 @@ export default function ActivityPage() {
                         {val.createdFor?.email || "-"}
                       </td>
                       <td className="w-[200px] ps-5 py-3 pe-3 text-start">
-                        {val.checkinTime}
+                        {removeSeconds(val.checkinTime) || "-"}
                       </td>
                       <td className="w-[200px] ps-7 py-3 pe-3 text-start">
-                        {val.checkoutTime}
+                        {removeSeconds(val.checkoutTime) || "-"}
                       </td>
                       <td className="w-[200px] py-3 text-center">
                         {val.activities.length}
