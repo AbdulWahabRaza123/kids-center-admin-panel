@@ -6,22 +6,97 @@ import { CreateOrEditProfileDialog } from "../dialogs/create-edit-profile";
 import { useState } from "react";
 import { UserBanConfirmationDialog } from "../dialogs/user-ban-confirmation-dialog";
 import { QRCodeDialog } from "../dialogs/qr-code-dialog";
+import Toggle from "react-toggle";
+import "react-toggle/style.css";
+import { useNotify } from "../toast/notify";
+import { AuthStatesContext } from "@/context/auth";
+import { client } from "@/lib/client";
+import { useAllDeactivatedParents, useAllParents } from "@/actions/queries";
+const SelectStatus = ({
+  val,
+  banUser,
+}: {
+  val: ParentDetails;
+  banUser: (id: number) => void;
+}) => {
+  const [selectStatus, setSelectStatus] = useState(
+    val.disabled === 1 ? true : false
+  );
 
+  const changeStatus = async (val: boolean, id: number) => {
+    if (!val) {
+      setSelectStatus(true);
+      banUser(id);
+    } else {
+    }
+  };
+  return (
+    <>
+      <Toggle
+        id="cheese-status"
+        defaultChecked={true}
+        checked={selectStatus}
+        onChange={(e) => {
+          const status = e.target.checked;
+          console.log("This is status ", status);
+          changeStatus(status, val.user_id);
+        }}
+      />
+    </>
+  );
+};
 export const ParentTableComp = ({
   headings,
   data,
   edit = false,
+  deactivate = false,
 }: {
   headings: string[];
   data: ParentDetails[] | undefined;
   edit: boolean;
+  deactivate?: boolean;
 }) => {
+  const notify = useNotify();
+  const { user, token } = AuthStatesContext();
+  const { refetch: refetchDeactivatedUsers } = useAllDeactivatedParents(
+    user ?? user,
+    token ?? token
+  );
+  const { refetch: refetchUsers } = useAllParents(user ?? user, token ?? token);
   const [cursor, setCursor] = useState(0);
   const [selectedData, setSelectedData] = useState<ParentDetails | null>(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openBanDialog, setOpenBanDialog] = useState(false);
   const [openQRDialog, setOpenQRDialog] = useState(false);
+  const activateUser = async (id: number) => {
+    if (!id || !token) {
+      notify({
+        type: "warning",
+        title: "Invalid error",
+      });
+      return;
+    }
 
+    try {
+      const res = await client.get(`/auth/users/enable/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      refetchUsers();
+      refetchDeactivatedUsers();
+      notify({
+        type: "success",
+        title: "User enabled successfully",
+      });
+    } catch (e) {
+      console.log(e);
+      notify({
+        type: "error",
+        title: "Invalid error",
+      });
+    }
+  };
   return (
     <>
       {selectedData && openEditDialog && (
@@ -57,9 +132,6 @@ export const ParentTableComp = ({
         </thead>
         <tbody className=" shadow-sm py-14">
           {data?.slice(cursor, cursor + 8)?.map((val: ParentDetails) => {
-            if (val?.disabled === 1) {
-              return <></>;
-            }
             return (
               <>
                 <tr>
@@ -97,6 +169,16 @@ export const ParentTableComp = ({
                   <td className="w-[200px] text-start p-3">
                     {val.roll_no || "-"}
                   </td>
+                  {deactivate && (
+                    <>
+                      <SelectStatus
+                        val={val}
+                        banUser={() => {
+                          activateUser(val.user_id);
+                        }}
+                      />
+                    </>
+                  )}
                   {edit && (
                     <td className="w-[200px] text-start p-3">
                       <EditDisableMenuComp

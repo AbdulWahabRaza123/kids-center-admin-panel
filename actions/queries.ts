@@ -73,6 +73,66 @@ export function useAllFinancers(user: UserDetails, token: string) {
     },
   });
 }
+export function useAllDeactivatedParents(user: UserDetails, token: string) {
+  return useQuery({
+    enabled: !!user?.id,
+    queryKey: ["deactivated-parents", user?.id],
+    queryFn: async () => {
+      try {
+        const res = await client.get(`/auth/users/parents/deactivated`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = res.data;
+        return data as ParentDetails[];
+      } catch (e) {
+        console.log(e);
+        throw new Error("Invalid Error found");
+      }
+    },
+  });
+}
+export function useAllDeactivatedNanies(user: UserDetails, token: string) {
+  return useQuery({
+    enabled: !!user?.id,
+    queryKey: ["deactivated-nanies", user?.id],
+    queryFn: async () => {
+      try {
+        const res = await client.get(`/auth/users/nanies/deactivated`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = res.data;
+        return data as NanyDetails[];
+      } catch (e) {
+        console.log(e);
+        throw new Error("Invalid Error found");
+      }
+    },
+  });
+}
+export function useAllDeactivatedFinancers(user: UserDetails, token: string) {
+  return useQuery({
+    enabled: !!user?.id,
+    queryKey: ["deactivated-financers", user?.id],
+    queryFn: async () => {
+      try {
+        const res = await client.get(`/auth/users/financers/deactivated`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = res.data;
+        return data as UserDetails[];
+      } catch (e) {
+        console.log(e);
+        throw new Error("Invalid Error found");
+      }
+    },
+  });
+}
 export function useAllActivities(user: UserDetails, token: string) {
   return useQuery({
     enabled: !!user?.id,

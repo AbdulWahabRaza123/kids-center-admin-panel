@@ -25,6 +25,8 @@ import {
   ParentDetails,
   UserDetails,
 } from "@/interface/user-interface";
+import { useToast } from "../use-toast";
+import { useNotify } from "../toast/notify";
 const options = [
   {
     title: "Student",
@@ -50,6 +52,7 @@ export const CreateOrEditProfileDialog = ({
   edit: boolean;
   data?: ParentDetails | NanyDetails | UserDetails;
 }) => {
+  const notify = useNotify();
   const { user, token, selectedOption, setSelectedOption } =
     AuthStatesContext();
   const { refetch: refetchNanies } = useAllNanies(user ?? user, token ?? token);
@@ -116,6 +119,44 @@ export const CreateOrEditProfileDialog = ({
     }
   };
   const handleRegisterUser = async () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Validate email format
+    if (!emailRegex.test(email)) {
+      console.log("Invalid email format");
+      notify({
+        title: "Invalid email format",
+        type: "warning",
+      });
+      return; // Exit the function if email is invalid
+    }
+
+    // Validate password length
+    if (password.length < 6) {
+      console.log("Password must be at least 6 characters");
+      notify({
+        title: "Password must be at least 6 characters",
+        type: "warning",
+      });
+      return; // Exit the function if password is too short
+    }
+    if (selectedOption === "parent") {
+      if (!studentName && !studentClass && !studentPhoneNo && !studentRollNo) {
+        notify({
+          title: "Please enter any student field",
+          type: "warning",
+        });
+        return;
+      }
+    } else if (selectedOption === "nany") {
+      if (!nanyName && !nanyPhoneNo && !nanyRegNo && !nanyQualification) {
+        notify({
+          title: "Please enter any nany field",
+          type: "warning",
+        });
+        return;
+      }
+    }
     try {
       setLoading(true);
       const res = await client.post("/auth", {
@@ -143,6 +184,28 @@ export const CreateOrEditProfileDialog = ({
   const handleEditUser = async () => {
     try {
       setLoading(true);
+      if (selectedOption === "parent") {
+        if (
+          !studentName &&
+          !studentClass &&
+          !studentPhoneNo &&
+          !studentRollNo
+        ) {
+          notify({
+            title: "Please enter any student field",
+            type: "warning",
+          });
+          return;
+        }
+      } else if (selectedOption === "nany") {
+        if (!nanyName && !nanyPhoneNo && !nanyRegNo && !nanyQualification) {
+          notify({
+            title: "Please enter any nany field",
+            type: "warning",
+          });
+          return;
+        }
+      }
       if (selectedOption === "parent") {
         const parentData: ParentDetails = data as ParentDetails;
         await handleLinkParent(parentData.user_id);

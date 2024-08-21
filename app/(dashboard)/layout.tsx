@@ -26,6 +26,12 @@ const sidebarItems = [
     link: "/fee",
   },
   {
+    name: "Disabled Users",
+    activeIcon: "/assets/sidebar-icons/active/people.svg",
+    noneActiveIcon: "/assets/sidebar-icons/non-active/people.svg",
+    link: "/deactivate-user-manage",
+  },
+  {
     name: "Comments",
     activeIcon: "/assets/sidebar-icons/active/communication.svg",
     noneActiveIcon: "/assets/sidebar-icons/non-active/communication.svg",

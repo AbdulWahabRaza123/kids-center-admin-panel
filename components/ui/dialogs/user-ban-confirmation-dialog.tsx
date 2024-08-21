@@ -8,7 +8,13 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Ban, Trash2, X } from "lucide-react";
 import { client } from "@/lib/client";
 import { RoleDetails } from "@/interface/user-interface";
-import { useAllNanies, useAllParents } from "@/actions/queries";
+import {
+  useAllDeactivatedFinancers,
+  useAllDeactivatedNanies,
+  useAllDeactivatedParents,
+  useAllNanies,
+  useAllParents,
+} from "@/actions/queries";
 import { useNotify } from "../toast/notify";
 export const UserBanConfirmationDialog = ({
   open,
@@ -29,6 +35,18 @@ export const UserBanConfirmationDialog = ({
     user ?? user,
     token ?? token
   );
+  const { refetch: refetchDeactivatedUsers } = useAllDeactivatedParents(
+    user ?? user,
+    token ?? token
+  );
+  const { refetch: refetchDeactivatedNanies } = useAllDeactivatedNanies(
+    user ?? user,
+    token ?? token
+  );
+  // const { refetch: refetchDeactivatedFinancers } = useAllDeactivatedFinancers(
+  //   user ?? user,
+  //   token ?? token
+  // );
   const [loading, setLoading] = useState(false);
   const handleBan = async () => {
     if (!id || !role || !token) {
@@ -54,6 +72,7 @@ export const UserBanConfirmationDialog = ({
           },
         });
         refetchParents();
+        refetchDeactivatedUsers();
       } else if (role === "nany") {
         const res = await client.get(`/auth/users/disable/${id}`, {
           headers: {
@@ -62,6 +81,7 @@ export const UserBanConfirmationDialog = ({
         });
 
         refetchNanies();
+        refetchDeactivatedNanies();
       }
       notify({
         type: "success",

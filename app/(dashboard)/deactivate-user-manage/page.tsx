@@ -4,6 +4,9 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { CreateOrEditProfileDialog } from "@/components/ui/dialogs/create-edit-profile";
 import {
+  useAllDeactivatedFinancers,
+  useAllDeactivatedNanies,
+  useAllDeactivatedParents,
   useAllFinancers,
   useAllNanies,
   useAllParents,
@@ -71,17 +74,17 @@ export default function StudentManagement() {
     data: naniesData,
     isLoading: naniesLoading,
     error: naniesError,
-  } = useAllNanies(user ?? user, token ?? token);
+  } = useAllDeactivatedNanies(user ?? user, token ?? token);
   const {
     data: parentsData,
     isLoading: parentsLoading,
     error: parentsError,
-  } = useAllParents(user ?? user, token ?? token);
+  } = useAllDeactivatedParents(user ?? user, token ?? token);
   const {
     data: financersData,
     isLoading: financersLoading,
     error: financersError,
-  } = useAllFinancers(user ?? user, token ?? token);
+  } = useAllDeactivatedFinancers(user ?? user, token ?? token);
   const [openUserDialog, setOpenUserDialog] = useState(false);
   const [mount, setMount] = useState<boolean>(false);
   const [selectOption, setSelectOption] = useState<string>(
@@ -200,24 +203,12 @@ export default function StudentManagement() {
   if (!mount) return null;
   return (
     <>
-      <CreateOrEditProfileDialog
-        open={openUserDialog}
-        setOpen={setOpenUserDialog}
-        edit={false}
-      />
       <main className="flex flex-col px-10">
         <div className="flex flex-row items-start justify-between">
           <h1 className="text-[26px] font-[600]">User Management</h1>
           <div className="flex flex-col items-end gap-2">
             <SearchInput value={search} setValue={onSearchRoleBasedData} />
-            <PrimaryBtn
-              className="w-[200px] text-[16px] h-[40px] flex flex-row items-center justify-center"
-              onClick={() => {
-                setOpenUserDialog(true);
-              }}
-            >
-              Create Profile
-            </PrimaryBtn>
+
             <div className="w-full flex flex-col items-end gap-2 justify-end">
               <p className="text-[14px] text-gray-400">
                 Filter by{" "}
@@ -287,21 +278,24 @@ export default function StudentManagement() {
             <ParentTableComp
               headings={parentTableHeadings}
               data={parentItems}
-              edit={true}
+              edit={false}
+              deactivate={true}
             />
           )}
           {selectedOption === "nany" && (
             <NanyTableComp
               headings={nanyTableHeadings}
               data={nanyItems}
-              edit={true}
+              edit={false}
+              deactivate={true}
             />
           )}
           {selectedOption === "finance" && (
             <FinanceTableComp
               headings={financeTableHeadings}
               data={financerItems}
-              edit={true}
+              edit={false}
+              deactivate={true}
             />
           )}
         </SpinnerWrapper>

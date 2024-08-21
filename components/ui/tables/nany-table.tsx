@@ -6,21 +6,97 @@ import { useState } from "react";
 import { CreateOrEditProfileDialog } from "../dialogs/create-edit-profile";
 import { UserBanConfirmationDialog } from "../dialogs/user-ban-confirmation-dialog";
 import { QRCodeDialog } from "../dialogs/qr-code-dialog";
+import Toggle from "react-toggle";
+import "react-toggle/style.css";
+import { AuthStatesContext } from "@/context/auth";
+import { useNotify } from "../toast/notify";
+import { useAllDeactivatedNanies, useAllNanies } from "@/actions/queries";
+import { client } from "@/lib/client";
+const SelectStatus = ({
+  val,
+  banUser,
+}: {
+  val: NanyDetails;
+  banUser: (id: number) => void;
+}) => {
+  const [selectStatus, setSelectStatus] = useState(
+    val.disabled === 1 ? true : false
+  );
+
+  const changeStatus = async (val: boolean, id: number) => {
+    if (!val) {
+      setSelectStatus(true);
+      banUser(id);
+    } else {
+    }
+  };
+  return (
+    <>
+      <Toggle
+        id="cheese-status"
+        defaultChecked={true}
+        checked={selectStatus}
+        onChange={(e) => {
+          const status = e.target.checked;
+          console.log("This is status ", status);
+          changeStatus(status, val.user_id);
+        }}
+      />
+    </>
+  );
+};
 export const NanyTableComp = ({
   headings,
   data,
   edit = false,
+  deactivate = false,
 }: {
   headings: string[];
   data: NanyDetails[] | undefined;
   edit: boolean;
+  deactivate?: boolean;
 }) => {
+  const notify = useNotify();
+  const { user, token } = AuthStatesContext();
   const [cursor, setCursor] = useState(0);
+  const { refetch: refetchDeactivatedUsers } = useAllDeactivatedNanies(
+    user ?? user,
+    token ?? token
+  );
+  const { refetch: refetchUsers } = useAllNanies(user ?? user, token ?? token);
   const [selectedData, setSelectedData] = useState<NanyDetails | null>(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openBanDialog, setOpenBanDialog] = useState(false);
   const [openQRDialog, setOpenQRDialog] = useState(false);
+  const activateUser = async (id: number) => {
+    if (!id || !token) {
+      notify({
+        type: "warning",
+        title: "Invalid error",
+      });
+      return;
+    }
 
+    try {
+      const res = await client.get(`/auth/users/enable/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      refetchUsers();
+      refetchDeactivatedUsers();
+      notify({
+        type: "success",
+        title: "User enabled successfully",
+      });
+    } catch (e) {
+      console.log(e);
+      notify({
+        type: "error",
+        title: "Invalid error",
+      });
+    }
+  };
   return (
     <>
       {selectedData && (
@@ -56,9 +132,9 @@ export const NanyTableComp = ({
         </thead>
         <tbody>
           {data?.slice(cursor, cursor + 8)?.map((val: NanyDetails) => {
-            if (val?.disabled === 1) {
-              return <></>;
-            }
+            // if (val?.disabled === 1) {
+            //   return <></>;
+            // }
             return (
               <>
                 <tr>
@@ -96,6 +172,16 @@ export const NanyTableComp = ({
                   <td className="w-[200px] text-start p-3">
                     {val.reg_no || "-"}
                   </td>
+                  {deactivate && (
+                    <>
+                      <SelectStatus
+                        val={val}
+                        banUser={() => {
+                          activateUser(val.user_id);
+                        }}
+                      />
+                    </>
+                  )}
                   {edit && (
                     <td className="w-[200px] text-start p-3">
                       <EditDisableMenuComp

@@ -8,10 +8,12 @@ export const FinanceTableComp = ({
   headings,
   data,
   edit = false,
+  deactivate = false,
 }: {
   headings: string[];
   data: UserDetails[] | undefined;
   edit: boolean;
+  deactivate?: boolean;
 }) => {
   const [cursor, setCursor] = useState(0);
   return (
@@ -33,7 +35,7 @@ export const FinanceTableComp = ({
                   <td className="w-[200px] text-start p-3">
                     {val.email || "-"}
                   </td>
-                  {edit && (
+                  {/* {edit && (
                     <td className="w-[200px] text-start p-3">
                       <EditDisableMenuComp
                         onClick={(selectedOpt) => {
@@ -43,7 +45,7 @@ export const FinanceTableComp = ({
                         <EllipsisVertical className="cursor-pointer" />
                       </EditDisableMenuComp>
                     </td>
-                  )}
+                  )} */}
                 </tr>
               </>
             );
