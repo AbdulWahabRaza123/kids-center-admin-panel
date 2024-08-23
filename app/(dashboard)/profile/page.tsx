@@ -65,7 +65,7 @@ export default function Profile() {
             <TextInput
               type="text"
               placeholder="user@gmail.com"
-              title="Email address"
+              title="Email/Username"
               value={email}
               setValue={setEmail}
               className="w-[230px]"

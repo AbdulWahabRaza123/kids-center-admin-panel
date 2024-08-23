@@ -20,7 +20,14 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const tableHeadings = ["Id", "email", "Rating", "Date", "Description", "More"];
+const tableHeadings = [
+  "Id",
+  "Email/Username",
+  "Rating",
+  "Date",
+  "Description",
+  "More",
+];
 const feedbackFilterOptions = [
   {
     title: "Rating",

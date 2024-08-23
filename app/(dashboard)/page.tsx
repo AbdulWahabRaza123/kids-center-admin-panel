@@ -17,7 +17,7 @@ const nanyTableHeadings = [
   // "User ID",
   "Nany ID",
   "Name",
-  "Email",
+  "Email/Username",
   "Phone No",
   "Qualification",
   "Reg No",
@@ -26,12 +26,12 @@ const parentTableHeadings = [
   // "User ID",
   "Student ID",
   "Name",
-  "Email",
+  "Email/Username",
   "Phone No",
   "Class",
   "Roll No",
 ];
-const financeTableHeadings = ["User ID", "Email"];
+const financeTableHeadings = ["User ID", "Email/Username"];
 const options = [
   {
     title: "Student",

@@ -26,6 +26,7 @@ const Signin = () => {
       return;
     }
     try {
+      setUser(null);
       setLoading(true);
       const res = await axios.post("/api/auth/signin", {
         email,
@@ -41,12 +42,19 @@ const Signin = () => {
       localStorage.setItem("kids-user", JSON.stringify(tempUser));
       setToken(tempToken);
       setUser(tempUser);
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
-      notify({
-        type: "error",
-        title: "Invalid error",
-      });
+      if (e?.response?.status === 404) {
+        notify({
+          title: "User has been disabled",
+          type: "error",
+        });
+      } else {
+        notify({
+          title: "Invalid error!",
+          type: "error",
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -76,8 +84,8 @@ const Signin = () => {
             value={email}
             setValue={setEmail}
             type="email"
-            title="Email"
-            placeholder="email"
+            title="Email/Username"
+            placeholder="email/username"
           />
           <div className="flex items-center gap-2 mt-2">
             <input type="radio" className="h-5 w-5" />

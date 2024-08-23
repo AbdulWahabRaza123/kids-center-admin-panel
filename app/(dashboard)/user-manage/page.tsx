@@ -23,7 +23,7 @@ import { SearchInput } from "@/components/ui/inputs/search-input";
 const nanyTableHeadings = [
   "Nany ID",
   "Name",
-  "Email",
+  "Email/Username",
   "Phone No",
   "Qualification",
   "Reg No",
@@ -32,13 +32,13 @@ const nanyTableHeadings = [
 const parentTableHeadings = [
   "Student ID",
   "Name",
-  "Email",
+  "Email/Username",
   "Phone No",
   "Class",
   "Roll No",
   "Action",
 ];
-const financeTableHeadings = ["User ID", "Email"];
+const financeTableHeadings = ["User ID", "Email/Username"];
 const parentFilterOptions = [
   {
     title: "Roll No",

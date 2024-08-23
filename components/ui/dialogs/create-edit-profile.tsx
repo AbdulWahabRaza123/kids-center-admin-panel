@@ -119,17 +119,17 @@ export const CreateOrEditProfileDialog = ({
     }
   };
   const handleRegisterUser = async () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    // Validate email format
-    if (!emailRegex.test(email)) {
-      console.log("Invalid email format");
-      notify({
-        title: "Invalid email format",
-        type: "warning",
-      });
-      return; // Exit the function if email is invalid
-    }
+    // // Validate email format
+    // if (!emailRegex.test(email)) {
+    //   console.log("Invalid email format");
+    //   notify({
+    //     title: "Invalid email format",
+    //     type: "warning",
+    //   });
+    //   return; // Exit the function if email is invalid
+    // }
 
     // Validate password length
     if (password.length < 6) {
@@ -175,8 +175,24 @@ export const CreateOrEditProfileDialog = ({
         }
         setOpen(false);
       }
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
+      if (e?.response?.status === 500) {
+        notify({
+          title: "Email or username already exists!",
+          type: "error",
+        });
+      } else if (e?.response?.status === 404) {
+        notify({
+          title: "User has been disabled",
+          type: "error",
+        });
+      } else {
+        notify({
+          title: "Invalid error!",
+          type: "error",
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -214,8 +230,19 @@ export const CreateOrEditProfileDialog = ({
         await handleLinkNany(nanyData.user_id);
       }
       setOpen(false);
-    } catch (e) {
-      console.log(e);
+    } catch (e: any) {
+      console.log(e?.response);
+      if (e?.response?.status === 500) {
+        notify({
+          title: "Email or username already exists!",
+          type: "error",
+        });
+      } else {
+        notify({
+          title: "Invalid error!",
+          type: "error",
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -268,15 +295,22 @@ export const CreateOrEditProfileDialog = ({
           </h1>
         </div>
         <div className="flex flex-row items-center gap-3 mt-3">
-          <TextInput
-            type="email"
-            placeholder="devid@gmail.com"
-            title="Email"
-            value={email}
-            setValue={setEmail}
-            className="w-[50%]"
-            disabled={edit}
-          />
+          <div className="w-[50%]">
+            <TextInput
+              type="email"
+              placeholder="devid@gmail.com or david"
+              title="Email/Username"
+              value={email}
+              setValue={(value) => {
+                const sanitizedValue = value.toLowerCase().replace(/\s+/g, "");
+                setEmail(sanitizedValue);
+              }}
+              disabled={edit}
+            />
+            <p className="text-gray-400 text-[9px] ms-1">
+              No white space or capital letter allowed
+            </p>
+          </div>
           <div className="flex flex-col items-start gap-2">
             <h1 className=" text-black">Role</h1>
             <SelectInput
