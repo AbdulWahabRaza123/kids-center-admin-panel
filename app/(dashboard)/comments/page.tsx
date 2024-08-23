@@ -20,8 +20,8 @@ import { useEffect, useState } from "react";
 
 const tableHeadings = [
   "Id",
-  "Student Id",
-  "Nanny Id",
+  "Student Name",
+  "Nanny Name",
   "Activity Id",
   "Date",
   "Description",

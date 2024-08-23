@@ -15,8 +15,8 @@ import { useQuery } from "@tanstack/react-query";
 
 export function useAllParents(user: UserDetails, token: string) {
   return useQuery({
-    enabled: !!user?.id,
-    queryKey: ["parents", user?.id],
+    enabled: !!user?.email,
+    queryKey: ["parents", user?.email],
     queryFn: async () => {
       try {
         const res = await client.get(`/auth/users/parents`, {
@@ -35,8 +35,8 @@ export function useAllParents(user: UserDetails, token: string) {
 }
 export function useAllNanies(user: UserDetails, token: string) {
   return useQuery({
-    enabled: !!user?.id,
-    queryKey: ["nanies", user?.id],
+    enabled: !!user?.email,
+    queryKey: ["nanies", user?.email],
     queryFn: async () => {
       try {
         const res = await client.get(`/auth/users/nanies`, {
@@ -55,8 +55,8 @@ export function useAllNanies(user: UserDetails, token: string) {
 }
 export function useAllFinancers(user: UserDetails, token: string) {
   return useQuery({
-    enabled: !!user?.id,
-    queryKey: ["financers", user?.id],
+    enabled: !!user?.email,
+    queryKey: ["financers", user?.email],
     queryFn: async () => {
       try {
         const res = await client.get(`/auth/users/financers`, {
@@ -76,7 +76,7 @@ export function useAllFinancers(user: UserDetails, token: string) {
 export function useAllDeactivatedParents(user: UserDetails, token: string) {
   return useQuery({
     enabled: !!user?.id,
-    queryKey: ["deactivated-parents", user?.id],
+    queryKey: ["deactivated-parents", user?.email],
     queryFn: async () => {
       try {
         const res = await client.get(`/auth/users/parents/deactivated`, {
@@ -96,7 +96,7 @@ export function useAllDeactivatedParents(user: UserDetails, token: string) {
 export function useAllDeactivatedNanies(user: UserDetails, token: string) {
   return useQuery({
     enabled: !!user?.id,
-    queryKey: ["deactivated-nanies", user?.id],
+    queryKey: ["deactivated-nanies", user?.email],
     queryFn: async () => {
       try {
         const res = await client.get(`/auth/users/nanies/deactivated`, {
@@ -116,7 +116,7 @@ export function useAllDeactivatedNanies(user: UserDetails, token: string) {
 export function useAllDeactivatedFinancers(user: UserDetails, token: string) {
   return useQuery({
     enabled: !!user?.id,
-    queryKey: ["deactivated-financers", user?.id],
+    queryKey: ["deactivated-financers", user?.email],
     queryFn: async () => {
       try {
         const res = await client.get(`/auth/users/financers/deactivated`, {
