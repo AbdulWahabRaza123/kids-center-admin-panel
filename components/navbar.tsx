@@ -105,53 +105,7 @@ const Navbar = () => {
   };
   return (
     <div className="h-[90px] w-full flex flex-row items-center justify-between px-10">
-      <div className="w-[350px] relative">
-        <SearchInput
-          value={search}
-          setValue={onSearchData}
-          className="relative"
-        />
-        {recommededData.length > 0 && (
-          <div className="absolute top-[50px] w-full bg-white shadow-lg rounded-[10px]">
-            {recommededData.map((data: any) =>
-              user.role === "finance" ? (
-                <>
-                  <div
-                    className="flex flex-col items-start p-2 hover:bg-slate-400/10"
-                    key={data.id}
-                  >
-                    {/* <p className="text-ellipsis line-clamp-1">{data.id}</p> */}
-                    <p className="text-ellipsis line-clamp-1">
-                      Created For: {data.created_for_id}
-                    </p>
-                    <p className="text-ellipsis line-clamp-1 text-[12px]">
-                      Status:{data.status}
-                    </p>
-                  </div>
-                </>
-              ) : (
-                <div
-                  className="flex flex-row items-center gap-2 p-2 hover:bg-slate-400/10"
-                  key={data.id}
-                >
-                  <Image
-                    src="/assets/profile.svg"
-                    alt="profile"
-                    width={50}
-                    height={50}
-                    className="rounded-full object-cover"
-                  />
-                  <div className="flex flex-col text-start">
-                    <p className="text-ellipsis line-clamp-1">{data.email}</p>
-                    <p className="text-[10px] text-gray-400">{data.role}</p>
-                  </div>
-                </div>
-              )
-            )}
-          </div>
-        )}
-      </div>
-
+      <div></div>
       <div className="flex flex-row items-center gap-2">
         <div className="flex flex-row items-center gap-2 cursor-pointer hover:bg-slate-400/10 active:bg-slate-400/20 p-2 rounded-[10px]">
           <Image
