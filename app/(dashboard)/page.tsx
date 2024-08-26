@@ -11,7 +11,6 @@ import { NanyTableComp } from "@/components/ui/tables/nany-table";
 import { ParentTableComp } from "@/components/ui/tables/parent-table";
 import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
-import { Activity } from "lucide-react";
 import { useEffect, useState } from "react";
 const nanyTableHeadings = [
   // "User ID",

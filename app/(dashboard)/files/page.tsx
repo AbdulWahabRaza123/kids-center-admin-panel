@@ -11,18 +11,10 @@ import { SpinnerWrapper } from "@/components/ui/wrappers/spinner-wrapper";
 import { AuthStatesContext } from "@/context/auth";
 import { FileDetails } from "@/interface/file-interface";
 import { client } from "@/lib/client";
-import { maskEmail } from "@/logic/user-logic";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Ellipsis,
-  EllipsisVertical,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, EllipsisVertical } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
-const tableHeadings = ["Id", "Nanny", "Parent", "Name", "link", "More"];
-
+const tableHeadings = ["Id", "Student Name", "File Name", "link", "More"];
 export default function FilePage() {
   const notify = useNotify();
   const { user, token } = AuthStatesContext();
@@ -30,7 +22,6 @@ export default function FilePage() {
     user ?? user,
     token ?? token
   );
-  console.log("This is user files ", data);
   const [cursor, setCursor] = useState(0);
   const [mount, setMount] = useState<boolean>(false);
   const [selectedData, setSelectedData] = useState<FileDetails | null>(null);
@@ -137,11 +128,9 @@ export default function FilePage() {
                       <td className="w-[50px] text-start p-3">
                         {val.id || "-"}
                       </td>
+
                       <td className="w-[200px] text-start p-3">
-                        {maskEmail(val.createdByEmail) || "-"}
-                      </td>
-                      <td className="w-[200px] text-start p-3">
-                        {maskEmail(val.createdForEmail) || "-"}
+                        {val.createdForEmail || "-"}
                       </td>
                       <td className="w-[200px] text-start p-3">
                         {val.name || "-"}
