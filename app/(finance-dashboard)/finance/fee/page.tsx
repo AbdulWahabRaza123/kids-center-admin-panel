@@ -160,6 +160,7 @@ export default function FeePage() {
             <PrimaryBtn
               className="w-[200px] text-[16px] h-[40px] flex flex-row items-center justify-center"
               onClick={() => {
+                setIsEdit(false);
                 setOpenAddFeeDialog(true);
               }}
             >
