@@ -42,6 +42,11 @@ const Signin = () => {
       localStorage.setItem("kids-user", JSON.stringify(tempUser));
       setToken(tempToken);
       setUser(tempUser);
+      if (tempUser?.role === "admin") {
+        router.push("/");
+      } else if (tempUser?.role === "finance") {
+        router.push("/finance");
+      }
     } catch (e: any) {
       console.log(e);
       if (e?.response?.status === 404) {
