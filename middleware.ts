@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 const financePaths = [
+  "/signin",
   "/",
   "/user-manage",
   "/activities",
@@ -10,6 +11,7 @@ const financePaths = [
   "/files"
 ]
 const adminPaths = [
+  "/signin",
   "/finance",
   "/finance/fee"
 ]

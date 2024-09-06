@@ -80,7 +80,7 @@ export default function Home() {
         />
       </div>
       <div className="flex items-center gap-5 flex-wrap mt-7 mb-3">
-        {[naniesData?.length, parentsData?.length, financersData?.length].map(
+        {[parentsData?.length, naniesData?.length, financersData?.length].map(
           (item, index) => (
             <OverviewCard
               key={index}
